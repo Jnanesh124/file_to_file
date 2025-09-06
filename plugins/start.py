@@ -16,7 +16,7 @@ from pyrogram.errors import FloodWait, UserIsBlocked, InputUserDeactivated
 from datetime import datetime, timedelta
 from bot import Bot
 from config import *
-from helper_func import subscribed, encode, decode, get_messages, get_shortlink, get_verify_status, update_verify_status, get_exp_time
+from helper_func import subscribed, encode, decode, get_messages, get_shortlink, get_verify_status, update_verify_status, get_exp_time, get_non_joined_channels
 from database.database import add_user, del_user, full_userbase, present_user
 from shortzy import Shortzy
 
@@ -112,7 +112,7 @@ async def start_command(client: Client, message: Message):
                 reply_markup = None
             await message.reply(f"Your token successfully verified and valid for: 24 Hour", reply_markup=reply_markup, protect_content=False, quote=True)
 
-        elif len(message.text) > 7 and verify_status['is_verified']:
+        elif len(message.text) > 7 and (not IS_VERIFY or verify_status['is_verified']):
             try:
                 base64_string = message.text.split(" ", 1)[1]
             except:
@@ -186,7 +186,7 @@ async def start_command(client: Client, message: Message):
                 delete_notification = await message.reply(NOTIFICATION)
                 asyncio.create_task(delete_notification_after_delay(client, delete_notification.chat.id, delete_notification.id, delay=NOTIFICATION_TIME))
                 
-        elif verify_status['is_verified']:
+        elif not IS_VERIFY or verify_status['is_verified']:
             reply_markup = InlineKeyboardMarkup(
                 [[InlineKeyboardButton("About Me", callback_data="about"),
                   InlineKeyboardButton("Close", callback_data="close")]]
@@ -205,18 +205,38 @@ async def start_command(client: Client, message: Message):
             )
 
         else:
-            verify_status = await get_verify_status(id)
-            if IS_VERIFY and not verify_status['is_verified']:
-                short_url = f"adrinolinks.in"
-                # TUT_VID = f"https://t.me/ultroid_official/18"
-                token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-                await update_verify_status(id, verify_token=token, link="")
-                link = await get_shortlink(SHORTLINK_URL, SHORTLINK_API,f'https://telegram.dog/{client.username}?start=verify_{token}')
-                btn = [
-                    [InlineKeyboardButton("Click here", url=link)],
-                    [InlineKeyboardButton('How to use the bot', url=TUT_VID)]
-                ]
-                await message.reply(f"Your Ads token is expired, refresh your token and try again.\n\nToken Timeout: {get_exp_time(VERIFY_EXPIRE)}\n\nWhat is the token?\n\nThis is an ads token. If you pass 1 ad, you can use the bot for 24 Hour after passing the ad.", reply_markup=InlineKeyboardMarkup(btn), protect_content=False, quote=True)
+            if IS_VERIFY:
+                verify_status = await get_verify_status(id)
+                if not verify_status['is_verified']:
+                    short_url = f"adrinolinks.in"
+                    # TUT_VID = f"https://t.me/ultroid_official/18"
+                    token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+                    await update_verify_status(id, verify_token=token, link="")
+                    link = await get_shortlink(SHORTLINK_URL, SHORTLINK_API,f'https://telegram.dog/{client.username}?start=verify_{token}')
+                    btn = [
+                        [InlineKeyboardButton("Click here", url=link)],
+                        [InlineKeyboardButton('How to use the bot', url=TUT_VID)]
+                    ]
+                    await message.reply(f"Your Ads token is expired, refresh your token and try again.\n\nToken Timeout: {get_exp_time(VERIFY_EXPIRE)}\n\nWhat is the token?\n\nThis is an ads token. If you pass 1 ad, you can use the bot for 24 Hour after passing the ad.", reply_markup=InlineKeyboardMarkup(btn), protect_content=False, quote=True)
+                    return
+            
+            # If verification is disabled or user is verified, show start message
+            reply_markup = InlineKeyboardMarkup(
+                [[InlineKeyboardButton("About Me", callback_data="about"),
+                  InlineKeyboardButton("Close", callback_data="close")]]
+            )
+            await message.reply_text(
+                text=START_MSG.format(
+                    first=message.from_user.first_name,
+                    last=message.from_user.last_name,
+                    username=None if not message.from_user.username else '@' + message.from_user.username,
+                    mention=message.from_user.mention,
+                    id=message.from_user.id
+                ),
+                reply_markup=reply_markup,
+                disable_web_page_preview=True,
+                quote=True
+            )
 
 
         
@@ -238,12 +258,16 @@ async def not_joined(client: Client, message: Message):
     # Wait for 3 seconds to simulate checking
     await asyncio.sleep(3)
     
+    # Get non-joined channels only
+    non_joined_channels = await get_non_joined_channels(client, message.from_user.id)
+    
     buttons = []
     
-    # Add buttons for all force sub channels
-    if hasattr(client, 'invitelinks') and client.invitelinks:
-        for i, link in enumerate(client.invitelinks):
-            buttons.append([InlineKeyboardButton(f"Join Channel {i+1}", url=link)])
+    # Add buttons only for non-joined channels
+    if hasattr(client, 'invitelinks') and client.invitelinks and non_joined_channels:
+        for channel_index, channel_id in non_joined_channels:
+            if channel_index < len(client.invitelinks):
+                buttons.append([InlineKeyboardButton(f"Join Channel {channel_index+1}", url=client.invitelinks[channel_index])])
     
     try:
         buttons.append(

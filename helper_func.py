@@ -38,6 +38,28 @@ async def is_subscribed(filter, client, update):
     
     return True
 
+async def get_non_joined_channels(client, user_id):
+    """Get list of channels user hasn't joined yet"""
+    if not FORCE_SUB_CHANNELS:
+        return []
+    
+    if user_id in ADMINS:
+        return []
+    
+    non_joined = []
+    
+    for i, channel_id in enumerate(FORCE_SUB_CHANNELS):
+        try:
+            member = await client.get_chat_member(chat_id=channel_id, user_id=user_id)
+            if not member.status in [ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.MEMBER]:
+                non_joined.append((i, channel_id))
+        except UserNotParticipant:
+            non_joined.append((i, channel_id))
+        except Exception:
+            non_joined.append((i, channel_id))
+    
+    return non_joined
+
 async def encode(string):
     string_bytes = string.encode("ascii")
     base64_bytes = base64.urlsafe_b64encode(string_bytes)
