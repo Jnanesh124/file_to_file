@@ -289,3 +289,15 @@ https://t.me/ultroid_official
 (っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
 ░╚════╝░░╚════╝░╚═════╝░╚══════╝
                                           
+[06-Sep-25 09:57:36 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 09:57:36 - INFO] - bot - Bot stopped.
+[06-Sep-25 09:57:41 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 09:57:41 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
