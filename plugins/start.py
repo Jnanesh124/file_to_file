@@ -7,6 +7,7 @@ from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, 
 from bot import Bot
 from config import *
 from database.database import *
+from database.database import present_user, add_user
 from helper_func import *
 
 # ================== HELPER WRAPPERS ================== #
@@ -27,6 +28,10 @@ async def get_user_non_joined_channels(client: Client, update):
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(client: Client, message: Message):
     id = message.from_user.id
+    
+    # Add user to database if not present
+    if not await present_user(id):
+        await add_user(id)
 
     # ================== FORCE SUB CHECK ================== #
     if not await is_user_subscribed(client, message):

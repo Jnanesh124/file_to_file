@@ -44,9 +44,17 @@ async def db_update_verify_status(user_id, verify):
     await user_data.update_one({'_id': user_id}, {'$set': {'verify_status': verify}})
 
 async def full_userbase():
-    user_docs = user_data.find()
-    user_ids = [doc['_id'] async for doc in user_docs]
-    return user_ids
+    """Get all user IDs from database (users who have started the bot)"""
+    try:
+        user_docs = user_data.find()
+        user_ids = []
+        async for doc in user_docs:
+            if '_id' in doc:
+                user_ids.append(doc['_id'])
+        return user_ids
+    except Exception as e:
+        print(f"Error getting userbase: {e}")
+        return []
 
 async def del_user(user_id: int):
     await user_data.delete_one({'_id': user_id})
