@@ -1,0 +1,116 @@
+Pyromod is working! If you like pyromod, please star it at https://github.com/usernein/pyromod
+[06-Sep-25 10:02:15 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 10:02:15 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 10:04:54 - ERROR] - pyrogram.dispatcher - cannot access local variable 'asyncio' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/dispatcher.py", line 242, in handler_worker
+    await self.loop.run_in_executor(
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/sync.py", line 78, in async_to_sync_wrap
+    return asyncio.run_coroutine_threadsafe(coroutine, main_loop).result()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyromod/listen/message_handler.py", line 98, in resolve_future_or_callback
+    await self.original_callback(client, message, *args)
+  File "/home/runner/workspace/plugins/start.py", line 34, in start_handler
+    await asyncio.sleep(2)
+          ^^^^^^^
+UnboundLocalError: cannot access local variable 'asyncio' where it is not associated with a value
+[06-Sep-25 10:04:57 - ERROR] - pyrogram.dispatcher - cannot access local variable 'asyncio' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/dispatcher.py", line 242, in handler_worker
+    await self.loop.run_in_executor(
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/sync.py", line 78, in async_to_sync_wrap
+    return asyncio.run_coroutine_threadsafe(coroutine, main_loop).result()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyromod/listen/message_handler.py", line 98, in resolve_future_or_callback
+    await self.original_callback(client, message, *args)
+  File "/home/runner/workspace/plugins/start.py", line 34, in start_handler
+    await asyncio.sleep(2)
+          ^^^^^^^
+UnboundLocalError: cannot access local variable 'asyncio' where it is not associated with a value
+[06-Sep-25 10:04:59 - ERROR] - pyrogram.dispatcher - cannot access local variable 'asyncio' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/dispatcher.py", line 242, in handler_worker
+    await self.loop.run_in_executor(
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/sync.py", line 78, in async_to_sync_wrap
+    return asyncio.run_coroutine_threadsafe(coroutine, main_loop).result()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyromod/listen/message_handler.py", line 98, in resolve_future_or_callback
+    await self.original_callback(client, message, *args)
+  File "/home/runner/workspace/plugins/start.py", line 34, in start_handler
+    await asyncio.sleep(2)
+          ^^^^^^^
+UnboundLocalError: cannot access local variable 'asyncio' where it is not associated with a value
+[06-Sep-25 10:05:00 - ERROR] - pyrogram.dispatcher - cannot access local variable 'asyncio' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/dispatcher.py", line 242, in handler_worker
+    await self.loop.run_in_executor(
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/sync.py", line 78, in async_to_sync_wrap
+    return asyncio.run_coroutine_threadsafe(coroutine, main_loop).result()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyromod/listen/message_handler.py", line 98, in resolve_future_or_callback
+    await self.original_callback(client, message, *args)
+  File "/home/runner/workspace/plugins/start.py", line 34, in start_handler
+    await asyncio.sleep(2)
+          ^^^^^^^
+UnboundLocalError: cannot access local variable 'asyncio' where it is not associated with a value
+[06-Sep-25 10:05:02 - ERROR] - pyrogram.dispatcher - cannot access local variable 'asyncio' where it is not associated with a value
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/dispatcher.py", line 242, in handler_worker
+    await self.loop.run_in_executor(
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/sync.py", line 78, in async_to_sync_wrap
+    return asyncio.run_coroutine_threadsafe(coroutine, main_loop).result()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyromod/listen/message_handler.py", line 98, in resolve_future_or_callback
+    await self.original_callback(client, message, *args)
+  File "/home/runner/workspace/plugins/start.py", line 34, in start_handler
+    await asyncio.sleep(2)
+          ^^^^^^^
+UnboundLocalError: cannot access local variable 'asyncio' where it is not associated with a value
