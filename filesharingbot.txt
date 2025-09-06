@@ -192,3 +192,78 @@ https://t.me/ultroid_official
 (っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
 ░╚════╝░░╚════╝░╚═════╝░╚══════╝
                                           
+[06-Sep-25 09:03:54 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 09:04:10 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 09:04:10 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 09:04:11 - INFO] - aiohttp.access - 172.31.97.98 [06/Sep/2025:09:04:11 +0000] "GET / HTTP/1.1" 200 178 "https://2afc7d04-7d04-4379-9cd9-9c80382bddcd-00-3sw0k737hgeel.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar2nm%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 09:09:08 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 09:09:09 - INFO] - bot - Bot stopped.
+[06-Sep-25 09:11:02 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 09:11:02 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 09:11:03 - INFO] - aiohttp.access - 172.31.97.98 [06/Sep/2025:09:11:03 +0000] "GET / HTTP/1.1" 200 178 "https://2afc7d04-7d04-4379-9cd9-9c80382bddcd-00-3sw0k737hgeel.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar2qo%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 09:14:08 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 09:14:10 - INFO] - bot - Bot stopped.
+[06-Sep-25 09:14:34 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 09:14:34 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 09:14:35 - INFO] - aiohttp.access - 172.31.97.98 [06/Sep/2025:09:14:35 +0000] "GET / HTTP/1.1" 200 178 "https://2afc7d04-7d04-4379-9cd9-9c80382bddcd-00-3sw0k737hgeel.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar2s8%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 09:18:44 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 09:18:58 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 09:18:58 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 09:18:59 - INFO] - aiohttp.access - 172.31.97.98 [06/Sep/2025:09:18:59 +0000] "GET / HTTP/1.1" 200 178 "https://2afc7d04-7d04-4379-9cd9-9c80382bddcd-00-3sw0k737hgeel.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar2to%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 09:26:25 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 09:26:27 - INFO] - bot - Bot stopped.
+[06-Sep-25 09:26:37 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 09:26:37 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 09:26:38 - INFO] - aiohttp.access - 172.31.97.98 [06/Sep/2025:09:26:38 +0000] "GET / HTTP/1.1" 200 178 "https://2afc7d04-7d04-4379-9cd9-9c80382bddcd-00-3sw0k737hgeel.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar31a%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 09:37:09 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 09:37:11 - INFO] - bot - Bot stopped.
+[06-Sep-25 09:37:19 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 09:37:19 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
