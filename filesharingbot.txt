@@ -739,3 +739,14 @@ Traceback (most recent call last):
   File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shortzy/adlinkfly.py", line 60, in convert
     raise Exception(e)
 Exception: Connection timeout to host https://arolinks.com/api?api=dc64f71dee43e715379e1da5d3bc9dbeb96b71a7&url=https://telegram.dog/newxxxiobot?start%3Dverify_Wt9l6CSwIq&alias=&format=json
+[06-Sep-25 10:50:49 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 10:50:49 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 10:50:49 - INFO] - aiohttp.access - 172.31.97.194 [06/Sep/2025:10:50:49 +0000] "GET / HTTP/1.1" 200 178 "https://4a1152f9-f381-4535-9226-7b66706fd764-00-3hd4vkpolb01o.sisko.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Aree%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
