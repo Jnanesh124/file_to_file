@@ -750,3 +750,53 @@ https://t.me/ultroid_official
 ░╚════╝░░╚════╝░╚═════╝░╚══════╝
                                           
 [06-Sep-25 10:50:49 - INFO] - aiohttp.access - 172.31.97.194 [06/Sep/2025:10:50:49 +0000] "GET / HTTP/1.1" 200 178 "https://4a1152f9-f381-4535-9226-7b66706fd764-00-3hd4vkpolb01o.sisko.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Aree%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 10:59:32 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 10:59:32 - INFO] - bot - Bot stopped.
+[06-Sep-25 10:59:37 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 10:59:37 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 10:59:38 - INFO] - aiohttp.access - 172.31.97.194 [06/Sep/2025:10:59:38 +0000] "GET / HTTP/1.1" 200 178 "https://4a1152f9-f381-4535-9226-7b66706fd764-00-3hd4vkpolb01o.sisko.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Arjs%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 11:03:17 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 11:03:28 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 11:03:28 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 11:03:29 - INFO] - aiohttp.access - 172.31.97.194 [06/Sep/2025:11:03:29 +0000] "GET / HTTP/1.1" 200 178 "https://4a1152f9-f381-4535-9226-7b66706fd764-00-3hd4vkpolb01o.sisko.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Arlt%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 11:08:36 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 11:08:37 - INFO] - bot - Bot stopped.
+[06-Sep-25 11:08:45 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 11:08:45 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 11:08:45 - INFO] - aiohttp.access - 172.31.97.194 [06/Sep/2025:11:08:45 +0000] "GET / HTTP/1.1" 200 178 "https://4a1152f9-f381-4535-9226-7b66706fd764-00-3hd4vkpolb01o.sisko.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Arns%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 11:11:34 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 11:11:46 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 11:11:46 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 11:11:46 - INFO] - aiohttp.access - 172.31.97.194 [06/Sep/2025:11:11:46 +0000] "GET / HTTP/1.1" 200 178 "https://4a1152f9-f381-4535-9226-7b66706fd764-00-3hd4vkpolb01o.sisko.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Arpd%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
