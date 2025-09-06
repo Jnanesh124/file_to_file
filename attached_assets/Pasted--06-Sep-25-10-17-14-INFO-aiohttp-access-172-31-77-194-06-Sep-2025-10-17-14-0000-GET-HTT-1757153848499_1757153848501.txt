@@ -1,0 +1,18 @@
+[06-Sep-25 10:17:14 - INFO] - aiohttp.access - 172.31.77.194 [06/Sep/2025:10:17:14 +0000] "GET / HTTP/1.1" 200 178 "https://1005ec4c-1b6b-4486-9fbc-72b6e11a82bb-00-3757v57maq7g7.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar15k%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+Error broadcasting to 64f373fa29b250873f93418d: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 64f3752529b250873f93418e: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 64f4914829b250873f93418f: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 64f578ce29b250873f934190: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 64f9b02929b250873f934191: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 64fa0bf029b250873f934192: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 64fb31c029b250873f934193: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 64fdc44a29b250873f934194: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 64fdc79f29b250873f934195: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 6501ad0629b250873f934196: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 6502904e29b250873f934197: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 65029d8129b250873f934198: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 6505a52e29b250873f934199: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 650c685de1014bbb9f80c49e: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 651824b1b472a3e18d744704: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 652187cdb472a3e18d744705: Error binding parameter 1: type 'ObjectId' is not supported
+Error broadcasting to 652c819ec3e63d0fb649b1ab: Error binding parameter 1: type 'ObjectId' is not supported
