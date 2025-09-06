@@ -17,7 +17,7 @@ from pyrogram.errors import FloodWait, UserIsBlocked, InputUserDeactivated
 from datetime import datetime, timedelta
 from bot import Bot
 from config import *
-from helper_func import subscribed, encode, decode, get_messages, get_shortlink, get_verify_status, update_verify_status, get_exp_time, get_non_joined_channels
+from helper_func import encode, decode, get_messages, get_shortlink, get_verify_status, update_verify_status, get_exp_time, get_non_joined_channels, is_subscribed
 from database.database import add_user, del_user, full_userbase, present_user
 from shortzy import Shortzy
 
@@ -114,7 +114,7 @@ async def start_handler(client: Client, message: Message):
         return await message.reply(f"Your token successfully verified and valid for: 24 Hour", protect_content=False, quote=True)
 
     # Check subscription status
-    if not await subscribed(filters, client, message):
+    if not await is_subscribed(None, client, message):
         # Send checking membership message
         checking_msg = await message.reply("🔄 **Checking your membership status...**\n\nPlease wait while I verify your subscription to all required channels.")
         
