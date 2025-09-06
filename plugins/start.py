@@ -111,6 +111,10 @@ async def start_command(client: Client, message: Message):
             await asyncio.sleep(2)
             
             _, token = message.text.split("_", 1)
+            
+            # Get fresh verify status
+            verify_status = await get_verify_status(id)
+            
             if verify_status['verify_token'] != token:
                 await token_checking_msg.delete()
                 return await message.reply("Your token is invalid or Expired. Try again by clicking /start")
@@ -120,8 +124,7 @@ async def start_command(client: Client, message: Message):
             # Delete the checking message
             await token_checking_msg.delete()
             
-            if verify_status["link"] == "":
-                reply_markup = None
+            reply_markup = None
             await message.reply(f"Your token successfully verified and valid for: 24 Hour", reply_markup=reply_markup, protect_content=False, quote=True)
 
         elif len(message.text) > 7 and (not IS_VERIFY or verify_status['is_verified']):
@@ -320,39 +323,78 @@ async def send_text(client: Bot, message: Message):
     if message.reply_to_message:
         query = await full_userbase()
         broadcast_msg = message.reply_to_message
-        total = 0
+        total_users = len(query)
+        current_user = 0
         successful = 0
         blocked = 0
         deleted = 0
         unsuccessful = 0
         
-        pls_wait = await message.reply("<i>Broadcasting Message.. This will Take Some Time</i>")
+        pls_wait = await message.reply(f"<i>🔄 Starting broadcast...</i>\n\n<b>Total Users:</b> <code>{total_users}</code>\n<b>Progress:</b> <code>0/{total_users}</code>")
+        
         for chat_id in query:
+            current_user += 1
+            
+            # Update live status every 10 users or on last user
+            if current_user % 10 == 0 or current_user == total_users:
+                remaining = total_users - current_user
+                try:
+                    await pls_wait.edit(f"""<b>🔄 Broadcasting in progress...</b>
+
+<b>📊 Live Statistics:</b>
+• <b>Total Users:</b> <code>{total_users}</code>
+• <b>Completed:</b> <code>{current_user}/{total_users}</code>
+• <b>Remaining:</b> <code>{remaining}</code>
+
+<b>📈 Results so far:</b>
+• <b>✅ Successful:</b> <code>{successful}</code>
+• <b>🚫 Blocked:</b> <code>{blocked}</code>
+• <b>❌ Deleted:</b> <code>{deleted}</code>
+• <b>⚠️ Failed:</b> <code>{unsuccessful}</code>
+
+<b>Progress:</b> <code>{((current_user/total_users)*100):.1f}%</code>""")
+                except:
+                    pass  # Continue even if edit fails
+            
             try:
                 await broadcast_msg.copy(chat_id)
                 successful += 1
             except FloodWait as e:
                 await asyncio.sleep(e.x)
-                await broadcast_msg.copy(chat_id)
-                successful += 1
+                try:
+                    await broadcast_msg.copy(chat_id)
+                    successful += 1
+                except Exception:
+                    unsuccessful += 1
             except UserIsBlocked:
                 await del_user(chat_id)
                 blocked += 1
             except InputUserDeactivated:
                 await del_user(chat_id)
                 deleted += 1
-            except:
+            except Exception as error:
                 unsuccessful += 1
-                pass
-            total += 1
+                print(f"Broadcast failed for {chat_id}: {str(error)}")
         
-        status = f"""<b><u>Broadcast Completed</u>
+        # Final status report
+        status = f"""<b>✅ Broadcast Completed!</b>
 
-Total Users: <code>{total}</code>
-Successful: <code>{successful}</code>
-Blocked Users: <code>{blocked}</code>
-Deleted Accounts: <code>{deleted}</code>
-Unsuccessful: <code>{unsuccessful}</code></b>"""
+<b>📊 Final Results:</b>
+• <b>Total Users:</b> <code>{total_users}</code>
+• <b>✅ Successful:</b> <code>{successful}</code>
+• <b>🚫 Blocked Users:</b> <code>{blocked}</code>
+• <b>❌ Deleted Accounts:</b> <code>{deleted}</code>
+• <b>⚠️ Failed Attempts:</b> <code>{unsuccessful}</code>
+
+<b>📈 Success Rate:</b> <code>{((successful/total_users)*100):.1f}%</code>
+
+<b>🗑️ Cleanup:</b>
+• <code>{blocked + deleted}</code> inactive users removed from database
+
+<b>⚠️ Failed Reasons:</b>
+• User blocked bot: <code>{blocked}</code>
+• Account deleted: <code>{deleted}</code>
+• Other errors: <code>{unsuccessful}</code>"""
         
         return await pls_wait.edit(status)
 
