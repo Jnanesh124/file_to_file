@@ -145,8 +145,16 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
 
     await checking_msg.delete()
 
-    # Directly call start handler again
+    # Process the original command after verification
+    if hasattr(query.message, 'text') and query.message.text:
+        command = query.message.text
+    else:
+        command = f"/start {query.data.split('_')[-1]}" if 'start_' in query.data else "/start"
+    
+    # Create a fake message object to process the file request
     fake_msg = query.message
     fake_msg.from_user = query.from_user
-    fake_msg.text = "/start"
-    await start_handler(client, fake_msg)
+    fake_msg.text = command
+    
+    # Call the start handler with the original command
+    await start(client, fake_msg) start_handler(client, fake_msg)
