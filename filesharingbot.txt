@@ -180,3 +180,15 @@ Traceback (most recent call last):
     if not await subscribed(filters, client, message):
                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 TypeError: is_subscribed() takes 3 positional arguments but 4 were given
+[06-Sep-25 08:54:47 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 08:54:49 - INFO] - bot - Bot stopped.
+[06-Sep-25 08:54:54 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 08:54:54 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
