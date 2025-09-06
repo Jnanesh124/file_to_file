@@ -27,12 +27,6 @@ async def get_user_non_joined_channels(client: Client, update):
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(client: Client, message: Message):
     id = message.from_user.id
-    
-    # Add user to database
-    try:
-        await add_user(id)
-    except:
-        pass
 
     # ================== FORCE SUB CHECK ================== #
     if not await is_user_subscribed(client, message):
@@ -156,6 +150,7 @@ async def start_handler(client: Client, message: Message):
                                 # Schedule auto-delete if enabled
                                 if AUTO_DELETE:
                                     from plugins.auto_delete import schedule_auto_delete
+                                    import asyncio
                                     asyncio.create_task(schedule_auto_delete(client, sent_msg, file_id))
                                 return
                         except Exception:
@@ -210,15 +205,16 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
 
     await checking_msg.delete()
 
-    # After successful subscription check, show welcome message
-    await client.send_message(
-        chat_id=user_id,
-        text=START_MSG.format(
-            first=query.from_user.first_name,
-            last=query.from_user.last_name,
-            username=None if not query.from_user.username else '@' + query.from_user.username,
-            mention=query.from_user.mention,
-            id=query.from_user.id
-        ),
-        disable_web_page_preview=True
-    )
+    # Process the original command after verification
+    if hasattr(query.message, 'text') and query.message.text:
+        command = query.message.text
+    else:
+        command = f"/start {query.data.split('_')[-1]}" if 'start_' in query.data else "/start"
+    
+    # Create a fake message object to process the file request
+    fake_msg = query.message
+    fake_msg.from_user = query.from_user
+    fake_msg.text = command
+    
+    # Call the start handler with the original command
+    await start_handler(client, fake_msg)

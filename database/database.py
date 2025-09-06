@@ -1,6 +1,6 @@
+
 import motor.motor_asyncio
 from config import DB_URI, DB_NAME
-import asyncio
 
 dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URI)
 database = dbclient[DB_NAME]
@@ -75,36 +75,7 @@ async def get_file(message_id):
                 return file_doc
     except:
         pass
-
+    
     # If not found by ObjectId, try as string
     file_doc = await files_data.find_one({'_id': message_id})
     return file_doc
-
-# Broadcast functions
-async def get_verify_status(user_id):
-    user = await user_data.find_one({'_id': user_id})
-    if user:
-        return user.get('verify_status', default_verify)
-    return default_verify
-
-async def get_all_users():
-    """Get all users from database"""
-    users = []
-    async for user in user_data.find({}):
-        users.append(user)
-    return users
-
-async def delete_user(user_id):
-    """Delete user from database"""
-    await user_data.delete_one({'_id': user_id})
-
-async def send_broadcast(message, bot):
-    """Send broadcast message to all users who have started the bot"""
-    users = await get_all_users()
-    for user in users:
-        user_id = user['_id']
-        if await present_user(user_id):  # Check if user has started the bot
-            try:
-                await bot.send_message(user_id, message)
-            except Exception as e:
-                print(f"Error sending message to {user_id}: {e}")
