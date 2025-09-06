@@ -53,7 +53,7 @@ CHANNEL = os.environ.get("CHANNEL", "JNK_BACKUP")
 SHORTLINK_URL = os.environ.get("SHORTLINK_URL", "arolinks.com")
 SHORTLINK_API = os.environ.get("SHORTLINK_API", "dc64f71dee43e715379e1da5d3bc9dbeb96b71a7")
 VERIFY_EXPIRE = int(os.environ.get('VERIFY_EXPIRE', 86400))
-IS_VERIFY_ENV = os.environ.get("IS_VERIFY", "False")
+IS_VERIFY_ENV = os.environ.get("IS_VERIFY", "True")
 IS_VERIFY = IS_VERIFY_ENV.lower() not in ['false', '0', 'no', 'off']
 
 TUT_VID = os.environ.get("TUT_VID", "https://t.me/HOWTOOPENLINKFAST")

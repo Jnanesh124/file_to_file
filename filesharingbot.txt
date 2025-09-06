@@ -544,3 +544,198 @@ https://t.me/ultroid_official
 [06-Sep-25 10:34:18 - INFO] - aiohttp.access - 172.31.77.194 [06/Sep/2025:10:34:18 +0000] "GET / HTTP/1.1" 200 178 "https://1005ec4c-1b6b-4486-9fbc-72b6e11a82bb-00-3757v57maq7g7.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1i6%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
 [06-Sep-25 10:37:47 - INFO] - root - Stop signal received (SIGTERM). Exiting...
 [06-Sep-25 10:37:50 - INFO] - bot - Bot stopped.
+[06-Sep-25 10:40:30 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 10:40:30 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 10:40:31 - INFO] - aiohttp.access - 172.31.77.194 [06/Sep/2025:10:40:31 +0000] "GET / HTTP/1.1" 200 0 "https://1005ec4c-1b6b-4486-9fbc-72b6e11a82bb-00-3757v57maq7g7.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1nh%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 10:42:59 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 10:43:52 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 10:43:52 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 10:43:53 - INFO] - aiohttp.access - 172.31.77.194 [06/Sep/2025:10:43:53 +0000] "GET / HTTP/1.1" 200 178 "https://1005ec4c-1b6b-4486-9fbc-72b6e11a82bb-00-3757v57maq7g7.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1rl%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 10:44:31 - ERROR] - pyrogram.dispatcher - Connection timeout to host https://arolinks.com/api?api=dc64f71dee43e715379e1da5d3bc9dbeb96b71a7&url=https://telegram.dog/newxxxiobot?start%3Dverify_kbIn7ugNRj&alias=&format=json
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 1268, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/asyncio/selector_events.py", line 638, in sock_connect
+    return await fut
+           ^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/client.py", line 725, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 642, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 1209, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 1581, in _create_direct_connection
+    raise last_exc
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 1550, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 1265, in _wrap_create_connection
+    async with ceil_timeout(
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shortzy/adlinkfly.py", line 49, in convert
+    data = await self.__fetch(session, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shortzy/adlinkfly.py", line 17, in __fetch
+    async with session.get(
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/client.py", line 1488, in __aenter__
+    self._resp: _RetType = await self._coro
+                           ^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/client.py", line 770, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/client.py", line 729, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host https://arolinks.com/api?api=dc64f71dee43e715379e1da5d3bc9dbeb96b71a7&url=https://telegram.dog/newxxxiobot?start%3Dverify_kbIn7ugNRj&alias=&format=json
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/dispatcher.py", line 242, in handler_worker
+    await self.loop.run_in_executor(
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/sync.py", line 78, in async_to_sync_wrap
+    return asyncio.run_coroutine_threadsafe(coroutine, main_loop).result()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyromod/listen/message_handler.py", line 98, in resolve_future_or_callback
+    await self.original_callback(client, message, *args)
+  File "/home/runner/workspace/plugins/start.py", line 87, in start_handler
+    link = await get_shortlink(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/helper_func.py", line 137, in get_shortlink
+    link = await shortzy.convert(link)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shortzy/main.py", line 56, in convert
+    return await self.shortener.convert(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shortzy/adlinkfly.py", line 60, in convert
+    raise Exception(e)
+Exception: Connection timeout to host https://arolinks.com/api?api=dc64f71dee43e715379e1da5d3bc9dbeb96b71a7&url=https://telegram.dog/newxxxiobot?start%3Dverify_kbIn7ugNRj&alias=&format=json
+[06-Sep-25 10:44:59 - ERROR] - pyrogram.dispatcher - Connection timeout to host https://arolinks.com/api?api=dc64f71dee43e715379e1da5d3bc9dbeb96b71a7&url=https://telegram.dog/newxxxiobot?start%3Dverify_Wt9l6CSwIq&alias=&format=json
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 1268, in _wrap_create_connection
+    sock = await aiohappyeyeballs.start_connection(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohappyeyeballs/impl.py", line 73, in start_connection
+    sock = await _connect_sock(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohappyeyeballs/impl.py", line 208, in _connect_sock
+    await loop.sock_connect(sock, address)
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/asyncio/selector_events.py", line 638, in sock_connect
+    return await fut
+           ^^^^^^^^^
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/client.py", line 725, in _connect_and_send_request
+    conn = await self._connector.connect(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 642, in connect
+    proto = await self._create_connection(req, traces, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 1209, in _create_connection
+    _, proto = await self._create_direct_connection(req, traces, timeout)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 1581, in _create_direct_connection
+    raise last_exc
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 1550, in _create_direct_connection
+    transp, proto = await self._wrap_create_connection(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/connector.py", line 1265, in _wrap_create_connection
+    async with ceil_timeout(
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shortzy/adlinkfly.py", line 49, in convert
+    data = await self.__fetch(session, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shortzy/adlinkfly.py", line 17, in __fetch
+    async with session.get(
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/client.py", line 1488, in __aenter__
+    self._resp: _RetType = await self._coro
+                           ^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/client.py", line 770, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/aiohttp/client.py", line 729, in _connect_and_send_request
+    raise ConnectionTimeoutError(
+aiohttp.client_exceptions.ConnectionTimeoutError: Connection timeout to host https://arolinks.com/api?api=dc64f71dee43e715379e1da5d3bc9dbeb96b71a7&url=https://telegram.dog/newxxxiobot?start%3Dverify_Wt9l6CSwIq&alias=&format=json
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/dispatcher.py", line 242, in handler_worker
+    await self.loop.run_in_executor(
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyrogram/sync.py", line 78, in async_to_sync_wrap
+    return asyncio.run_coroutine_threadsafe(coroutine, main_loop).result()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/7d088dip86hlzri9sk0h78b63yfmx0a0-python3-3.11.13/lib/python3.11/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyromod/listen/message_handler.py", line 98, in resolve_future_or_callback
+    await self.original_callback(client, message, *args)
+  File "/home/runner/workspace/plugins/start.py", line 87, in start_handler
+    link = await get_shortlink(
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/helper_func.py", line 137, in get_shortlink
+    link = await shortzy.convert(link)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shortzy/main.py", line 56, in convert
+    return await self.shortener.convert(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/shortzy/adlinkfly.py", line 60, in convert
+    raise Exception(e)
+Exception: Connection timeout to host https://arolinks.com/api?api=dc64f71dee43e715379e1da5d3bc9dbeb96b71a7&url=https://telegram.dog/newxxxiobot?start%3Dverify_Wt9l6CSwIq&alias=&format=json
