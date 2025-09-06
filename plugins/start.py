@@ -101,6 +101,37 @@ async def start_handler(client: Client, message: Message):
                 quote=True
             )
 
+    # ================== HANDLE FILE REQUESTS ================== #
+    if len(message.text) > 7:  # More than just "/start"
+        file_id = message.text.split(" ", 1)[1]
+        
+        # Check if it's a file ID (not a verify token)
+        if not file_id.startswith("verify_"):
+            try:
+                from helper_func import decode
+                from database.database import get_file
+                
+                # Decode the file ID
+                decoded_id = await decode(file_id)
+                
+                # Get file from database
+                file_data = await get_file(decoded_id)
+                
+                if file_data:
+                    # Send the file
+                    await message.reply_document(
+                        document=file_data['file_id'],
+                        caption=file_data.get('caption', ''),
+                        protect_content=PROTECT_CONTENT,
+                        quote=True
+                    )
+                    return
+                else:
+                    return await message.reply("❌ File not found or may have been deleted.")
+                    
+            except Exception as e:
+                return await message.reply("❌ Invalid file link or file not found.")
+    
     # ================== NORMAL START (already verified) ================== #
     return await message.reply("✅ Welcome back! You are already verified and subscribed.")
 
