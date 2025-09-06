@@ -74,10 +74,23 @@ async def start_handler(client: Client, message: Message):
                 return await message.reply("❌ Your token is invalid or expired.\nClick /start again to get a new one.")
 
             await update_verify_status(user_id, is_verified=True, verified_time=time.time())
-            return await message.reply("✅ Your token was successfully verified!\nValid for 24 hours.")
+            await message.reply("✅ Your token was successfully verified!\nValid for 24 hours.")
+            
+            # Continue to normal start message after successful verification
+            await message.reply(
+                START_MSG.format(
+                    first=message.from_user.first_name,
+                    last=message.from_user.last_name,
+                    username=f"@{message.from_user.username}" if message.from_user.username else None,
+                    mention=message.from_user.mention,
+                    id=user_id
+                )
+            )
+            return
 
-        # Case 2: User not verified yet
-        if not verify_status['is_verified']:
+        # Case 2: Check if user is verified (with expiry check)
+        current_time = time.time()
+        if not verify_status['is_verified'] or (current_time - verify_status['verified_time']) > VERIFY_EXPIRE:
             checking_msg = await message.reply("🔄 **Checking your token...**")
             await asyncio.sleep(1)
             await checking_msg.delete()
@@ -150,7 +163,15 @@ async def start_handler(client: Client, message: Message):
                 return await message.reply("❌ Invalid file link or file not found.")
 
     # ====== NORMAL START MESSAGE ====== #
-    await message.reply("✅ Welcome back! You are already verified and subscribed.")
+    await message.reply(
+        START_MSG.format(
+            first=message.from_user.first_name,
+            last=message.from_user.last_name,
+            username=f"@{message.from_user.username}" if message.from_user.username else None,
+            mention=message.from_user.mention,
+            id=user_id
+        )
+    )
 
 # ================== CALLBACK HANDLER FOR TRY AGAIN ================== #
 @Bot.on_callback_query(filters.regex("check_sub"))
