@@ -155,7 +155,6 @@ async def start_handler(client: Client, message: Message):
                                 # Schedule auto-delete if enabled
                                 if AUTO_DELETE:
                                     from plugins.auto_delete import schedule_auto_delete
-                                    import asyncio
                                     asyncio.create_task(schedule_auto_delete(client, sent_msg, file_id))
                                 return
                         except Exception:
