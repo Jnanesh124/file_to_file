@@ -136,7 +136,7 @@ async def start_command(client: Client, message: Message):
 
         verify_status = await get_verify_status(id)
 
-        elif len(message.text) > 7 and (not IS_VERIFY or verify_status['is_verified']):
+        if len(message.text) > 7 and (not IS_VERIFY or verify_status['is_verified']):
             try:
                 base64_string = message.text.split(" ", 1)[1]
             except:
