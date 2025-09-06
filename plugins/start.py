@@ -1,3 +1,4 @@
+
 # https://www.youtube.com/channel/UC7tAa4hho37iNv731_6RIOg
 from pymongo import MongoClient
 import asyncio
@@ -70,7 +71,6 @@ async def schedule_auto_delete(client, chat_id, message_id, delay):
 
     asyncio.create_task(delete_message())  
 
-
 async def delete_notification_after_delay(client, chat_id, message_id, delay):
     await asyncio.sleep(delay)
     try:
@@ -79,12 +79,11 @@ async def delete_notification_after_delay(client, chat_id, message_id, delay):
     except Exception as e:
         print(f"Error deleting notification {message_id} in chat {chat_id}: {e}")
 
-
 @Bot.on_message(filters.command('start') & filters.private)
-async def start_command_with_verification(client: Client, message: Message):
+async def start_handler(client: Client, message: Message):
     id = message.from_user.id
     
-    # Handle token verification first, before subscription check
+    # Handle token verification first
     if "verify_" in message.text and IS_VERIFY:
         if not await present_user(id):
             try:
@@ -112,158 +111,191 @@ async def start_command_with_verification(client: Client, message: Message):
         # Delete the checking message
         await token_checking_msg.delete()
         
-        reply_markup = None
-        return await message.reply(f"Your token successfully verified and valid for: 24 Hour", reply_markup=reply_markup, protect_content=False, quote=True)
+        return await message.reply(f"Your token successfully verified and valid for: 24 Hour", protect_content=False, quote=True)
 
-@Bot.on_message(filters.command('start') & filters.private & subscribed)
-async def start_command(client: Client, message: Message):
-    id = message.from_user.id
+    # Check subscription status
+    if not await subscribed(filters, client, message):
+        # Send checking membership message
+        checking_msg = await message.reply("🔄 **Checking your membership status...**\n\nPlease wait while I verify your subscription to all required channels.")
+        
+        # Wait for 3 seconds to simulate checking
+        await asyncio.sleep(3)
+        
+        # Get non-joined channels only
+        non_joined_channels = await get_non_joined_channels(client, message.from_user.id)
+        
+        buttons = []
+        
+        # Add buttons only for non-joined channels
+        if hasattr(client, 'invitelinks') and client.invitelinks and non_joined_channels:
+            for channel_index, channel_id in non_joined_channels:
+                if channel_index < len(client.invitelinks):
+                    buttons.append([InlineKeyboardButton(f"Join Channel {channel_index+1}", url=client.invitelinks[channel_index])])
+        
+        try:
+            buttons.append(
+                [
+                    InlineKeyboardButton(
+                        text = 'Try Again',
+                        url = f"https://t.me/{client.username}?start={message.command[1] if len(message.command) > 1 else ''}"
+                    )
+                ]
+            )
+        except IndexError:
+            pass
+
+        # Delete the checking message
+        await checking_msg.delete()
+        
+        return await message.reply(
+            text = FORCE_MSG.format(
+                    first = message.from_user.first_name,
+                    last = message.from_user.last_name,
+                    username = None if not message.from_user.username else '@' + message.from_user.username,
+                    mention = message.from_user.mention,
+                    id = message.from_user.id
+                ),
+            reply_markup = InlineKeyboardMarkup(buttons),
+            quote = True,
+            disable_web_page_preview = True
+        )
+
+    # User is subscribed, proceed with main logic
     UBAN = BAN  # Fetch the owner's ID from config
     
-    # Schedule the initial message for deletion after 10 minutes
-    #await schedule_auto_delete(client, message.chat.id, message.id, delay=600)
-
     # Check if the user is the owner
     if id == UBAN:
-        sent_message = await message.reply("You are the U-BAN! Additional actions can be added here.")
+        return await message.reply("You are the U-BAN! Additional actions can be added here.")
+
+    if not await present_user(id):
+        try:
+            await add_user(id)
+        except:
+            pass
+
+    verify_status = await get_verify_status(id)
+
+    if len(message.text) > 7 and (not IS_VERIFY or verify_status['is_verified']):
+        try:
+            base64_string = message.text.split(" ", 1)[1]
+        except:
+            return
+        _string = await decode(base64_string)
+        argument = _string.split("-")
+        if len(argument) == 3:
+            try:
+                start = int(int(argument[1]) / abs(client.db_channel.id))
+                end = int(int(argument[2]) / abs(client.db_channel.id))
+            except:
+                return
+            if start <= end:
+                ids = range(start, end+1)
+            else:
+                ids = []
+                i = start
+                while True:
+                    ids.append(i)
+                    i -= 1
+                    if i < end:
+                        break
+        elif len(argument) == 2:
+            try:
+                ids = [int(int(argument[1]) / abs(client.db_channel.id))]
+            except:
+                return
+        temp_msg = await message.reply("Please wait...")
+        try:
+            messages = await get_messages(client, ids)
+        except:
+            await message.reply_text("Something went wrong..!")
+            return
+        await temp_msg.delete()
+        
+        phdlusts = []
+        messages = await get_messages(client, ids)
+        for msg in messages:
+            if bool(CUSTOM_CAPTION) & bool(msg.document):
+                caption = CUSTOM_CAPTION.format(previouscaption = "" if not msg.caption else msg.caption.html, filename = msg.document.file_name)
+            else:
+                caption = "" if not msg.caption else msg.caption.html
+
+            if DISABLE_CHANNEL_BUTTON:
+                reply_markup = msg.reply_markup
+            else:
+                reply_markup = None
+            
+            try:
+                phdlust = await msg.copy(chat_id=message.from_user.id, caption=caption, reply_markup=reply_markup , protect_content=PROTECT_CONTENT)
+                phdlusts.append(phdlust)
+                if AUTO_DELETE == True:
+                    asyncio.create_task(schedule_auto_delete(client, phdlust.chat.id, phdlust.id, delay=DELETE_AFTER))
+                await asyncio.sleep(0.2)      
+            except FloodWait as e:
+                await asyncio.sleep(e.x)
+                phdlust = await msg.copy(chat_id=message.from_user.id, caption=caption, reply_markup=reply_markup , protect_content=PROTECT_CONTENT)
+                phdlusts.append(phdlust)     
+
+        # Notify user to get file again if messages are auto-deleted
+        if GET_AGAIN == True:
+            get_file_markup = InlineKeyboardMarkup([
+                [InlineKeyboardButton("GET FILE AGAIN", url=f"https://t.me/{client.username}?start={message.text.split()[1]}")]
+            ])
+            await message.reply(GET_INFORM, reply_markup=get_file_markup)
+
+        if AUTO_DELETE == True:
+            delete_notification = await message.reply(NOTIFICATION)
+            asyncio.create_task(delete_notification_after_delay(client, delete_notification.chat.id, delete_notification.id, delay=NOTIFICATION_TIME))
+            
+    elif not IS_VERIFY or verify_status['is_verified']:
+        reply_markup = InlineKeyboardMarkup(
+            [[InlineKeyboardButton("About Me", callback_data="about"),
+              InlineKeyboardButton("Close", callback_data="close")]]
+        )
+        await message.reply_text(
+            text=START_MSG.format(
+                first=message.from_user.first_name,
+                last=message.from_user.last_name,
+                username=None if not message.from_user.username else '@' + message.from_user.username,
+                mention=message.from_user.mention,
+                id=message.from_user.id
+            ),
+            reply_markup=reply_markup,
+            disable_web_page_preview=True,
+            quote=True
+        )
 
     else:
-        if not await present_user(id):
-            try:
-                await add_user(id)
-            except:
-                pass
-
-        verify_status = await get_verify_status(id)
-
-        if len(message.text) > 7 and (not IS_VERIFY or verify_status['is_verified']):
-            try:
-                base64_string = message.text.split(" ", 1)[1]
-            except:
+        if IS_VERIFY:
+            verify_status = await get_verify_status(id)
+            if not verify_status['is_verified']:
+                token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+                await update_verify_status(id, verify_token=token, link="")
+                link = await get_shortlink(SHORTLINK_URL, SHORTLINK_API,f'https://telegram.dog/{client.username}?start=verify_{token}')
+                btn = [
+                    [InlineKeyboardButton("Click here", url=link)],
+                    [InlineKeyboardButton('How to use the bot', url=TUT_VID)]
+                ]
+                await message.reply(f"Your Ads token is expired, refresh your token and try again.\n\nToken Timeout: {get_exp_time(VERIFY_EXPIRE)}\n\nWhat is the token?\n\nThis is an ads token. If you pass 1 ad, you can use the bot for 24 Hour after passing the ad.", reply_markup=InlineKeyboardMarkup(btn), protect_content=False, quote=True)
                 return
-            _string = await decode(base64_string)
-            argument = _string.split("-")
-            if len(argument) == 3:
-                try:
-                    start = int(int(argument[1]) / abs(client.db_channel.id))
-                    end = int(int(argument[2]) / abs(client.db_channel.id))
-                except:
-                    return
-                if start <= end:
-                    ids = range(start, end+1)
-                else:
-                    ids = []
-                    i = start
-                    while True:
-                        ids.append(i)
-                        i -= 1
-                        if i < end:
-                            break
-            elif len(argument) == 2:
-                try:
-                    ids = [int(int(argument[1]) / abs(client.db_channel.id))]
-                except:
-                    return
-            temp_msg = await message.reply("Please wait...")
-            try:
-                messages = await get_messages(client, ids)
-            except:
-                await message.reply_text("Something went wrong..!")
-                return
-            await temp_msg.delete()
-            
-            phdlusts = []
-            messages = await get_messages(client, ids)
-            for msg in messages:
-                if bool(CUSTOM_CAPTION) & bool(msg.document):
-                    caption = CUSTOM_CAPTION.format(previouscaption = "" if not msg.caption else msg.caption.html, filename = msg.document.file_name)
-                else:
-                    caption = "" if not msg.caption else msg.caption.html
-
-                if DISABLE_CHANNEL_BUTTON:
-                    reply_markup = msg.reply_markup
-                else:
-                    reply_markup = None
-                
-                try:
-                    messages = await get_messages(client, ids)
-                    phdlust = await msg.copy(chat_id=message.from_user.id, caption=caption, reply_markup=reply_markup , protect_content=PROTECT_CONTENT)
-                    phdlusts.append(phdlust)
-                    if AUTO_DELETE == True:
-                        #await message.reply_text(f"The message will be automatically deleted in {delete_after} seconds.")
-                        asyncio.create_task(schedule_auto_delete(client, phdlust.chat.id, phdlust.id, delay=DELETE_AFTER))
-                    await asyncio.sleep(0.2)      
-                    #asyncio.sleep(0.2)
-                except FloodWait as e:
-                    await asyncio.sleep(e.x)
-                    phdlust = await msg.copy(chat_id=message.from_user.id, caption=caption, reply_markup=reply_markup , protect_content=PROTECT_CONTENT)
-                    phdlusts.append(phdlust)     
-
-            # Notify user to get file again if messages are auto-deleted
-            if GET_AGAIN == True:
-                get_file_markup = InlineKeyboardMarkup([
-                    [InlineKeyboardButton("GET FILE AGAIN", url=f"https://t.me/{client.username}?start={message.text.split()[1]}")]
-                ])
-                await message.reply(GET_INFORM, reply_markup=get_file_markup)
-
-            if AUTO_DELETE == True:
-                delete_notification = await message.reply(NOTIFICATION)
-                asyncio.create_task(delete_notification_after_delay(client, delete_notification.chat.id, delete_notification.id, delay=NOTIFICATION_TIME))
-                
-        elif not IS_VERIFY or verify_status['is_verified']:
-            reply_markup = InlineKeyboardMarkup(
-                [[InlineKeyboardButton("About Me", callback_data="about"),
-                  InlineKeyboardButton("Close", callback_data="close")]]
-            )
-            await message.reply_text(
-                text=START_MSG.format(
-                    first=message.from_user.first_name,
-                    last=message.from_user.last_name,
-                    username=None if not message.from_user.username else '@' + message.from_user.username,
-                    mention=message.from_user.mention,
-                    id=message.from_user.id
-                ),
-                reply_markup=reply_markup,
-                disable_web_page_preview=True,
-                quote=True
-            )
-
-        else:
-            if IS_VERIFY:
-                verify_status = await get_verify_status(id)
-                if not verify_status['is_verified']:
-                    short_url = f"adrinolinks.in"
-                    # TUT_VID = f"https://t.me/ultroid_official/18"
-                    token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-                    await update_verify_status(id, verify_token=token, link="")
-                    link = await get_shortlink(SHORTLINK_URL, SHORTLINK_API,f'https://telegram.dog/{client.username}?start=verify_{token}')
-                    btn = [
-                        [InlineKeyboardButton("Click here", url=link)],
-                        [InlineKeyboardButton('How to use the bot', url=TUT_VID)]
-                    ]
-                    await message.reply(f"Your Ads token is expired, refresh your token and try again.\n\nToken Timeout: {get_exp_time(VERIFY_EXPIRE)}\n\nWhat is the token?\n\nThis is an ads token. If you pass 1 ad, you can use the bot for 24 Hour after passing the ad.", reply_markup=InlineKeyboardMarkup(btn), protect_content=False, quote=True)
-                    return
-            
-            # If verification is disabled or user is verified, show start message
-            reply_markup = InlineKeyboardMarkup(
-                [[InlineKeyboardButton("About Me", callback_data="about"),
-                  InlineKeyboardButton("Close", callback_data="close")]]
-            )
-            await message.reply_text(
-                text=START_MSG.format(
-                    first=message.from_user.first_name,
-                    last=message.from_user.last_name,
-                    username=None if not message.from_user.username else '@' + message.from_user.username,
-                    mention=message.from_user.mention,
-                    id=message.from_user.id
-                ),
-                reply_markup=reply_markup,
-                disable_web_page_preview=True,
-                quote=True
-            )
-
-
         
+        # If verification is disabled or user is verified, show start message
+        reply_markup = InlineKeyboardMarkup(
+            [[InlineKeyboardButton("About Me", callback_data="about"),
+              InlineKeyboardButton("Close", callback_data="close")]]
+        )
+        await message.reply_text(
+            text=START_MSG.format(
+                first=message.from_user.first_name,
+                last=message.from_user.last_name,
+                username=None if not message.from_user.username else '@' + message.from_user.username,
+                mention=message.from_user.mention,
+                id=message.from_user.id
+            ),
+            reply_markup=reply_markup,
+            disable_web_page_preview=True,
+            quote=True
+        )
+
 #=====================================================================================##
 
 WAIT_MSG = """"<b>Processing ...</b>"""
@@ -271,55 +303,6 @@ WAIT_MSG = """"<b>Processing ...</b>"""
 REPLY_ERROR = """<code>Use this command as a replay to any telegram message with out any spaces.</code>"""
 
 #=====================================================================================##
-
-    
-    
-@Bot.on_message(filters.command('start') & filters.private)
-async def not_joined(client: Client, message: Message):
-    # Send checking membership message
-    checking_msg = await message.reply("🔄 **Checking your membership status...**\n\nPlease wait while I verify your subscription to all required channels.")
-    
-    # Wait for 3 seconds to simulate checking
-    await asyncio.sleep(3)
-    
-    # Get non-joined channels only
-    non_joined_channels = await get_non_joined_channels(client, message.from_user.id)
-    
-    buttons = []
-    
-    # Add buttons only for non-joined channels
-    if hasattr(client, 'invitelinks') and client.invitelinks and non_joined_channels:
-        for channel_index, channel_id in non_joined_channels:
-            if channel_index < len(client.invitelinks):
-                buttons.append([InlineKeyboardButton(f"Join Channel {channel_index+1}", url=client.invitelinks[channel_index])])
-    
-    try:
-        buttons.append(
-            [
-                InlineKeyboardButton(
-                    text = 'Try Again',
-                    url = f"https://t.me/{client.username}?start={message.command[1]}"
-                )
-            ]
-        )
-    except IndexError:
-        pass
-
-    # Delete the checking message
-    await checking_msg.delete()
-    
-    await message.reply(
-        text = FORCE_MSG.format(
-                first = message.from_user.first_name,
-                last = message.from_user.last_name,
-                username = None if not message.from_user.username else '@' + message.from_user.username,
-                mention = message.from_user.mention,
-                id = message.from_user.id
-            ),
-        reply_markup = InlineKeyboardMarkup(buttons),
-        quote = True,
-        disable_web_page_preview = True
-    )
 
 @Bot.on_message(filters.command('users') & filters.private & filters.user(ADMINS))
 async def get_users(client: Bot, message: Message):
