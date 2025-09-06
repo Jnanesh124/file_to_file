@@ -127,7 +127,13 @@ async def start_handler(client: Client, message: Message):
                         
                         for msg in messages:
                             if msg:
-                                await msg.copy(chat_id=message.from_user.id, protect_content=PROTECT_CONTENT)
+                                sent_msg = await msg.copy(chat_id=message.from_user.id, protect_content=PROTECT_CONTENT)
+                                
+                                # Schedule auto-delete if enabled
+                                if AUTO_DELETE:
+                                    from plugins.auto_delete import schedule_auto_delete
+                                    asyncio.create_task(schedule_auto_delete(client, sent_msg, file_id))
+                                
                                 await asyncio.sleep(0.5)  # Avoid flood
                         return
                     
@@ -139,7 +145,13 @@ async def start_handler(client: Client, message: Message):
                             # Get single message from database channel
                             msg = await client.get_messages(client.db_channel.id, msg_id)
                             if msg:
-                                await msg.copy(chat_id=message.from_user.id, protect_content=PROTECT_CONTENT)
+                                sent_msg = await msg.copy(chat_id=message.from_user.id, protect_content=PROTECT_CONTENT)
+                                
+                                # Schedule auto-delete if enabled
+                                if AUTO_DELETE:
+                                    from plugins.auto_delete import schedule_auto_delete
+                                    import asyncio
+                                    asyncio.create_task(schedule_auto_delete(client, sent_msg, file_id))
                                 return
                         except Exception:
                             pass
