@@ -104,10 +104,22 @@ async def start_command(client: Client, message: Message):
             await update_verify_status(id, is_verified=False)
 
         if "verify_" in message.text:
+            # Send token verification checking message
+            token_checking_msg = await message.reply("🔄 **Verifying your token...**\n\nPlease wait while I validate your verification token.")
+            
+            # Wait for 2 seconds to simulate token checking
+            await asyncio.sleep(2)
+            
             _, token = message.text.split("_", 1)
             if verify_status['verify_token'] != token:
+                await token_checking_msg.delete()
                 return await message.reply("Your token is invalid or Expired. Try again by clicking /start")
+            
             await update_verify_status(id, is_verified=True, verified_time=time.time())
+            
+            # Delete the checking message
+            await token_checking_msg.delete()
+            
             if verify_status["link"] == "":
                 reply_markup = None
             await message.reply(f"Your token successfully verified and valid for: 24 Hour", reply_markup=reply_markup, protect_content=False, quote=True)
