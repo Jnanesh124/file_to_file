@@ -69,6 +69,20 @@ async def del_user(user_id: int):
     await user_data.delete_one({'_id': user_id})
     return
 
+async def get_verify_status(user_id):
+    user = await user_data.find_one({'_id': user_id})
+    if user:
+        return user.get('verify_status', default_verify)
+    return default_verify
+
+async def update_verify_status(user_id, verify_token="", is_verified=False, verified_time=0, link=""):
+    current = await get_verify_status(user_id)
+    current['verify_token'] = verify_token
+    current['is_verified'] = is_verified
+    current['verified_time'] = verified_time
+    current['link'] = link
+    await user_data.update_one({'_id': user_id}, {'$set': {'verify_status': current}})
+
 # File storage functions
 files_data = database['files']
 

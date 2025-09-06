@@ -45,8 +45,6 @@ async def start_handler(client: Client, message: Message):
                 if index < len(client.invitelinks):
                     buttons.append([InlineKeyboardButton(f"Join Channel {index+1}", url=client.invitelinks[index])])
 
-        buttons.append([InlineKeyboardButton("🔄 Try Again", callback_data="check_sub")])
-
         await checking_msg.delete()
         return await message.reply(
             FORCE_MSG.format(
@@ -171,8 +169,6 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
             for index, channel_id in non_joined_channels:
                 if index < len(client.invitelinks):
                     buttons.append([InlineKeyboardButton(f"Join Channel {index+1}", url=client.invitelinks[index])])
-
-        buttons.append([InlineKeyboardButton("🔄 Try Again", callback_data="check_sub")])
 
         return await checking_msg.edit_text(
             text=FORCE_MSG.format(
