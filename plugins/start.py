@@ -232,13 +232,19 @@ REPLY_ERROR = """<code>Use this command as a replay to any telegram message with
     
 @Bot.on_message(filters.command('start') & filters.private)
 async def not_joined(client: Client, message: Message):
-    buttons = [
-        [
-            InlineKeyboardButton(
-                "Join Channel",
-                url = client.invitelink)
-        ]
-    ]
+    # Send checking membership message
+    checking_msg = await message.reply("🔄 **Checking your membership status...**\n\nPlease wait while I verify your subscription to all required channels.")
+    
+    # Wait for 3 seconds to simulate checking
+    await asyncio.sleep(3)
+    
+    buttons = []
+    
+    # Add buttons for all force sub channels
+    if hasattr(client, 'invitelinks') and client.invitelinks:
+        for i, link in enumerate(client.invitelinks):
+            buttons.append([InlineKeyboardButton(f"Join Channel {i+1}", url=link)])
+    
     try:
         buttons.append(
             [
@@ -251,6 +257,9 @@ async def not_joined(client: Client, message: Message):
     except IndexError:
         pass
 
+    # Delete the checking message
+    await checking_msg.delete()
+    
     await message.reply(
         text = FORCE_MSG.format(
                 first = message.from_user.first_name,
