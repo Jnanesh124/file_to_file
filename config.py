@@ -50,8 +50,8 @@ SUPPORT_GROUP = os.environ.get("SUPPORT_GROUP", "JNK_BACKUP")
 CHANNEL = os.environ.get("CHANNEL", "JNK_BACKUP")
 
 # Shortener (token system)
-SHORTLINK_URL = os.environ.get("SHORTLINK_URL", "teraboxlinks.com")
-SHORTLINK_API = os.environ.get("SHORTLINK_API", "6a77d7544d9317a1002a7645ca03de54223f75f1")
+SHORTLINK_URL = os.environ.get("SHORTLINK_URL", "arolinks.com")
+SHORTLINK_API = os.environ.get("SHORTLINK_API", "dc64f71dee43e715379e1da5d3bc9dbeb96b71a7")
 VERIFY_EXPIRE = int(os.environ.get('VERIFY_EXPIRE', 86400))
 IS_VERIFY_ENV = os.environ.get("IS_VERIFY", "True")
 IS_VERIFY = IS_VERIFY_ENV.lower() not in ['false', '0', 'no', 'off']
