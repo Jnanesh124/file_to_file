@@ -1,0 +1,16 @@
+[06-Sep-25 08:11:33 - WARNING] - bot - Telegram says: [400 CHANNEL_INVALID] - The channel parameter is invalid (caused by "channels.GetChannels")
+[06-Sep-25 08:11:33 - WARNING] - bot - Bot can't Export Invite link from Force Sub Channel!
+[06-Sep-25 08:11:33 - WARNING] - bot - Please Double check the FORCE_SUB_CHANNEL value and Make sure Bot is Admin in channel with Invite Users via Link Permission, Current Force Sub Channel Value: -1002108419450
+[06-Sep-25 08:11:33 - INFO] - bot - 
+Bot Stopped. Join https://t.me/ultroid_official for support
+[06-Sep-25 08:13:17 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 08:13:17 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[06-Sep-25 08:13:18 - INFO] - aiohttp.access - 172.31.97.98 [06/Sep/2025:08:13:18 +0000] "GET / HTTP/1.1" 200 178 "https://2afc7d04-7d04-4379-9cd9-9c80382bddcd-00-3sw0k737hgeel.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Arv2%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
