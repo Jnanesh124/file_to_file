@@ -301,3 +301,14 @@ https://t.me/ultroid_official
 (っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
 ░╚════╝░░╚════╝░╚═════╝░╚══════╝
                                           
+[06-Sep-25 09:59:25 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 09:59:33 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 09:59:33 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
