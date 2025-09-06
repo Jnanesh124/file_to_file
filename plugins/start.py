@@ -108,26 +108,43 @@ async def start_handler(client: Client, message: Message):
         # Check if it's a file ID (not a verify token)
         if not file_id.startswith("verify_"):
             try:
-                from helper_func import decode
-                from database.database import get_file
+                from helper_func import decode, get_messages
                 
                 # Decode the file ID
-                decoded_id = await decode(file_id)
+                decoded = await decode(file_id)
                 
-                # Get file from database
-                file_data = await get_file(decoded_id)
+                # Handle batch files (get-123-456 format)
+                if decoded.startswith("get-"):
+                    parts = decoded.split("-")
+                    if len(parts) == 3:  # Batch: get-start_id-end_id
+                        _, start_id, end_id = parts
+                        start_msg_id = abs(int(start_id)) // abs(client.db_channel.id)
+                        end_msg_id = abs(int(end_id)) // abs(client.db_channel.id)
+                        
+                        # Get range of messages
+                        msg_ids = list(range(start_msg_id, end_msg_id + 1))
+                        messages = await get_messages(client, msg_ids)
+                        
+                        for msg in messages:
+                            if msg:
+                                await msg.copy(chat_id=message.from_user.id, protect_content=PROTECT_CONTENT)
+                                await asyncio.sleep(0.5)  # Avoid flood
+                        return
+                    
+                    elif len(parts) == 2:  # Single file: get-msg_id
+                        _, msg_id = parts
+                        msg_id = abs(int(msg_id)) // abs(client.db_channel.id)
+                        
+                        try:
+                            # Get single message from database channel
+                            msg = await client.get_messages(client.db_channel.id, msg_id)
+                            if msg:
+                                await msg.copy(chat_id=message.from_user.id, protect_content=PROTECT_CONTENT)
+                                return
+                        except Exception:
+                            pass
                 
-                if file_data:
-                    # Send the file
-                    await message.reply_document(
-                        document=file_data['file_id'],
-                        caption=file_data.get('caption', ''),
-                        protect_content=PROTECT_CONTENT,
-                        quote=True
-                    )
-                    return
-                else:
-                    return await message.reply("❌ File not found or may have been deleted.")
+                return await message.reply("❌ File not found or may have been deleted.")
                     
             except Exception as e:
                 return await message.reply("❌ Invalid file link or file not found.")

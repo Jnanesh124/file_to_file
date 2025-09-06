@@ -51,3 +51,31 @@ async def full_userbase():
 async def del_user(user_id: int):
     await user_data.delete_one({'_id': user_id})
     return
+
+# File storage functions
+files_data = database['files']
+
+async def save_file(file_id, caption=None):
+    """Save file to database and return the message ID"""
+    file_doc = {
+        'file_id': file_id,
+        'caption': caption
+    }
+    result = await files_data.insert_one(file_doc)
+    return str(result.inserted_id)
+
+async def get_file(message_id):
+    """Get file from database using message ID"""
+    try:
+        # Try to find by ObjectId first
+        from bson import ObjectId
+        if ObjectId.is_valid(message_id):
+            file_doc = await files_data.find_one({'_id': ObjectId(message_id)})
+            if file_doc:
+                return file_doc
+    except:
+        pass
+    
+    # If not found by ObjectId, try as string
+    file_doc = await files_data.find_one({'_id': message_id})
+    return file_doc
