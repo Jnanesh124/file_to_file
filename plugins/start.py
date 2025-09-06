@@ -157,4 +157,4 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
     fake_msg.text = command
     
     # Call the start handler with the original command
-    await start(client, fake_msg) start_handler(client, fake_msg)
+    await start_handler(client, fake_msg)
