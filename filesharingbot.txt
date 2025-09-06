@@ -62,3 +62,14 @@ https://t.me/ultroid_official
 ░╚════╝░░╚════╝░╚═════╝░╚══════╝
                                           
 [06-Sep-25 08:30:24 - INFO] - aiohttp.access - 172.31.97.98 [06/Sep/2025:08:30:24 +0000] "GET / HTTP/1.1" 200 178 "https://2afc7d04-7d04-4379-9cd9-9c80382bddcd-00-3sw0k737hgeel.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar19s%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
+[06-Sep-25 08:32:12 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[06-Sep-25 08:32:19 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[06-Sep-25 08:32:19 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
