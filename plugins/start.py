@@ -103,7 +103,7 @@ async def start_command(client: Client, message: Message):
         if verify_status['is_verified'] and VERIFY_EXPIRE < (time.time() - verify_status['verified_time']):
             await update_verify_status(id, is_verified=False)
 
-        if "verify_" in message.text:
+        if "verify_" in message.text and IS_VERIFY:
             # Send token verification checking message
             token_checking_msg = await message.reply("🔄 **Verifying your token...**\n\nPlease wait while I validate your verification token.")
             
