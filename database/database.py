@@ -50,7 +50,16 @@ async def full_userbase():
         user_ids = []
         async for doc in user_docs:
             if '_id' in doc:
-                user_ids.append(doc['_id'])
+                # Ensure we only add integer user IDs, not ObjectId
+                user_id = doc['_id']
+                if isinstance(user_id, int):
+                    user_ids.append(user_id)
+                elif hasattr(user_id, '__int__'):
+                    try:
+                        user_ids.append(int(user_id))
+                    except (ValueError, TypeError):
+                        print(f"Skipping invalid user ID: {user_id}")
+                        continue
         return user_ids
     except Exception as e:
         print(f"Error getting userbase: {e}")

@@ -23,6 +23,16 @@ async def broadcast_handler(client: Client, message: Message):
         
         for chat_id in query:
             try:
+                # Ensure chat_id is an integer
+                if not isinstance(chat_id, int):
+                    try:
+                        chat_id = int(chat_id)
+                    except (ValueError, TypeError):
+                        print(f"Skipping invalid chat_id: {chat_id}")
+                        unsuccessful += 1
+                        total += 1
+                        continue
+                
                 await broadcast_msg.copy(chat_id)
                 successful += 1
             except FloodWait as e:

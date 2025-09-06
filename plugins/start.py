@@ -175,12 +175,10 @@ async def start_handler(client: Client, message: Message):
 async def recheck_subscription(client: Client, query: CallbackQuery):
     user_id = query.from_user.id
 
-    try:
-        await query.message.delete()
-    except:
-        pass
+    # Answer the callback query first
+    await query.answer("🔄 Checking membership status...")
 
-    checking_msg = await client.send_message(user_id, "🔄 **Re-checking your membership...**\n\nPlease wait...")
+    checking_msg = await query.message.edit_text("🔄 **Re-checking your membership...**\n\nPlease wait...")
     await asyncio.sleep(2)
 
     if not await is_user_subscribed(client, query):
@@ -194,9 +192,7 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
 
         buttons.append([InlineKeyboardButton("🔄 Try Again", callback_data="check_sub")])
 
-        await checking_msg.delete()
-        return await client.send_message(
-            chat_id=user_id,
+        return await checking_msg.edit_text(
             text=FORCE_MSG.format(
                 first=query.from_user.first_name,
                 last=query.from_user.last_name,
@@ -208,18 +204,9 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
             disable_web_page_preview=True
         )
 
-    await checking_msg.delete()
-
-    # Process the original command after verification
-    if hasattr(query.message, 'text') and query.message.text:
-        command = query.message.text
-    else:
-        command = f"/start {query.data.split('_')[-1]}" if 'start_' in query.data else "/start"
+    # User is now subscribed, show success message
+    await checking_msg.edit_text("✅ **Membership verified!**\n\nYou have successfully joined all required channels.")
     
-    # Create a fake message object to process the file request
-    fake_msg = query.message
-    fake_msg.from_user = query.from_user
-    fake_msg.text = command
-    
-    # Call the start handler with the original command
-    await start_handler(client, fake_msg)
+    # Wait a moment then show the start message
+    await asyncio.sleep(2)
+    await checking_msg.edit_text("✅ Welcome! You are now verified and subscribed.\n\nYou can now use the bot normally.")
