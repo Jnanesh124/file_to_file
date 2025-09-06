@@ -80,6 +80,41 @@ async def delete_notification_after_delay(client, chat_id, message_id, delay):
         print(f"Error deleting notification {message_id} in chat {chat_id}: {e}")
 
 
+@Bot.on_message(filters.command('start') & filters.private)
+async def start_command_with_verification(client: Client, message: Message):
+    id = message.from_user.id
+    
+    # Handle token verification first, before subscription check
+    if "verify_" in message.text and IS_VERIFY:
+        if not await present_user(id):
+            try:
+                await add_user(id)
+            except:
+                pass
+                
+        # Send token verification checking message
+        token_checking_msg = await message.reply("🔄 **Verifying your token...**\n\nPlease wait while I validate your verification token.")
+        
+        # Wait for 2 seconds to simulate token checking
+        await asyncio.sleep(2)
+        
+        _, token = message.text.split("_", 1)
+        
+        # Get fresh verify status
+        verify_status = await get_verify_status(id)
+        
+        if verify_status['verify_token'] != token:
+            await token_checking_msg.delete()
+            return await message.reply("Your token is invalid or Expired. Try again by clicking /start")
+        
+        await update_verify_status(id, is_verified=True, verified_time=time.time())
+        
+        # Delete the checking message
+        await token_checking_msg.delete()
+        
+        reply_markup = None
+        return await message.reply(f"Your token successfully verified and valid for: 24 Hour", reply_markup=reply_markup, protect_content=False, quote=True)
+
 @Bot.on_message(filters.command('start') & filters.private & subscribed)
 async def start_command(client: Client, message: Message):
     id = message.from_user.id
@@ -100,32 +135,6 @@ async def start_command(client: Client, message: Message):
                 pass
 
         verify_status = await get_verify_status(id)
-        if verify_status['is_verified'] and VERIFY_EXPIRE < (time.time() - verify_status['verified_time']):
-            await update_verify_status(id, is_verified=False)
-
-        if "verify_" in message.text and IS_VERIFY:
-            # Send token verification checking message
-            token_checking_msg = await message.reply("🔄 **Verifying your token...**\n\nPlease wait while I validate your verification token.")
-            
-            # Wait for 2 seconds to simulate token checking
-            await asyncio.sleep(2)
-            
-            _, token = message.text.split("_", 1)
-            
-            # Get fresh verify status
-            verify_status = await get_verify_status(id)
-            
-            if verify_status['verify_token'] != token:
-                await token_checking_msg.delete()
-                return await message.reply("Your token is invalid or Expired. Try again by clicking /start")
-            
-            await update_verify_status(id, is_verified=True, verified_time=time.time())
-            
-            # Delete the checking message
-            await token_checking_msg.delete()
-            
-            reply_markup = None
-            await message.reply(f"Your token successfully verified and valid for: 24 Hour", reply_markup=reply_markup, protect_content=False, quote=True)
 
         elif len(message.text) > 7 and (not IS_VERIFY or verify_status['is_verified']):
             try:
