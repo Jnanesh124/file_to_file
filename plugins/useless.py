@@ -5,7 +5,7 @@ from pyrogram import filters
 from config import ADMINS, BOT_STATS_TEXT, USER_REPLY_TEXT,ADMINS
 from datetime import datetime
 from helper_func import get_readable_time
-from database.database import add_user, present_user
+from database.database import add_user, present_user, full_userbase
 
 @Bot.on_message(filters.command('stats') & filters.user(ADMINS))
 async def stats(bot: Bot, message: Message):
@@ -13,6 +13,15 @@ async def stats(bot: Bot, message: Message):
     delta = now - bot.uptime
     time = get_readable_time(delta.seconds)
     await message.reply(BOT_STATS_TEXT.format(uptime=time))
+
+@Bot.on_message(filters.command('users') & filters.user(ADMINS))
+async def users_stats(bot: Bot, message: Message):
+    try:
+        users = await full_userbase()
+        total_users = len(users)
+        await message.reply(f"📊 **Bot Statistics:**\n\n👥 Total Users: {total_users}")
+    except Exception as e:
+        await message.reply(f"❌ Error getting user statistics: {str(e)}")
 
 
 @Bot.on_message(filters.private & filters.incoming)
