@@ -1214,3 +1214,5 @@ https://t.me/ultroid_official
      ⏰ Verified: 2025-09-07 14:04:37
      ⏳ Expires in: 21h 30m
 [07-Sep-25 16:33:52 - INFO] - bot - ==================================================
+[07-Sep-25 16:38:10 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[07-Sep-25 16:38:12 - INFO] - bot - Bot stopped.
