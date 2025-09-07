@@ -7,9 +7,19 @@ import os
 from bot import Bot
 from config import ADMINS, CHANNEL_ID, DISABLE_CHANNEL_BUTTON
 from helper_func import encode
+from database.database import is_banned_user
 
-@Bot.on_message(filters.private & filters.user(ADMINS) & ~filters.command(['start', 'users', 'broadcast', 'batch', 'genlink', 'stats', 'total', 'puser', 'removepremium', 'premiumlist']))
+@Bot.on_message(filters.private & filters.user(ADMINS) & ~filters.command(['start', 'users', 'broadcast', 'batch', 'genlink', 'stats', 'total', 'puser', 'removepremium', 'premiumlist', 'ban', 'unban', 'listban']))
 async def channel_post(client: Client, message: Message):
+    user_id = message.from_user.id
+    
+    # Check if user is banned (even admins can be banned)
+    if await is_banned_user(user_id):
+        return await message.reply(
+            "🚫 **You are banned from using this bot.**\n\n"
+            "Contact support if you think this is a mistake."
+        )
+    
     reply_text = await message.reply_text("Please Wait...!", quote=True)
     try:
         thumbnail_path = None  # Initialize thumbnail_path for cleanup

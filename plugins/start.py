@@ -27,14 +27,16 @@ async def get_user_non_joined_channels(client: Client, update):
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(client: Client, message: Message):
     user_id = message.from_user.id
+    username = message.from_user.username
+    first_name = message.from_user.first_name
 
     # Check if user is banned
+    from database.database import is_banned_user
     if await is_banned_user(user_id):
-        await message.reply(
+        return await message.reply(
             "🚫 **You are banned from using this bot.**\n\n"
-            "📞 Contact support if you think this is a mistake."
+            "Contact support if you think this is a mistake."
         )
-        return
 
     # Add user to DB if not present
     if not await present_user(user_id):

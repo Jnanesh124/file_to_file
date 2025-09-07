@@ -104,6 +104,8 @@ premiumlist - show list of all premium users
 - `/unban <user_id>` - Unban user (Admin only)
 - `/listban` - List all banned users (Admin only)
 
+🛠️ Variables only)
+
 🛠️ Variables
 
 * `API_HASH` Your API Hash from my.telegram.org
