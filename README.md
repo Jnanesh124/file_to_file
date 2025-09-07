@@ -78,6 +78,14 @@ users - view bot statistics
 broadcast - broadcast any messages to bot users
 
 stats - checking your bot uptime
+
+total - show total file link clicks statistics
+
+puser <user_id> - make a user premium (bypass verification)
+
+removepremium <user_id> - remove premium status from user
+
+premiumlist - show list of all premium users
 ```
 
 🛠️ Variables

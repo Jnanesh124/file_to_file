@@ -6,7 +6,7 @@ from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from bot import Bot
 from config import *
-from database.database import present_user, add_user, get_verify_status, update_verify_status
+from database.database import add_user, present_user, full_userbase, get_verify_status, update_verify_status, user_data
 from helper_func import is_subscribed, get_non_joined_channels, get_shortlink, decode, get_messages, get_exp_time
 
 # ================== HELPER WRAPPERS ================== #
@@ -128,7 +128,7 @@ async def start_handler(client: Client, message: Message):
         # Check if user is premium
         user_doc = await user_data.find_one({'_id': user_id})
         is_premium = user_doc.get('is_premium', False) if user_doc else False
-        
+
         # If user is not premium, check verification status
         if not is_premium:
             if not verify_status['is_verified'] or is_expired:
@@ -258,6 +258,92 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
         text = "/start"
     await start_handler(client, MsgWrapper())
 
+# ================== PREMIUM USER COMMANDS ================== #
+
+# Add premium user
+@Bot.on_message(filters.private & filters.command("puser"))
+async def puser_handler(client: Client, message: Message):
+    if message.chat.id not in ADMINS:
+        return await message.reply("You are not authorized to use this command.")
+
+    try:
+        _, user_id_str = message.text.split(" ", 1)
+        user_id = int(user_id_str)
+
+        # Update the user's status to premium in the database
+        await update_verify_status(user_id, is_premium=True)
+        await message.reply(f"User `{user_id}` has been successfully made a premium user.")
+
+        # Optionally, notify the user they are now premium
+        try:
+            await client.send_message(
+                user_id,
+                "🎉 Congratulations! You have been granted premium access. You no longer need to verify."
+            )
+        except Exception as e:
+            print(f"Failed to notify user {user_id} about premium status: {e}")
+
+    except ValueError:
+        await message.reply("Invalid user ID format. Please use `/puser <user_id>`.")
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
+
+# Remove premium user
+@Bot.on_message(filters.private & filters.command("removepremium"))
+async def removepremium_handler(client: Client, message: Message):
+    if message.chat.id not in ADMINS:
+        return await message.reply("You are not authorized to use this command.")
+
+    try:
+        _, user_id_str = message.text.split(" ", 1)
+        user_id = int(user_id_str)
+
+        # Update the user's status to not premium in the database
+        await update_verify_status(user_id, is_premium=False)
+        await message.reply(f"User `{user_id}` has been successfully removed from premium users.")
+
+        # Optionally, notify the user
+        try:
+            await client.send_message(
+                user_id,
+                "Your premium access has been revoked. You will now need to verify your account."
+            )
+        except Exception as e:
+            print(f"Failed to notify user {user_id} about premium status removal: {e}")
+
+    except ValueError:
+        await message.reply("Invalid user ID format. Please use `/removepremium <user_id>`.")
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
+
+# List all premium users
+@Bot.on_message(filters.private & filters.command("premiumlist"))
+async def premiumlist_handler(client: Client, message: Message):
+    if message.chat.id not in ADMINS:
+        return await message.reply("You are not authorized to use this command.")
+
+    try:
+        # Fetch all users and filter for premium ones
+        all_users = await full_userbase() # Assuming full_userbase returns all user documents
+        premium_users = [user['_id'] for user in all_users if user.get('is_premium', False)]
+
+        if not premium_users:
+            await message.reply("No premium users found.")
+            return
+
+        # Format the list of premium users
+        premium_list_text = "✅ **Premium Users:**\n\n"
+        for user_id in premium_users:
+            premium_list_text += f"- `{user_id}`\n"
+
+        # Telegram messages have a limit, so we might need to chunk this if there are many users.
+        # For now, assuming it fits within a single message.
+        await message.reply(premium_list_text)
+
+    except Exception as e:
+        await message.reply(f"An error occurred while fetching premium users: {e}")
+
+
 # ================== TOTAL CLICKS COMMAND ================== #
 @Bot.on_message(filters.private & filters.command("total"))
 async def total_handler(client: Client, message: Message):
@@ -268,32 +354,13 @@ async def total_handler(client: Client, message: Message):
     # Example:
     # total_clicks = await get_total_link_clicks(user_id)
     # await message.reply(f"Total clicks on your stored links: {total_clicks}")
-    await message.reply("This command is under development.")
 
-# ================== PREMIUM USER COMMAND ================== #
-@Bot.on_message(filters.private & filters.command("puser"))
-async def puser_handler(client: Client, message: Message):
-    if message.chat.id not in ADMINS: # Check if the sender is an admin
-        return await message.reply("You are not authorized to use this command.")
-
+    # Get total clicks for the user
     try:
-        _, user_id_to_make_premium = message.text.split(" ", 1)
-        user_id_to_make_premium = int(user_id_to_make_premium)
-
-        # Update the user's status to premium in the database
-        await update_verify_status(user_id_to_make_premium, is_premium=True)
-        await message.reply(f"User `{user_id_to_make_premium}` has been successfully made a premium user.")
-
-        # Optionally, notify the user they are now premium
-        try:
-            await client.send_message(
-                user_id_to_make_premium,
-                "🎉 Congratulations! You have been granted premium access. You no longer need to verify."
-            )
-        except Exception as e:
-            print(f"Failed to notify user {user_id_to_make_premium} about premium status: {e}")
-
-    except ValueError:
-        await message.reply("Invalid user ID format. Please use `/puser <user_id>`.")
+        from database.database import get_total_link_clicks
+        total_clicks = await get_total_link_clicks(user_id)
+        await message.reply(f"Total clicks on your stored links: {total_clicks}")
+    except ImportError:
+        await message.reply("Sorry, the link click tracking feature is not fully implemented yet.")
     except Exception as e:
-        await message.reply(f"An error occurred: {e}")
+        await message.reply(f"An error occurred while fetching total clicks: {e}")
