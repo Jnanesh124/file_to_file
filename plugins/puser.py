@@ -1,4 +1,5 @@
 
+import time
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from bot import Bot
@@ -50,6 +51,20 @@ async def premium_user_command(client: Client, message: Message):
             success_msg += f"⚡ **Verification:** Bypassed"
         
         await message.reply(success_msg)
+        
+        # Notify the user about premium status
+        try:
+            notification_msg = (
+                f"🎉 **Congratulations!**\n\n"
+                f"✨ You have been granted **Premium Access**!\n\n"
+                f"🚫 **No more verification needed**\n"
+                f"⚡ **Direct file access**\n"
+                f"👑 **Premium benefits activated**\n\n"
+                f"Enjoy your premium experience!"
+            )
+            await client.send_message(user_id, notification_msg)
+        except Exception as e:
+            await message.reply(f"✅ User made premium but couldn't notify them: {str(e)}")
         
     except Exception as e:
         await message.reply(f"❌ Error making user premium: {str(e)}")

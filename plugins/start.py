@@ -125,8 +125,12 @@ async def start_handler(client: Client, message: Message):
             if is_expired:
                 print(f"⏰ User {user_id} verification expired. Elapsed: {int(time_elapsed/3600)}h {int((time_elapsed%3600)/60)}m")
 
+        # Check if user is premium
+        user_doc = await user_data.find_one({'_id': user_id})
+        is_premium = user_doc.get('is_premium', False) if user_doc else False
+        
         # If user is not premium, check verification status
-        if not verify_status.get('is_premium', False): # Check if user is premium
+        if not is_premium:
             if not verify_status['is_verified'] or is_expired:
                 checking_msg = await message.reply("🔄 **Checking your token...**")
                 await asyncio.sleep(1)
@@ -174,6 +178,9 @@ async def start_handler(client: Client, message: Message):
                         for msg in messages:
                             if msg:
                                 sent_msg = await msg.copy(chat_id=user_id, protect_content=PROTECT_CONTENT)
+                                # Increment file click count for each file
+                                from database.database import increment_file_clicks
+                                await increment_file_clicks(user_id)
                                 if AUTO_DELETE:
                                     from plugins.auto_delete import schedule_auto_delete
                                     asyncio.create_task(schedule_auto_delete(client, sent_msg, file_id))
@@ -187,6 +194,9 @@ async def start_handler(client: Client, message: Message):
                             msg = await client.get_messages(client.db_channel.id, msg_id)
                             if msg:
                                 sent_msg = await msg.copy(chat_id=user_id, protect_content=PROTECT_CONTENT)
+                                # Increment file click count
+                                from database.database import increment_file_clicks
+                                await increment_file_clicks(user_id)
                                 if AUTO_DELETE:
                                     from plugins.auto_delete import schedule_auto_delete
                                     asyncio.create_task(schedule_auto_delete(client, sent_msg, file_id))
