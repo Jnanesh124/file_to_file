@@ -9,6 +9,72 @@ from config import *
 from database.database import add_user, present_user, full_userbase, get_verify_status, update_verify_status, user_data, ban_user, unban_user, is_banned_user, get_banned_users, increment_file_clicks, get_total_link_clicks # Added necessary imports
 from helper_func import is_subscribed, get_non_joined_channels, get_shortlink, decode, get_messages, get_exp_time
 
+@Bot.on_message(filters.private & filters.command("start"))
+async def start_handler(client: Client, message: Message):
+    user_id = message.from_user.id
+
+    # Check if user is banned
+    if await is_banned_user(user_id):
+        return await message.reply(
+            "🚫 **You are banned from using this bot.**\n\n"
+            "Contact support if you think this is a mistake."
+        )
+
+    if len(message.text.split()) <= 1:
+        if not await present_user(user_id):
+            await add_user(user_id)
+            await message.reply_text(
+                "Hello there! 👋\n\n"
+                "I am your personal file storing bot. "
+                "Send me any file, and I will store it for you.\n\n"
+                "You can also manage your files and settings using the commands below.\n\n"
+                "Use /help to see all available commands.",
+                reply_markup=InlineKeyboardMarkup(
+                    [[
+                        InlineKeyboardButton("❓ Help", callback_data="help")
+                    ]]
+                )
+            )
+        else:
+            await message.reply_text(
+                "Hello again! 👋\n\n"
+                "Welcome back! Use /help to see all available commands.",
+                reply_markup=InlineKeyboardMarkup(
+                    [[
+                        InlineKeyboardButton("❓ Help", callback_data="help")
+                    ]]
+                )
+            )
+    else:
+        # Handle the case where the start command includes arguments (e.g., referral links)
+        # You might want to implement referral logic here
+        pass
+
+@Bot.on_message(filters.private & filters.command("help"))
+async def help_command(client: Client, message: Message):
+    user_id = message.from_user.id
+
+    # Check if user is banned
+    if await is_banned_user(user_id):
+        return await message.reply(
+            "🚫 **You are banned from using this bot.**\n\n"
+            "Contact support if you think this is a mistake."
+        )
+
+    help_text = (
+        "Here are the commands you can use:\n\n"
+        "/start - Start the bot\n"
+        "/help - Show this help message\n"
+        "/total - Show your total file clicks\n"
+        "/puser <user_id> - Make user premium (Admin only)\n"
+        "/removepremium <user_id> - Remove premium status (Admin only)\n"
+        "/premiumlist - List all premium users (Admin only)\n"
+        "/ban <user_id> - Ban a user from accessing the bot (Admin only)\n"
+        "/unban <user_id> - Unban a previously banned user (Admin only)\n"
+        "/listban - List all banned users (Admin only)"
+    )
+    await message.reply_text(help_text)
+
 # ================== HELPER WRAPPERS ================== #
 async def is_user_subscribed(client: Client, update):
     """Wrapper to allow Message or CallbackQuery for subscription check"""
