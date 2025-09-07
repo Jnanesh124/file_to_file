@@ -906,3 +906,38 @@ https://t.me/ultroid_official
      ⏰ Verified: 2025-09-07 14:04:37
      ⏳ Expires in: 22h 15m
 [07-Sep-25 15:48:57 - INFO] - bot - ==================================================
+[07-Sep-25 15:55:03 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[07-Sep-25 15:55:11 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[07-Sep-25 15:55:11 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[07-Sep-25 15:55:14 - INFO] - bot - ==================================================
+[07-Sep-25 15:55:14 - INFO] - bot - 📊 VERIFICATION STATISTICS (Last 24 Hours)
+[07-Sep-25 15:55:14 - INFO] - bot - ==================================================
+[07-Sep-25 15:55:14 - INFO] - bot - ✅ Total Active Verified Users: 4
+[07-Sep-25 15:55:14 - INFO] - bot - 🆕 New Verifications (24h): 4
+[07-Sep-25 15:55:14 - INFO] - bot - 
+🔔 Recent Verifications:
+[07-Sep-25 15:55:14 - INFO] - bot -   1. 👤 Ritvik (@kvg_ritvik)
+     🆔 ID: 7066408742
+     ⏰ Verified: 2025-09-06 16:45:42
+     ⏳ Expires in: 0h 50m
+[07-Sep-25 15:55:14 - INFO] - bot -   2. 👤 Jn (No username)
+     🆔 ID: 8077775478
+     ⏰ Verified: 2025-09-07 13:50:23
+     ⏳ Expires in: 21h 55m
+[07-Sep-25 15:55:15 - INFO] - bot -   3. 👤 Crazy01 (No username)
+     🆔 ID: 6192345811
+     ⏰ Verified: 2025-09-06 20:40:49
+     ⏳ Expires in: 4h 45m
+[07-Sep-25 15:55:15 - INFO] - bot -   4. 👤 Jack (@Jacksparwking)
+     🆔 ID: 7623389594
+     ⏰ Verified: 2025-09-07 14:04:37
+     ⏳ Expires in: 22h 9m
+[07-Sep-25 15:55:15 - INFO] - bot - ==================================================
