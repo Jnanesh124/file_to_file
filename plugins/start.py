@@ -75,7 +75,7 @@ async def start_handler(client: Client, message: Message):
 
             await update_verify_status(user_id, is_verified=True, verified_time=time.time())
             await message.reply("✅ Your token was successfully verified!\nValid for 24 hours.")
-            
+
             # Send notification to admin about successful verification
             try:
                 admin_msg = (
@@ -87,19 +87,19 @@ async def start_handler(client: Client, message: Message):
                     f"⏰ **Verified At:** {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}\n"
                     f"⏳ **Valid Until:** {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() + VERIFY_EXPIRE))}"
                 )
-                
+
                 # Send to all admins
                 for admin_id in ADMINS:
                     try:
                         await client.send_message(admin_id, admin_msg)
                     except Exception as e:
                         print(f"Failed to send verification notification to admin {admin_id}: {e}")
-                        
+
                 print(f"✅ User {user_id} ({message.from_user.first_name}) verified successfully at {time.strftime('%Y-%m-%d %H:%M:%S')}")
-                        
+
             except Exception as e:
                 print(f"Error sending admin notification: {e}")
-            
+
             # Continue to normal start message after successful verification
             await message.reply(
                 START_MSG.format(
@@ -116,39 +116,41 @@ async def start_handler(client: Client, message: Message):
         # Handle offline time properly - check actual time elapsed since verification
         current_time = time.time()
         is_expired = False
-        
+
         if verify_status['is_verified'] and verify_status['verified_time']:
             # Calculate actual time elapsed since verification (handles bot offline time)
             time_elapsed = current_time - verify_status['verified_time']
             is_expired = time_elapsed > VERIFY_EXPIRE
-            
+
             if is_expired:
                 print(f"⏰ User {user_id} verification expired. Elapsed: {int(time_elapsed/3600)}h {int((time_elapsed%3600)/60)}m")
-        
-        if not verify_status['is_verified'] or is_expired:
-            checking_msg = await message.reply("🔄 **Checking your token...**")
-            await asyncio.sleep(1)
-            await checking_msg.delete()
 
-            token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-            await update_verify_status(user_id, verify_token=token, link="")
-            link = await get_shortlink(
-                SHORTLINK_URL,
-                SHORTLINK_API,
-                f'https://telegram.dog/{client.username}?start=verify_{token}'
-            )
+        # If user is not premium, check verification status
+        if not verify_status.get('is_premium', False): # Check if user is premium
+            if not verify_status['is_verified'] or is_expired:
+                checking_msg = await message.reply("🔄 **Checking your token...**")
+                await asyncio.sleep(1)
+                await checking_msg.delete()
 
-            btn = [
-                [InlineKeyboardButton("Click here to Verify ✅", url=link)],
-                [InlineKeyboardButton("How to use the bot", url=TUT_VID)]
-            ]
+                token = ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+                await update_verify_status(user_id, verify_token=token, link="")
+                link = await get_shortlink(
+                    SHORTLINK_URL,
+                    SHORTLINK_API,
+                    f'https://telegram.dog/{client.username}?start=verify_{token}'
+                )
 
-            return await message.reply(
-                f"⚠️ You need to verify before using the bot.\n"
-                f"Your token has expired or is missing.\nClick below to refresh your token.\n\n"
-                f"⏳ Token Timeout: {get_exp_time(VERIFY_EXPIRE)}",
-                reply_markup=InlineKeyboardMarkup(btn)
-            )
+                btn = [
+                    [InlineKeyboardButton("Click here to Verify ✅", url=link)],
+                    [InlineKeyboardButton("How to use this bot?", url=TUT_VID)]
+                ]
+
+                return await message.reply(
+                    f"⚠️ You need to verify before using the bot.\n"
+                    f"Your token has expired or is missing.\nClick below to refresh your token.\n\n"
+                    f"⏳ Token Timeout: {get_exp_time(VERIFY_EXPIRE)}",
+                    reply_markup=InlineKeyboardMarkup(btn)
+                )
 
     # ====== HANDLE FILE REQUESTS ====== #
     if len(message.text) > 7:
@@ -245,3 +247,43 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
         from_user = query.from_user
         text = "/start"
     await start_handler(client, MsgWrapper())
+
+# ================== TOTAL CLICKS COMMAND ================== #
+@Bot.on_message(filters.private & filters.command("total"))
+async def total_handler(client: Client, message: Message):
+    user_id = message.from_user.id
+    # Logic to count total clicks on stored links for the user
+    # This will require a new function in database.py to fetch this count.
+    # For now, let's assume such a function exists and returns a count.
+    # Example:
+    # total_clicks = await get_total_link_clicks(user_id)
+    # await message.reply(f"Total clicks on your stored links: {total_clicks}")
+    await message.reply("This command is under development.")
+
+# ================== PREMIUM USER COMMAND ================== #
+@Bot.on_message(filters.private & filters.command("puser"))
+async def puser_handler(client: Client, message: Message):
+    if message.chat.id not in ADMINS: # Check if the sender is an admin
+        return await message.reply("You are not authorized to use this command.")
+
+    try:
+        _, user_id_to_make_premium = message.text.split(" ", 1)
+        user_id_to_make_premium = int(user_id_to_make_premium)
+
+        # Update the user's status to premium in the database
+        await update_verify_status(user_id_to_make_premium, is_premium=True)
+        await message.reply(f"User `{user_id_to_make_premium}` has been successfully made a premium user.")
+
+        # Optionally, notify the user they are now premium
+        try:
+            await client.send_message(
+                user_id_to_make_premium,
+                "🎉 Congratulations! You have been granted premium access. You no longer need to verify."
+            )
+        except Exception as e:
+            print(f"Failed to notify user {user_id_to_make_premium} about premium status: {e}")
+
+    except ValueError:
+        await message.reply("Invalid user ID format. Please use `/puser <user_id>`.")
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")

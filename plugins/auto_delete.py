@@ -86,12 +86,15 @@ async def get_file_again(client: Client, query):
         if not await is_user_subscribed(client, query):
             return await query.answer("❌ Please join all channels first!", show_alert=True)
         
-        # Check verification status if enabled
+        # Check verification status if enabled (skip for premium users)
         if IS_VERIFY:
-            from database.database import get_verify_status
-            verify_status = await get_verify_status(user_id)
-            if not verify_status['is_verified']:
-                return await query.answer("❌ Please verify first by clicking /start", show_alert=True)
+            from database.database import get_verify_status, is_premium_user
+            is_premium = await is_premium_user(user_id)
+            
+            if not is_premium:
+                verify_status = await get_verify_status(user_id)
+                if not verify_status['is_verified']:
+                    return await query.answer("❌ Please verify first by clicking /start", show_alert=True)
         
         await query.answer("🔄 Fetching file again...", show_alert=True)
         

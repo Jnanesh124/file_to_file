@@ -22,7 +22,10 @@ def new_user(id):
             'verified_time': "",
             'verify_token': "",
             'link': ""
-        }
+        },
+        'is_premium': False,
+        'premium_added_time': 0,
+        'file_clicks': 0
     }
 
 async def present_user(user_id: int):
@@ -82,6 +85,21 @@ async def update_verify_status(user_id, verify_token="", is_verified=False, veri
     current['verified_time'] = verified_time
     current['link'] = link
     await user_data.update_one({'_id': user_id}, {'$set': {'verify_status': current}})
+
+async def is_premium_user(user_id):
+    """Check if user is premium"""
+    user = await user_data.find_one({'_id': user_id})
+    if user:
+        return user.get('is_premium', False)
+    return False
+
+async def increment_file_clicks(user_id):
+    """Increment file click count for user"""
+    await user_data.update_one(
+        {'_id': user_id},
+        {'$inc': {'file_clicks': 1}},
+        upsert=True
+    )
 
 # File storage functions
 files_data = database['files']
