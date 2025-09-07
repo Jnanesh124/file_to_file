@@ -6,7 +6,7 @@ from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from bot import Bot
 from config import *
-from database.database import add_user, present_user, full_userbase, get_verify_status, update_verify_status, user_data
+from database.database import add_user, present_user, full_userbase, get_verify_status, update_verify_status, user_data, ban_user, unban_user, is_banned_user, get_banned_users, increment_file_clicks, get_total_link_clicks # Added necessary imports
 from helper_func import is_subscribed, get_non_joined_channels, get_shortlink, decode, get_messages, get_exp_time
 
 # ================== HELPER WRAPPERS ================== #
@@ -27,6 +27,14 @@ async def get_user_non_joined_channels(client: Client, update):
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(client: Client, message: Message):
     user_id = message.from_user.id
+
+    # Check if user is banned
+    if await is_banned_user(user_id):
+        await message.reply(
+            "🚫 **You are banned from using this bot.**\n\n"
+            "📞 Contact support if you think this is a mistake."
+        )
+        return
 
     # Add user to DB if not present
     if not await present_user(user_id):
@@ -179,7 +187,6 @@ async def start_handler(client: Client, message: Message):
                             if msg:
                                 sent_msg = await msg.copy(chat_id=user_id, protect_content=PROTECT_CONTENT)
                                 # Increment file click count for each file
-                                from database.database import increment_file_clicks
                                 await increment_file_clicks(user_id)
                                 if AUTO_DELETE:
                                     from plugins.auto_delete import schedule_auto_delete
@@ -195,7 +202,6 @@ async def start_handler(client: Client, message: Message):
                             if msg:
                                 sent_msg = await msg.copy(chat_id=user_id, protect_content=PROTECT_CONTENT)
                                 # Increment file click count
-                                from database.database import increment_file_clicks
                                 await increment_file_clicks(user_id)
                                 if AUTO_DELETE:
                                     from plugins.auto_delete import schedule_auto_delete
@@ -343,6 +349,82 @@ async def premiumlist_handler(client: Client, message: Message):
     except Exception as e:
         await message.reply(f"An error occurred while fetching premium users: {e}")
 
+# Ban a user
+@Bot.on_message(filters.private & filters.command("ban"))
+async def ban_user_handler(client: Client, message: Message):
+    if message.chat.id not in ADMINS:
+        return await message.reply("You are not authorized to use this command.")
+
+    try:
+        _, user_id_str = message.text.split(" ", 1)
+        user_id = int(user_id_str)
+
+        await ban_user(user_id)
+        await message.reply(f"User `{user_id}` has been successfully banned.")
+
+        # Optionally, notify the user they are banned
+        try:
+            await client.send_message(
+                user_id,
+                "🚫 You have been banned from using this bot. Contact support if you believe this is an error."
+            )
+        except Exception as e:
+            print(f"Failed to notify user {user_id} about ban: {e}")
+
+    except ValueError:
+        await message.reply("Invalid user ID format. Please use `/ban <user_id>`.")
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
+
+# Unban a user
+@Bot.on_message(filters.private & filters.command("unban"))
+async def unban_user_handler(client: Client, message: Message):
+    if message.chat.id not in ADMINS:
+        return await message.reply("You are not authorized to use this command.")
+
+    try:
+        _, user_id_str = message.text.split(" ", 1)
+        user_id = int(user_id_str)
+
+        await unban_user(user_id)
+        await message.reply(f"User `{user_id}` has been successfully unbanned.")
+
+        # Optionally, notify the user they are unbanned
+        try:
+            await client.send_message(
+                user_id,
+                "✅ You have been unbanned. You can now use the bot again."
+            )
+        except Exception as e:
+            print(f"Failed to notify user {user_id} about unban: {e}")
+
+    except ValueError:
+        await message.reply("Invalid user ID format. Please use `/unban <user_id>`.")
+    except Exception as e:
+        await message.reply(f"An error occurred: {e}")
+
+# List all banned users
+@Bot.on_message(filters.private & filters.command("listban"))
+async def listban_handler(client: Client, message: Message):
+    if message.chat.id not in ADMINS:
+        return await message.reply("You are not authorized to use this command.")
+
+    try:
+        banned_users = await get_banned_users()
+
+        if not banned_users:
+            await message.reply("No users are currently banned.")
+            return
+
+        banned_list_text = "🚫 **Banned Users:**\n\n"
+        for user_id in banned_users:
+            banned_list_text += f"- `{user_id}`\n"
+
+        await message.reply(banned_list_text)
+
+    except Exception as e:
+        await message.reply(f"An error occurred while fetching banned users: {e}")
+
 
 # ================== TOTAL CLICKS COMMAND ================== #
 @Bot.on_message(filters.private & filters.command("total"))
@@ -357,7 +439,6 @@ async def total_handler(client: Client, message: Message):
 
     # Get total clicks for the user
     try:
-        from database.database import get_total_link_clicks
         total_clicks = await get_total_link_clicks(user_id)
         await message.reply(f"Total clicks on your stored links: {total_clicks}")
     except ImportError:

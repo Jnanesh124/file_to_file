@@ -26,7 +26,9 @@ def new_user(id):
         },
         'is_premium': False,
         'premium_added_time': 0,
-        'file_clicks': 0
+        'file_clicks': 0,
+        'is_banned': False,
+        'banned_time': 0
     }
 
 async def present_user(user_id: int):
@@ -143,3 +145,35 @@ async def get_total_link_clicks(user_id):
     if user:
         return user.get('file_clicks', 0)
     return 0
+
+async def ban_user(user_id):
+    """Ban a user"""
+    await user_data.update_one(
+        {'_id': user_id},
+        {'$set': {'is_banned': True, 'banned_time': time.time()}},
+        upsert=True
+    )
+
+async def unban_user(user_id):
+    """Unban a user"""
+    await user_data.update_one(
+        {'_id': user_id},
+        {'$set': {'is_banned': False}}
+    )
+
+async def is_banned_user(user_id):
+    """Check if user is banned"""
+    user = await user_data.find_one({'_id': user_id})
+    if user:
+        return user.get('is_banned', False)
+    return False
+
+async def get_banned_users():
+    """Get all banned users"""
+    banned_users = []
+    async for user in user_data.find({'is_banned': True}):
+        banned_users.append({
+            'user_id': int(user['_id']),
+            'banned_time': user.get('banned_time', 0)
+        })
+    return banned_users

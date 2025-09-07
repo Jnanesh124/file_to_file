@@ -100,6 +100,9 @@ premiumlist - show list of all premium users
 - `/puser <user_id>` - Make user premium (Admin only)
 - `/removepremium <user_id>` - Remove premium status (Admin only)
 - `/premiumlist` - List all premium users (Admin only)
+- `/ban <user_id>` - Ban user from accessing bot (Admin only)
+- `/unban <user_id>` - Unban user (Admin only)
+- `/listban` - List all banned users (Admin only)
 
 🛠️ Variables
 
