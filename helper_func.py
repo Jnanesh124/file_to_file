@@ -168,5 +168,12 @@ def get_readable_time(seconds: int) -> str:
     up_time += ":".join(time_list)
     return up_time
 
+def get_time_remaining(verify_time, expire_duration):
+    """Calculate remaining time for verification"""
+    current_time = time.time()
+    elapsed = current_time - verify_time
+    remaining = expire_duration - elapsed
+    return max(0, remaining)
+
 
 subscribed = filters.create(is_subscribed)

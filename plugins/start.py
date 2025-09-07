@@ -76,6 +76,30 @@ async def start_handler(client: Client, message: Message):
             await update_verify_status(user_id, is_verified=True, verified_time=time.time())
             await message.reply("✅ Your token was successfully verified!\nValid for 24 hours.")
             
+            # Send notification to admin about successful verification
+            try:
+                admin_msg = (
+                    f"🔔 **New User Verified Successfully!**\n\n"
+                    f"👤 **User:** {message.from_user.first_name}"
+                    f"{' ' + message.from_user.last_name if message.from_user.last_name else ''}\n"
+                    f"🆔 **User ID:** `{user_id}`\n"
+                    f"📧 **Username:** @{message.from_user.username if message.from_user.username else 'None'}\n"
+                    f"⏰ **Verified At:** {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}\n"
+                    f"⏳ **Valid Until:** {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() + VERIFY_EXPIRE))}"
+                )
+                
+                # Send to all admins
+                for admin_id in ADMINS:
+                    try:
+                        await client.send_message(admin_id, admin_msg)
+                    except Exception as e:
+                        print(f"Failed to send verification notification to admin {admin_id}: {e}")
+                        
+                print(f"✅ User {user_id} ({message.from_user.first_name}) verified successfully at {time.strftime('%Y-%m-%d %H:%M:%S')}")
+                        
+            except Exception as e:
+                print(f"Error sending admin notification: {e}")
+            
             # Continue to normal start message after successful verification
             await message.reply(
                 START_MSG.format(
@@ -89,8 +113,19 @@ async def start_handler(client: Client, message: Message):
             return
 
         # Case 2: Check if user is verified (with expiry check)
+        # Handle offline time properly - check actual time elapsed since verification
         current_time = time.time()
-        if not verify_status['is_verified'] or (current_time - verify_status['verified_time']) > VERIFY_EXPIRE:
+        is_expired = False
+        
+        if verify_status['is_verified'] and verify_status['verified_time']:
+            # Calculate actual time elapsed since verification (handles bot offline time)
+            time_elapsed = current_time - verify_status['verified_time']
+            is_expired = time_elapsed > VERIFY_EXPIRE
+            
+            if is_expired:
+                print(f"⏰ User {user_id} verification expired. Elapsed: {int(time_elapsed/3600)}h {int((time_elapsed%3600)/60)}m")
+        
+        if not verify_status['is_verified'] or is_expired:
             checking_msg = await message.reply("🔄 **Checking your token...**")
             await asyncio.sleep(1)
             await checking_msg.delete()
