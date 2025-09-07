@@ -104,7 +104,7 @@ async def get_message_id(client, message):
     elif message.forward_sender_name:
         return 0
     elif message.text:
-        pattern = "https://t.me/(?:c/)?(.*)/(\d+)"
+        pattern = r"https://t.me/(?:c/)?(.*)/(\d+)"
         matches = re.match(pattern,message.text)
         if not matches:
             return 0
@@ -174,6 +174,45 @@ def get_time_remaining(verify_time, expire_duration):
     elapsed = current_time - verify_time
     remaining = expire_duration - elapsed
     return max(0, remaining)
+
+async def get_verification_stats():
+    """Get verification statistics for the last 24 hours"""
+    try:
+        from config import VERIFY_EXPIRE
+        current_time = time.time()
+        last_24h = current_time - 86400  # 24 hours ago
+        
+        verified_in_24h = []
+        total_verified = 0
+        
+        async for user in user_data.find():
+            user_id = user.get('_id')
+            verify_status = user.get('verify_status', {})
+            
+            if verify_status.get('is_verified'):
+                verified_time = verify_status.get('verified_time', 0)
+                time_elapsed = current_time - verified_time
+                
+                # Check if still valid (not expired)
+                if time_elapsed <= VERIFY_EXPIRE:
+                    total_verified += 1
+                    
+                    # Check if verified in last 24 hours
+                    if verified_time >= last_24h:
+                        remaining_time = VERIFY_EXPIRE - time_elapsed
+                        verified_in_24h.append({
+                            'user_id': user_id,
+                            'verified_time': verified_time,
+                            'remaining_time': remaining_time
+                        })
+        
+        return {
+            'verified_in_24h': verified_in_24h,
+            'total_verified': total_verified
+        }
+    except Exception as e:
+        print(f"Error getting verification stats: {e}")
+        return {'verified_in_24h': [], 'total_verified': 0}
 
 
 subscribed = filters.create(is_subscribed)

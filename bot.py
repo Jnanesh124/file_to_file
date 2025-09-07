@@ -66,6 +66,68 @@ class Bot(Client):
 (っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
 ░╚════╝░░╚════╝░╚═════╝░╚══════╝
                                           """)
+        
+        # Show verification statistics on startup
+        try:
+            from helper_func import get_verification_stats
+            from config import IS_VERIFY
+            import time
+            
+            if IS_VERIFY:
+                stats = await get_verification_stats()
+                self.LOGGER(__name__).info("=" * 50)
+                self.LOGGER(__name__).info("📊 VERIFICATION STATISTICS (Last 24 Hours)")
+                self.LOGGER(__name__).info("=" * 50)
+                self.LOGGER(__name__).info(f"✅ Total Active Verified Users: {stats['total_verified']}")
+                self.LOGGER(__name__).info(f"🆕 New Verifications (24h): {len(stats['verified_in_24h'])}")
+                
+                if stats['verified_in_24h']:
+                    self.LOGGER(__name__).info("\n🔔 Recent Verifications:")
+                    for i, user_data in enumerate(stats['verified_in_24h'][:10], 1):  # Show max 10
+                        user_id = user_data['user_id']
+                        verified_time = user_data['verified_time']
+                        remaining_time = user_data['remaining_time']
+                        
+                        # Format verified time
+                        verified_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(verified_time))
+                        
+                        # Format remaining time
+                        remaining_hours = int(remaining_time // 3600)
+                        remaining_mins = int((remaining_time % 3600) // 60)
+                        remaining_str = f"{remaining_hours}h {remaining_mins}m"
+                        
+                        try:
+                            # Try to get user info
+                            user_info = await self.get_users(user_id)
+                            username = f"@{user_info.username}" if user_info.username else "No username"
+                            first_name = user_info.first_name or "Unknown"
+                            
+                            self.LOGGER(__name__).info(
+                                f"  {i}. 👤 {first_name} ({username})\n"
+                                f"     🆔 ID: {user_id}\n"
+                                f"     ⏰ Verified: {verified_str}\n"
+                                f"     ⏳ Expires in: {remaining_str}"
+                            )
+                        except:
+                            # If can't get user info, show basic details
+                            self.LOGGER(__name__).info(
+                                f"  {i}. 🆔 User ID: {user_id}\n"
+                                f"     ⏰ Verified: {verified_str}\n"
+                                f"     ⏳ Expires in: {remaining_str}"
+                            )
+                    
+                    if len(stats['verified_in_24h']) > 10:
+                        self.LOGGER(__name__).info(f"  ... and {len(stats['verified_in_24h']) - 10} more users")
+                else:
+                    self.LOGGER(__name__).info("📭 No new verifications in the last 24 hours")
+                
+                self.LOGGER(__name__).info("=" * 50)
+            else:
+                self.LOGGER(__name__).info("🔓 Verification is disabled")
+                
+        except Exception as e:
+            self.LOGGER(__name__).warning(f"Could not load verification statistics: {e}")
+        
         self.username = usr_bot_me.username
         #web-response
         app = web.AppRunner(await web_server())
