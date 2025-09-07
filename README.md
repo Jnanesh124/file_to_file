@@ -88,6 +88,19 @@ removepremium <user_id> - remove premium status from user
 premiumlist - show list of all premium users
 ```
 
+## Available Commands:
+
+- `/start` - Start the bot and verify your account
+- `/users` - Get total number of users (Admin only)
+- `/broadcast <message>` - Broadcast message to all users (Admin only)
+- `/batch <start_id> <end_id>` - Generate batch links (Admin only)
+- `/genlink <channel_post_link>` - Generate file sharing link (Admin only)
+- `/stats` - Get bot statistics (Admin only)
+- `/total` - Show your total file clicks
+- `/puser <user_id>` - Make user premium (Admin only)
+- `/removepremium <user_id>` - Remove premium status (Admin only)
+- `/premiumlist` - List all premium users (Admin only)
+
 🛠️ Variables
 
 * `API_HASH` Your API Hash from my.telegram.org

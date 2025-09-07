@@ -144,7 +144,7 @@ async def premium_list_command(client: Client, message: Message):
         
         # Find all premium users
         async for user in user_data.find({'is_premium': True}):
-            user_id = user.get('_id')
+            user_id = int(user['_id'])  # Convert to int directly
             premium_added_time = user.get('premium_added_time', 0)
             premium_users.append({
                 'user_id': user_id,
