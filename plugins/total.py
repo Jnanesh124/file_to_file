@@ -1,40 +1,80 @@
 
-
 import time
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from bot import Bot
 from config import ADMINS
-from database.database import user_data
+from database.database import user_data, present_user, add_user, update_verify_status, get_total_link_clicks
 
-@Bot.on_message(filters.private & filters.user(ADMINS) & filters.command('total'))
-async def total_command(client: Client, message: Message):
-    """Show total number of users who clicked file links"""
+@Bot.on_message(filters.private & filters.command("total"))
+async def total_handler(client: Client, message: Message):
+    """Show total file clicks for the user"""
+    user_id = message.from_user.id
     try:
-        total_clicks = 0
-        unique_users = set()
+        total_clicks = await get_total_link_clicks(user_id)
+        await message.reply(f"📊 **Total file clicks:** {total_clicks}")
+    except Exception as e:
+        await message.reply(f"❌ An error occurred while fetching total clicks: {str(e)}")
+
+@Bot.on_message(filters.private & filters.user(ADMINS) & filters.command('puser'))
+async def premium_user_command(client: Client, message: Message):
+    """Make a user premium (bypass verification)"""
+    try:
+        # Check if user provided a user ID
+        if len(message.text.split()) < 2:
+            await message.reply("❌ **Usage:** `/puser <user_id>`\n\n**Example:** `/puser 123456789`")
+            return
         
-        # Count total clicks and unique users
-        async for user in user_data.find():
-            user_id = user.get('_id')
-            click_count = user.get('file_clicks', 0)
+        try:
+            user_id = int(message.text.split()[1])
+        except ValueError:
+            await message.reply("❌ **Invalid user ID.** Please provide a valid numeric user ID.")
+            return
+        
+        # Check if user exists in database, if not add them
+        if not await present_user(user_id):
+            await add_user(user_id)
+        
+        # Update user to premium status
+        await update_verify_status(user_id, is_premium=True)
+        
+        # Try to get user info for better display
+        try:
+            user_info = await client.get_users(user_id)
+            username = f"@{user_info.username}" if user_info.username else "No username"
+            first_name = user_info.first_name or "Unknown"
             
-            if click_count > 0:
-                total_clicks += click_count
-                unique_users.add(user_id)
+            success_msg = f"✅ **User made Premium successfully!**\n\n"
+            success_msg += f"👤 **Name:** {first_name}\n"
+            success_msg += f"🆔 **User ID:** {user_id}\n"
+            success_msg += f"👑 **Username:** {username}\n"
+            success_msg += f"⚡ **Premium Status:** Active\n"
+            success_msg += f"🚫 **Verification:** Bypassed"
+            
+        except Exception:
+            success_msg = f"✅ **User made Premium successfully!**\n\n"
+            success_msg += f"🆔 **User ID:** {user_id}\n"
+            success_msg += f"👑 **Premium Status:** Active\n"
+            success_msg += f"⚡ **Verification:** Bypassed"
         
-        stats_msg = "=" * 40 + "\n"
-        stats_msg += "📊 FILE LINK STATISTICS\n"
-        stats_msg += "=" * 40 + "\n"
-        stats_msg += f"🔗 Total File Link Clicks: {total_clicks}\n"
-        stats_msg += f"👥 Unique Users Who Clicked: {len(unique_users)}\n"
-        stats_msg += f"📈 Average Clicks per User: {total_clicks / len(unique_users) if unique_users else 0:.1f}\n"
-        stats_msg += "=" * 40
+        await message.reply(success_msg)
         
-        await message.reply(f"```\n{stats_msg}\n```")
+        # Notify the user about premium status
+        try:
+            notification_msg = (
+                f"🎉 **Congratulations!**\n\n"
+                f"✨ You have been granted **Premium Access**!\n\n"
+                f"🚫 **No more verification needed**\n"
+                f"⚡ **Direct file access**\n"
+                f"👑 **Premium benefits activated**\n\n"
+                f"Enjoy your premium experience!"
+            )
+            await client.send_message(user_id, notification_msg)
+        except Exception as e:
+            await message.reply(f"✅ User made premium but couldn't notify them: {str(e)}")
         
     except Exception as e:
-        await message.reply(f"❌ Error getting file statistics: {str(e)}")
+        await message.reply(f"❌ Error making user premium: {str(e)}")
 
 @Bot.on_message(filters.private & filters.user(ADMINS) & filters.command('removepremium'))
 async def remove_premium_command(client: Client, message: Message):
@@ -57,10 +97,7 @@ async def remove_premium_command(client: Client, message: Message):
             return
         
         # Update user to remove premium status
-        await user_data.update_one(
-            {'_id': user_id},
-            {'$set': {'is_premium': False, 'premium_removed_time': time.time()}}
-        )
+        await update_verify_status(user_id, is_premium=False)
         
         # Try to get user info for better display
         try:
@@ -159,4 +196,4 @@ async def premium_list_command(client: Client, message: Message):
         await message.reply(f"```\n{stats_msg}\n```")
         
     except Exception as e:
-        await message.reply(f"❌ Error getting premium users list: {str(e)}")
+        await message.reply(f"❌ Error fetching premium users: {str(e)}")

@@ -1,5 +1,6 @@
 
 import motor.motor_asyncio
+import time
 from config import DB_URI, DB_NAME
 
 dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URI)
@@ -78,13 +79,20 @@ async def get_verify_status(user_id):
         return user.get('verify_status', default_verify)
     return default_verify
 
-async def update_verify_status(user_id, verify_token="", is_verified=False, verified_time=0, link=""):
+async def update_verify_status(user_id, verify_token="", is_verified=False, verified_time=0, link="", is_premium=None):
     current = await get_verify_status(user_id)
     current['verify_token'] = verify_token
     current['is_verified'] = is_verified
     current['verified_time'] = verified_time
     current['link'] = link
-    await user_data.update_one({'_id': user_id}, {'$set': {'verify_status': current}})
+    
+    update_data = {'verify_status': current}
+    if is_premium is not None:
+        update_data['is_premium'] = is_premium
+        if is_premium:
+            update_data['premium_added_time'] = time.time()
+    
+    await user_data.update_one({'_id': user_id}, {'$set': update_data})
 
 async def is_premium_user(user_id):
     """Check if user is premium"""
@@ -128,3 +136,10 @@ async def get_file(message_id):
     # If not found by ObjectId, try as string
     file_doc = await files_data.find_one({'_id': message_id})
     return file_doc
+
+async def get_total_link_clicks(user_id):
+    """Get total file clicks for a user"""
+    user = await user_data.find_one({'_id': user_id})
+    if user:
+        return user.get('file_clicks', 0)
+    return 0
