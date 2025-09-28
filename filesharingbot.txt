@@ -1216,3 +1216,63 @@ https://t.me/ultroid_official
 [07-Sep-25 16:33:52 - INFO] - bot - ==================================================
 [07-Sep-25 16:38:10 - INFO] - root - Stop signal received (SIGTERM). Exiting...
 [07-Sep-25 16:38:12 - INFO] - bot - Bot stopped.
+[28-Sep-25 10:53:40 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[28-Sep-25 10:53:40 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[28-Sep-25 10:53:43 - INFO] - bot - ==================================================
+[28-Sep-25 10:53:43 - INFO] - bot - 📊 VERIFICATION STATISTICS (Last 24 Hours)
+[28-Sep-25 10:53:43 - INFO] - bot - ==================================================
+[28-Sep-25 10:53:43 - INFO] - bot - ✅ Total Active Verified Users: 34
+[28-Sep-25 10:53:43 - INFO] - bot - 🆕 New Verifications (24h): 34
+[28-Sep-25 10:53:43 - INFO] - bot - 
+🔔 Recent Verifications:
+[28-Sep-25 10:53:43 - INFO] - bot -   1. 👤 chandru (@Besimple_1993)
+     🆔 ID: 760736528
+     ⏰ Verified: 2025-09-28 05:57:06
+     ⏳ Expires in: 19h 3m
+[28-Sep-25 10:53:43 - INFO] - bot -   2. 👤 Rajath (@rajaths)
+     🆔 ID: 5018731438
+     ⏰ Verified: 2025-09-27 19:53:11
+     ⏳ Expires in: 8h 59m
+[28-Sep-25 10:53:43 - INFO] - bot -   3. 👤 😎 (No username)
+     🆔 ID: 1597640348
+     ⏰ Verified: 2025-09-27 11:02:28
+     ⏳ Expires in: 0h 8m
+[28-Sep-25 10:53:44 - INFO] - bot -   4. 👤 Akash (No username)
+     🆔 ID: 7112001476
+     ⏰ Verified: 2025-09-28 07:54:19
+     ⏳ Expires in: 21h 0m
+[28-Sep-25 10:53:44 - INFO] - bot -   5. 👤 Kushal (No username)
+     🆔 ID: 5136352419
+     ⏰ Verified: 2025-09-27 17:57:19
+     ⏳ Expires in: 7h 3m
+[28-Sep-25 10:53:44 - INFO] - bot -   6. 👤 Irfan (No username)
+     🆔 ID: 898804840
+     ⏰ Verified: 2025-09-27 20:13:23
+     ⏳ Expires in: 9h 19m
+[28-Sep-25 10:53:44 - INFO] - bot -   7. 👤 Dev (No username)
+     🆔 ID: 6332569192
+     ⏰ Verified: 2025-09-28 08:23:19
+     ⏳ Expires in: 21h 29m
+[28-Sep-25 10:53:44 - INFO] - bot -   8. 👤 crazy (@crazy_royal_09)
+     🆔 ID: 729943184
+     ⏰ Verified: 2025-09-27 16:01:22
+     ⏳ Expires in: 5h 7m
+[28-Sep-25 10:53:44 - INFO] - bot -   9. 👤 Atuz (No username)
+     🆔 ID: 6480217251
+     ⏰ Verified: 2025-09-27 21:06:49
+     ⏳ Expires in: 10h 13m
+[28-Sep-25 10:53:44 - INFO] - bot -   10. 👤 Vijay (No username)
+     🆔 ID: 1063543617
+     ⏰ Verified: 2025-09-27 18:34:13
+     ⏳ Expires in: 7h 40m
+[28-Sep-25 10:53:44 - INFO] - bot -   ... and 24 more users
+[28-Sep-25 10:53:44 - INFO] - bot - ==================================================
+[28-Sep-25 10:53:45 - INFO] - aiohttp.access - 172.31.95.226 [28/Sep/2025:10:53:45 +0000] "GET / HTTP/1.1" 200 178 "https://ee854ff6-8e18-433a-8ecf-1d7619d462ea-00-gsjhpyv7xvf5.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1jv%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
