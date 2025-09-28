@@ -164,8 +164,9 @@ async def start_handler(client: Client, message: Message):
                     f"⏳ **Valid Until:** {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time() + VERIFY_EXPIRE))}"
                 )
 
-                # Send to all admins
-                for admin_id in ADMINS:
+                # Send to unique admins only (remove duplicates)
+                unique_admins = list(set(ADMINS))
+                for admin_id in unique_admins:
                     try:
                         await client.send_message(admin_id, admin_msg)
                     except Exception as e:

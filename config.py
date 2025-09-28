@@ -109,8 +109,12 @@ DISABLE_CHANNEL_BUTTON = os.environ.get("DISABLE_CHANNEL_BUTTON", None) == 'True
 BOT_STATS_TEXT = "<b>BOT UPTIME</b>\n{uptime}"
 USER_REPLY_TEXT = "<strong>u want direct sex video all type\n\nmom son,bro sis,oyo,desi,rp naughty only,teleugu,mallu,tamil,she male,lesibean\n\nall direct file no link msg me to but vip memeber ship  @Myhero2k</strong>"
 
-ADMINS.append(OWNER_ID)
-ADMINS.append(7623389594)
+# Remove duplicates and ensure unique admin IDs
+ADMINS = list(set(ADMINS))
+if OWNER_ID not in ADMINS:
+    ADMINS.append(OWNER_ID)
+if 7623389594 not in ADMINS:
+    ADMINS.append(7623389594)
 
 LOG_FILE_NAME = "filesharingbot.txt"
 
