@@ -15,8 +15,8 @@ CHANNEL_ID = int(os.environ.get("CHANNEL_ID", "-1565"))
 # OWNER ID
 OWNER_ID = int(os.environ.get("OWNER_ID", "6695586027"))
 
-# Port
-PORT = os.environ.get("PORT", "8585")
+# Port (must be int for aiohttp & Koyeb)
+PORT = int(os.environ.get("PORT", 8080))
 
 # Database 
 DB_URI = os.environ.get(
