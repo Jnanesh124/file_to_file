@@ -4,6 +4,7 @@ import string
 import time
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
+from pyrogram.errors import FloodWait, ChannelBanned, ChannelPrivate, ChatAdminRequired, PeerIdInvalid
 from bot import Bot
 from config import *
 from database.database import add_user, present_user, full_userbase, get_verify_status, update_verify_status, user_data, ban_user, unban_user, is_banned_user, get_banned_users, increment_file_clicks, get_total_link_clicks # Added necessary imports
@@ -267,17 +268,111 @@ async def start_handler(client: Client, message: Message):
                         _, msg_id = parts
                         msg_id = abs(int(msg_id)) // abs(client.db_channel.id)
                         try:
-                            msg = await client.get_messages(client.db_channel.id, msg_id)
-                            if msg:
-                                sent_msg = await msg.copy(chat_id=user_id, protect_content=PROTECT_CONTENT)
-                                # Increment file click count
-                                await increment_file_clicks(user_id)
-                                if AUTO_DELETE:
-                                    from plugins.auto_delete import schedule_auto_delete
-                                    asyncio.create_task(schedule_auto_delete(client, sent_msg, file_id))
+                            ids = int(msg_id)
+                            msg = None
+                            
+                            try:
+                                msg = await client.get_messages(chat_id=client.db_channel.id, message_ids=ids)
+                                
+                                # Log the message retrieval
+                                print(f"📥 Retrieved message for user {user_id}, msg_id: {ids}, msg exists: {msg is not None}, empty: {msg.empty if msg else 'N/A'}")
+                                
+                            except ChannelBanned:
+                                print(f"❌ Channel banned - user {user_id}, msg_id: {ids}")
+                                await message.reply_text(
+                                    "❌ **Database Channel Banned**\n\n"
+                                    "The database channel has been banned by Telegram.\n"
+                                    "Please contact the bot administrator to resolve this issue.\n\n"
+                                    f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                                )
                                 return
-                        except Exception:
-                            pass
+                            except ChannelPrivate:
+                                print(f"❌ Channel private - user {user_id}, msg_id: {ids}")
+                                await message.reply_text(
+                                    "❌ **Database Channel Private/Inaccessible**\n\n"
+                                    "The database channel is private or the bot has been removed from it.\n"
+                                    "Please contact the bot administrator.\n\n"
+                                    f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                                )
+                                return
+                            except ChatAdminRequired:
+                                print(f"❌ Admin required - user {user_id}, msg_id: {ids}")
+                                await message.reply_text(
+                                    "❌ **Bot Permission Issue**\n\n"
+                                    "The bot doesn't have admin rights in the database channel.\n"
+                                    "Please contact the bot administrator.\n\n"
+                                    f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                                )
+                                return
+                            except Exception as e:
+                                print(f"❌ Error fetching message - user {user_id}, msg_id: {ids}, error: {e}")
+                                await message.reply_text(
+                                    "❌ **Error Accessing File**\n\n"
+                                    "Unable to retrieve the file from database channel.\n"
+                                    "This could mean:\n"
+                                    "• The file was deleted\n"
+                                    "• The database channel is inaccessible\n"
+                                    "• The channel has been banned\n\n"
+                                    f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                                )
+                                return
+
+                            # Check if message is valid and not empty
+                            if not msg or msg.empty:
+                                error_msg = (
+                                    "❌Database channel was banned by Telegram❌\n\n"
+                                    "U Get Only New Video\n\n"
+                                    "if u want all old video\n"
+                                    "Than Buy VIP Membership msg @Myhero2k\n"
+                                )
+                                
+                                print(f"⚠️ EMPTY MESSAGE DETECTED - user {user_id}, msg_id: {ids}, msg exists: {msg is not None}")
+                                print(f"⚠️ Sending error notification to user {user_id}")
+                                
+                                try:
+                                    await message.reply_text(error_msg)
+                                    print(f"✅ Error notification sent to user {user_id}")
+                                except Exception as notify_error:
+                                    print(f"❌ Failed to send error notification to user {user_id}: {notify_error}")
+                                return
+
+                            # Try to copy the message
+                            try:
+                                print(f"📤 Attempting to copy message to user {user_id}")
+                                sent_msg = await msg.copy(chat_id=user_id, protect_content=PROTECT_CONTENT)
+                                
+                                if sent_msg:
+                                    print(f"✅ Message copied successfully to user {user_id}")
+                                    await increment_file_clicks(user_id)
+                                    if AUTO_DELETE:
+                                        from plugins.auto_delete import schedule_auto_delete
+                                        asyncio.create_task(schedule_auto_delete(client, sent_msg, file_id))
+                                    return
+                                else:
+                                    print(f"❌ Copy returned None for user {user_id}")
+                                    await message.reply_text(
+                                        "❌ **Database Channel Banned/Inaccessible**\n\n"
+                                        "Unable to send the file. The database channel may be banned or the bot has lost access.\n\n"
+                                        f"**Contact Support:** @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                                    )
+                                    return
+                            except Exception as copy_error:
+                                print(f"❌ Copy error for user {user_id}: {copy_error}")
+                                await message.reply_text(
+                                    "❌ **Database Channel Banned/Inaccessible**\n\n"
+                                    f"Failed to send file: {str(copy_error)}\n\n"
+                                    "The database channel may be banned or inaccessible.\n\n"
+                                    f"**Contact Support:** @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                                )
+                                return
+                        except Exception as outer_error:
+                            print(f"❌ Outer exception for user {user_id}: {outer_error}")
+                            await message.reply_text(
+                                "❌ **Unexpected Error**\n\n"
+                                "An unexpected error occurred while processing your request.\n\n"
+                                f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                            )
+                            return
 
                 return await message.reply("❌ File not found or may have been deleted.")
 
@@ -400,9 +495,9 @@ async def premiumlist_handler(client: Client, message: Message):
     try:
         from database.database import user_data
         import time
-        
+
         premium_users = []
-        
+
         # Find all premium users from database
         async for user in user_data.find({'is_premium': True}):
             user_id = int(user['_id'])
@@ -422,23 +517,23 @@ async def premiumlist_handler(client: Client, message: Message):
         # Format the list of premium users
         premium_list_text = "👑 **Premium Users List:**\n\n"
         premium_list_text += f"📊 Total Premium Users: {len(premium_users)}\n\n"
-        
+
         for i, user_data_item in enumerate(premium_users[:20], 1):  # Show max 20
             user_id = user_data_item['user_id']
             added_time = user_data_item['added_time']
-            
+
             # Format added time
             if added_time:
                 added_str = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(added_time))
             else:
                 added_str = "Unknown"
-            
+
             try:
                 # Try to get user info
                 user_info = await client.get_users(user_id)
                 username = f"@{user_info.username}" if user_info.username else "No username"
                 first_name = user_info.first_name or "Unknown"
-                
+
                 premium_list_text += f"  {i}. 👤 {first_name} ({username})\n"
                 premium_list_text += f"     🆔 ID: `{user_id}`\n"
                 premium_list_text += f"     ⏰ Added: {added_str}\n\n"
@@ -446,7 +541,7 @@ async def premiumlist_handler(client: Client, message: Message):
                 # If can't get user info, show basic details
                 premium_list_text += f"  {i}. 🆔 User ID: `{user_id}`\n"
                 premium_list_text += f"     ⏰ Added: {added_str}\n\n"
-        
+
         if len(premium_users) > 20:
             premium_list_text += f"  ... and {len(premium_users) - 20} more premium users\n"
 
