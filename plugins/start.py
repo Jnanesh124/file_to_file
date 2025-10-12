@@ -351,18 +351,19 @@ async def start_handler(client: Client, message: Message):
                                 else:
                                     print(f"❌ Copy returned None for user {user_id}")
                                     await message.reply_text(
-                                        "❌ **Database Channel Banned/Inaccessible**\n\n"
-                                        "Unable to send the file. The database channel may be banned or the bot has lost access.\n\n"
-                                        f"**Contact Support:** @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                                        "❌Database channel was banned by Telegram❌\n\n"
+                                        "U Get Only New Video\n\n"
+                                        "if u want all old video\n"
+                                        "Than Buy VIP Membership msg @Myhero2k\n"
                                     )
                                     return
                             except Exception as copy_error:
                                 print(f"❌ Copy error for user {user_id}: {copy_error}")
                                 await message.reply_text(
-                                    "❌ **Database Channel Banned/Inaccessible**\n\n"
-                                    f"Failed to send file: {str(copy_error)}\n\n"
-                                    "The database channel may be banned or inaccessible.\n\n"
-                                    f"**Contact Support:** @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                                    "❌Database channel was banned by Telegram❌\n\n"
+                                    "U Get Only New Video\n\n"
+                                    "if u want all old video\n"
+                                    "Than Buy VIP Membership msg @Myhero2k\n"
                                 )
                                 return
                         except Exception as outer_error:
