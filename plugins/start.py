@@ -323,22 +323,20 @@ async def start_handler(client: Client, message: Message):
                                     "❌Database channel was banned by Telegram❌\n\n"
                                     "U Get Only New Video\n\n"
                                     "if u want all old video\n"
-                                    "Than Buy VIP Membership msg @Myhero2k\n"
+                                    "Than Buy VIP Membership msg @Myhero2k"
                                 )
                                 
                                 print(f"⚠️ EMPTY MESSAGE DETECTED - user {user_id}, msg_id: {ids}, msg exists: {msg is not None}")
                                 print(f"⚠️ Sending error notification to user {user_id}")
                                 
-                                try:
-                                    await message.reply_text(error_msg)
-                                    print(f"✅ Error notification sent to user {user_id}")
-                                except Exception as notify_error:
-                                    print(f"❌ Failed to send error notification to user {user_id}: {notify_error}")
+                                # Send error message directly without try-except to see any errors
+                                await message.reply_text(error_msg)
+                                print(f"✅ Error notification sent to user {user_id}")
                                 return
 
                             # Try to copy the message
                             try:
-                                print(f"📤 Attempting to copy message to user {user_id}")
+                                print(f"📤 Attempting to copy message to user {user_id}, msg type: {type(msg).__name__}")
                                 sent_msg = await msg.copy(chat_id=user_id, protect_content=PROTECT_CONTENT)
                                 
                                 if sent_msg:
@@ -350,21 +348,23 @@ async def start_handler(client: Client, message: Message):
                                     return
                                 else:
                                     print(f"❌ Copy returned None for user {user_id}")
-                                    await message.reply_text(
+                                    error_response = await message.reply_text(
                                         "❌Database channel was banned by Telegram❌\n\n"
                                         "U Get Only New Video\n\n"
                                         "if u want all old video\n"
-                                        "Than Buy VIP Membership msg @Myhero2k\n"
+                                        "Than Buy VIP Membership msg @Myhero2k"
                                     )
+                                    print(f"✅ Error response sent: {error_response.id if error_response else 'Failed'}")
                                     return
                             except Exception as copy_error:
-                                print(f"❌ Copy error for user {user_id}: {copy_error}")
-                                await message.reply_text(
+                                print(f"❌ Copy error for user {user_id}: {type(copy_error).__name__}: {copy_error}")
+                                error_response = await message.reply_text(
                                     "❌Database channel was banned by Telegram❌\n\n"
                                     "U Get Only New Video\n\n"
                                     "if u want all old video\n"
-                                    "Than Buy VIP Membership msg @Myhero2k\n"
+                                    "Than Buy VIP Membership msg @Myhero2k"
                                 )
+                                print(f"✅ Error response sent: {error_response.id if error_response else 'Failed'}")
                                 return
                         except Exception as outer_error:
                             print(f"❌ Outer exception for user {user_id}: {outer_error}")
