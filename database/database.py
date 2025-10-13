@@ -191,6 +191,13 @@ async def get_file_id_from_token(token: str):
         return token_doc.get('file_id')
     return None
 
+async def get_file_token(token: str):
+    """Retrieve the file_id(s) associated with a given token."""
+    token_doc = await file_tokens.find_one({'_id': token})
+    if token_doc:
+        return token_doc.get('file_id')
+    return None
+
 async def delete_file_token(token: str):
     """Delete a file token from the database."""
     await file_tokens.delete_one({'_id': token})
