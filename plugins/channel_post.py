@@ -50,7 +50,7 @@ async def channel_post(client: Client, message: Message):
         link, token = await create_file_link(client, post_message.id)
 
         # Prepare the caption with the link
-        caption = f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪\nHOW TO OPEN LINK 👇 TUTORIAL\nhttps://t.me/HOWTOOPENLINKFAST\n\nBuy vip for 🔞 direct Video  @Myhero2k\n\nBACKUP CHANNEL https://t.me/+JfPMTmCv95hjMGNl\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪</strong>"
+        caption = f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪\nBuy vip for 🔞 direct Video  @Myhero2k\n\n©️BACKUP CHANNEL @JNK_BACKUP\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪</strong>"
 
         # Send the link
         if thumbnail_path:

@@ -65,7 +65,7 @@ async def batch(client: Client, message: Message):
     from helper_func import create_file_link
     message_ids = [f_msg_id, s_msg_id]
     link, token = await create_file_link(client, message_ids)
-    await second_message.reply_text(f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪\nHOW TO OPEN LINK 👇 TUTORIAL\nhttps://t.me/HOWTOOPENLINKFAST\n\nBuy vip for 🔞 direct Video  @Myhero2k\n\nBACKUP CHANNEL https://t.me/+JfPMTmCv95hjMGNl\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪</strong>", quote=True)
+    await second_message.reply_text(f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪\nBuy vip for 🔞 direct Video  @Myhero2k\n\n©️BACKUP CHANNEL @JNK_BACKUP\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪</strong>", quote=True)
 
 
 @Bot.on_message(filters.private & filters.user(ADMINS) & filters.command('genlink'))
@@ -101,4 +101,4 @@ async def link_generator(client: Client, message: Message):
     from helper_func import create_file_link
     link, token = await create_file_link(client, msg_id)
     reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton("🔁 Share URL", url=f'https://telegram.me/share/url?url={link}')]])
-    await channel_message.reply_text(f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪\nHOW TO OPEN LINK 👇 TUTORIAL\nhttps://t.me/HOWTOOPENLINKFAST\n\nBuy vip for 🔞 direct Video  @Myhero2k\n\nBACKUP CHANNEL https://t.me/+JfPMTmCv95hjMGNl\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪</strong>", quote=True, reply_markup=reply_markup)
+    await channel_message.reply_text(f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪\nBuy vip for 🔞 direct Video  @Myhero2k\n\n©️BACKUP CHANNEL @JNK_BACKUP\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪</strong>", quote=True, reply_markup=reply_markup)
