@@ -421,6 +421,7 @@ async def start_handler(client: Client, message: Message):
                 )
             # After loop, clear ids to prevent accidental reuse
             del ids
+            return  # Exit after sending files, don't send welcome message
         else:
             return await message.reply("❌ File not found or may have been deleted.")
 
