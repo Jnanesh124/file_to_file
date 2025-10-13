@@ -306,6 +306,9 @@ async def start_handler(client: Client, message: Message):
 
         # --- Common logic for processing message IDs ---
         if 'ids' in locals(): # Ensure ids variable is defined
+            files_sent = 0  # Track successfully sent files
+            files_skipped = 0  # Track skipped/deleted files
+            
             for msg_id in ids:
                 if msg_id is None: continue # Skip if msg_id is None
                 try:
@@ -365,6 +368,7 @@ async def start_handler(client: Client, message: Message):
                 # Check if message is valid and not empty
                 if not msg or msg.empty:
                     print(f"⚠️ EMPTY MESSAGE DETECTED - user {user_id}, msg_id: {msg_id}, msg exists: {msg is not None}")
+                    files_skipped += 1
                     # Skip this message and continue with the next one in batch
                     continue
 
@@ -375,6 +379,7 @@ async def start_handler(client: Client, message: Message):
 
                     if sent_msg:
                         print(f"✅ Message copied successfully to user {user_id}")
+                        files_sent += 1
                         await increment_file_clicks(user_id)
                         if AUTO_DELETE:
                             from plugins.auto_delete import schedule_auto_delete
@@ -383,19 +388,38 @@ async def start_handler(client: Client, message: Message):
                         await asyncio.sleep(0.5) # Small delay between files in batch
                     else:
                         print(f"❌ Copy returned None for user {user_id}, msg_id: {msg_id}")
+                        files_skipped += 1
                         # Skip this message and continue with the next one in batch
                         continue
                 except Exception as copy_error:
                     print(f"❌ Copy error for user {user_id}, msg_id: {msg_id}: {type(copy_error).__name__}: {copy_error}")
+                    files_skipped += 1
                     # Skip this message and continue with the next one in batch
                     continue
             
-            # Send single auto-delete notification after all files are sent
-            if AUTO_DELETE and NOTIFICATION:
+            # Send appropriate message based on what happened
+            if files_sent > 0 and files_skipped > 0:
+                # Some files sent, some skipped
+                status_msg = f"✅ Sent {files_sent} file(s) successfully.\n⚠️ {files_skipped} file(s) were deleted from database channel.\n\n"
+                if AUTO_DELETE and NOTIFICATION:
+                    status_msg += NOTIFICATION
+                await message.reply_text(status_msg, disable_web_page_preview=True)
+            elif files_sent > 0 and files_skipped == 0:
+                # All files sent successfully
+                if AUTO_DELETE and NOTIFICATION:
+                    await message.reply_text(NOTIFICATION, disable_web_page_preview=True)
+            elif files_sent == 0 and files_skipped > 0:
+                # All files were deleted/skipped
                 await message.reply_text(
-                    NOTIFICATION,
-                    disable_web_page_preview=True
+                    "❌ **Database channel issue detected**\n\n"
+                    f"All {files_skipped} file(s) in this batch have been deleted from the database channel.\n\n"
+                    "This could mean:\n"
+                    "• Files were manually deleted\n"
+                    "• Database channel was cleaned\n"
+                    "• Channel content was banned by Telegram\n\n"
+                    f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
                 )
+            
             # After loop, clear ids to prevent accidental reuse
             del ids
             return  # Exit after sending files, don't send welcome message
