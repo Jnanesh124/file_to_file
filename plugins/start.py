@@ -364,20 +364,9 @@ async def start_handler(client: Client, message: Message):
 
                 # Check if message is valid and not empty
                 if not msg or msg.empty:
-                    error_msg = (
-                        "❌Database channel was banned by Telegram❌\n\n"
-                        "U Get Only New Video\n\n"
-                        "if u want all old video\n"
-                        "Than Buy VIP Membership msg @Myhero2k"
-                    )
-
                     print(f"⚠️ EMPTY MESSAGE DETECTED - user {user_id}, msg_id: {msg_id}, msg exists: {msg is not None}")
-                    print(f"⚠️ Sending error notification to user {user_id}")
-
-                    # Send error message directly without try-except to see any errors
-                    await message.reply_text(error_msg)
-                    print(f"✅ Error notification sent to user {user_id}")
-                    return
+                    # Skip this message and continue with the next one in batch
+                    continue
 
                 # Try to copy the message
                 try:
@@ -394,24 +383,12 @@ async def start_handler(client: Client, message: Message):
                         await asyncio.sleep(0.5) # Small delay between files in batch
                     else:
                         print(f"❌ Copy returned None for user {user_id}, msg_id: {msg_id}")
-                        error_response = await message.reply_text(
-                            "❌Database channel was banned by Telegram❌\n\n"
-                            "U Get Only New Video\n\n"
-                            "if u want all old video\n"
-                            "Than Buy VIP Membership msg @Myhero2k"
-                        )
-                        print(f"✅ Error response sent: {error_response.id if error_response else 'Failed'}")
-                        return
+                        # Skip this message and continue with the next one in batch
+                        continue
                 except Exception as copy_error:
                     print(f"❌ Copy error for user {user_id}, msg_id: {msg_id}: {type(copy_error).__name__}: {copy_error}")
-                    error_response = await message.reply_text(
-                        "❌Database channel was banned by Telegram❌\n\n"
-                        "U Get Only New Video\n\n"
-                        "if u want all old video\n"
-                        "Than Buy VIP Membership msg @Myhero2k"
-                    )
-                    print(f"✅ Error response sent: {error_response.id if error_response else 'Failed'}")
-                    return
+                    # Skip this message and continue with the next one in batch
+                    continue
             
             # Send single auto-delete notification after all files are sent
             if AUTO_DELETE and NOTIFICATION:
@@ -423,7 +400,7 @@ async def start_handler(client: Client, message: Message):
             del ids
             return  # Exit after sending files, don't send welcome message
         else:
-            return await message.reply("❌ File not found or may have been deleted.")
+            return await message.reply_text("❌ File not found or may have been deleted.")
 
     # ====== NORMAL START MESSAGE ====== #
     await message.reply(
