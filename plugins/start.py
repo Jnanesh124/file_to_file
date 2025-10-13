@@ -274,8 +274,8 @@ async def start_handler(client: Client, message: Message):
         else:
             # Legacy base64 system (for backward compatibility)
             try:
-                string = await decode(token)
-                argument = string.split("-")
+                decoded_string = await decode(token)
+                argument = decoded_string.split("-")
 
                 if len(argument) == 3:
                     # Batch files
