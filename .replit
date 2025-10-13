@@ -7,5 +7,9 @@ channel = "stable-25_05"
 packages = ["cacert"]
 
 [[ports]]
+localPort = 8080
+externalPort = 8080
+
+[[ports]]
 localPort = 8585
 externalPort = 80

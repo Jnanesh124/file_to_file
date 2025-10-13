@@ -1276,3 +1276,63 @@ https://t.me/ultroid_official
 [28-Sep-25 10:53:44 - INFO] - bot -   ... and 24 more users
 [28-Sep-25 10:53:44 - INFO] - bot - ==================================================
 [28-Sep-25 10:53:45 - INFO] - aiohttp.access - 172.31.95.226 [28/Sep/2025:10:53:45 +0000] "GET / HTTP/1.1" 200 178 "https://ee854ff6-8e18-433a-8ecf-1d7619d462ea-00-gsjhpyv7xvf5.pike.replit.dev/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1jv%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36"
+[13-Oct-25 15:09:06 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[13-Oct-25 15:09:06 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[13-Oct-25 15:09:10 - INFO] - bot - ==================================================
+[13-Oct-25 15:09:10 - INFO] - bot - 📊 VERIFICATION STATISTICS (Last 24 Hours)
+[13-Oct-25 15:09:10 - INFO] - bot - ==================================================
+[13-Oct-25 15:09:10 - INFO] - bot - ✅ Total Active Verified Users: 21
+[13-Oct-25 15:09:10 - INFO] - bot - 🆕 New Verifications (24h): 21
+[13-Oct-25 15:09:10 - INFO] - bot - 
+🔔 Recent Verifications:
+[13-Oct-25 15:09:10 - INFO] - bot -   1. 👤 Vinayak More (No username)
+     🆔 ID: 1597640348
+     ⏰ Verified: 2025-10-13 11:14:58
+     ⏳ Expires in: 20h 5m
+[13-Oct-25 15:09:10 - INFO] - bot -   2. 👤 crazy (@crazy_royal_09)
+     🆔 ID: 729943184
+     ⏰ Verified: 2025-10-12 20:17:07
+     ⏳ Expires in: 5h 8m
+[13-Oct-25 15:09:10 - INFO] - bot -   3. 👤 Who knows (No username)
+     🆔 ID: 5925496490
+     ⏰ Verified: 2025-10-12 17:40:13
+     ⏳ Expires in: 2h 31m
+[13-Oct-25 15:09:10 - INFO] - bot -   4. 👤 Rohan (No username)
+     🆔 ID: 5452869465
+     ⏰ Verified: 2025-10-13 04:16:27
+     ⏳ Expires in: 13h 7m
+[13-Oct-25 15:09:11 - INFO] - bot -   5. 👤 Pranaja F (No username)
+     🆔 ID: 6376629834
+     ⏰ Verified: 2025-10-13 15:00:56
+     ⏳ Expires in: 23h 51m
+[13-Oct-25 15:09:11 - INFO] - bot -   6. 👤 Binil (No username)
+     🆔 ID: 726482677
+     ⏰ Verified: 2025-10-12 17:12:44
+     ⏳ Expires in: 2h 3m
+[13-Oct-25 15:09:11 - INFO] - bot -   7. 👤 Lucky (No username)
+     🆔 ID: 1764591800
+     ⏰ Verified: 2025-10-12 18:34:25
+     ⏳ Expires in: 3h 25m
+[13-Oct-25 15:09:11 - INFO] - bot -   8. 👤 Ritvik (@kvg_ritvik)
+     🆔 ID: 7066408742
+     ⏰ Verified: 2025-10-13 10:52:05
+     ⏳ Expires in: 19h 42m
+[13-Oct-25 15:09:11 - INFO] - bot -   9. 👤 Vichxxz (No username)
+     🆔 ID: 5735696832
+     ⏰ Verified: 2025-10-13 14:11:31
+     ⏳ Expires in: 23h 2m
+[13-Oct-25 15:09:12 - INFO] - bot -   10. 👤 keshav Sah (@Keshavsah01234)
+     🆔 ID: 5396463810
+     ⏰ Verified: 2025-10-12 18:51:29
+     ⏳ Expires in: 3h 42m
+[13-Oct-25 15:09:12 - INFO] - bot -   ... and 11 more users
+[13-Oct-25 15:09:12 - INFO] - bot - ==================================================
+[13-Oct-25 15:10:13 - INFO] - aiohttp.access - 172.31.98.130 [13/Oct/2025:15:10:13 +0000] "GET / HTTP/1.1" 200 177 "https://08b4ec6d-e800-4119-a3c3-2fd69ed25a88-00-3p683or240tmy.sisko.replit.dev:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
