@@ -1,4 +1,3 @@
-
 import motor.motor_asyncio
 import time
 from config import DB_URI, DB_NAME
@@ -7,6 +6,7 @@ dbclient = motor.motor_asyncio.AsyncIOMotorClient(DB_URI)
 database = dbclient[DB_NAME]
 
 user_data = database['users']
+file_tokens = database['file_tokens'] # Added for file token storage
 
 default_verify = {
     'is_verified': False,
@@ -87,13 +87,13 @@ async def update_verify_status(user_id, verify_token="", is_verified=False, veri
     current['is_verified'] = is_verified
     current['verified_time'] = verified_time
     current['link'] = link
-    
+
     update_data = {'verify_status': current}
     if is_premium is not None:
         update_data['is_premium'] = is_premium
         if is_premium:
             update_data['premium_added_time'] = time.time()
-    
+
     await user_data.update_one({'_id': user_id}, {'$set': update_data})
 
 async def is_premium_user(user_id):
@@ -134,7 +134,7 @@ async def get_file(message_id):
                 return file_doc
     except:
         pass
-    
+
     # If not found by ObjectId, try as string
     file_doc = await files_data.find_one({'_id': message_id})
     return file_doc
@@ -177,3 +177,20 @@ async def get_banned_users():
             'banned_time': user.get('banned_time', 0)
         })
     return banned_users
+
+# --- File Token Storage Functions ---
+
+async def save_file_token(token: str, file_id: str):
+    """Save a file token to the database."""
+    await file_tokens.insert_one({'_id': token, 'file_id': file_id})
+
+async def get_file_id_from_token(token: str):
+    """Retrieve the file_id associated with a given token."""
+    token_doc = await file_tokens.find_one({'_id': token})
+    if token_doc:
+        return token_doc.get('file_id')
+    return None
+
+async def delete_file_token(token: str):
+    """Delete a file token from the database."""
+    await file_tokens.delete_one({'_id': token})

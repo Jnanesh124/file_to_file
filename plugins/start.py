@@ -236,149 +236,185 @@ async def start_handler(client: Client, message: Message):
 
     # ====== HANDLE FILE REQUESTS ====== #
     if len(message.text) > 7:
-        file_id = message.text.split(" ", 1)[1]
+        try:
+            token = message.text.split(" ", 1)[1]
+        except:
+            return
 
-        if not file_id.startswith("verify_"):
+        # Check if it's a secure token (starts with 'file_')
+        if token.startswith('file_'):
+            # New secure token system
+            from helper_func import get_file_ids_from_token
+            message_ids = await get_file_ids_from_token(token)
+
+            if not message_ids:
+                return await message.reply("Invalid or expired link!")
+
+            # Handle both single and batch files
+            if isinstance(message_ids, list):
+                if len(message_ids) == 2:
+                    # Batch files
+                    start, end = message_ids[0], message_ids[1]
+                    if start <= end:
+                        ids = range(start, end + 1)
+                    else:
+                        ids = []
+                        i = start
+                        while True:
+                            ids.append(i)
+                            i -= 1
+                            if i < end:
+                                break
+                else:
+                    # Single file in list
+                    ids = message_ids
+            else:
+                # Single file
+                ids = [message_ids]
+        else:
+            # Legacy base64 system (for backward compatibility)
             try:
-                decoded = await decode(file_id)
+                string = await decode(token)
+                argument = string.split("-")
 
-                # Batch files: get-start-end
-                if decoded.startswith("get-"):
-                    parts = decoded.split("-")
-                    if len(parts) == 3:
-                        _, start_id, end_id = parts
-                        start_msg_id = abs(int(start_id)) // abs(client.db_channel.id)
-                        end_msg_id = abs(int(end_id)) // abs(client.db_channel.id)
-
-                        msg_ids = list(range(start_msg_id, end_msg_id + 1))
-                        messages = await get_messages(client, msg_ids)
-
-                        for msg in messages:
-                            if msg:
-                                sent_msg = await msg.copy(chat_id=user_id, protect_content=PROTECT_CONTENT)
-                                # Increment file click count for each file
-                                await increment_file_clicks(user_id)
-                                if AUTO_DELETE:
-                                    from plugins.auto_delete import schedule_auto_delete
-                                    asyncio.create_task(schedule_auto_delete(client, sent_msg, file_id))
-                                await asyncio.sleep(0.5)
+                if len(argument) == 3:
+                    # Batch files
+                    try:
+                        start = int(int(argument[1]) / abs(client.db_channel.id))
+                        end = int(int(argument[2]) / abs(client.db_channel.id))
+                    except:
                         return
 
-                    elif len(parts) == 2:  # Single file: get-msg_id
-                        _, msg_id = parts
-                        msg_id = abs(int(msg_id)) // abs(client.db_channel.id)
-                        try:
-                            ids = int(msg_id)
-                            msg = None
-                            
-                            try:
-                                msg = await client.get_messages(chat_id=client.db_channel.id, message_ids=ids)
-                                
-                                # Log the message retrieval
-                                print(f"📥 Retrieved message for user {user_id}, msg_id: {ids}, msg exists: {msg is not None}, empty: {msg.empty if msg else 'N/A'}")
-                                
-                            except ChannelBanned:
-                                print(f"❌ Channel banned - user {user_id}, msg_id: {ids}")
-                                await message.reply_text(
-                                    "❌ **Database Channel Banned**\n\n"
-                                    "The database channel has been banned by Telegram.\n"
-                                    "Please contact the bot administrator to resolve this issue.\n\n"
-                                    f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
-                                )
-                                return
-                            except ChannelPrivate:
-                                print(f"❌ Channel private - user {user_id}, msg_id: {ids}")
-                                await message.reply_text(
-                                    "❌ **Database Channel Private/Inaccessible**\n\n"
-                                    "The database channel is private or the bot has been removed from it.\n"
-                                    "Please contact the bot administrator.\n\n"
-                                    f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
-                                )
-                                return
-                            except ChatAdminRequired:
-                                print(f"❌ Admin required - user {user_id}, msg_id: {ids}")
-                                await message.reply_text(
-                                    "❌ **Bot Permission Issue**\n\n"
-                                    "The bot doesn't have admin rights in the database channel.\n"
-                                    "Please contact the bot administrator.\n\n"
-                                    f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
-                                )
-                                return
-                            except Exception as e:
-                                print(f"❌ Error fetching message - user {user_id}, msg_id: {ids}, error: {e}")
-                                await message.reply_text(
-                                    "❌ **Error Accessing File**\n\n"
-                                    "Unable to retrieve the file from database channel.\n"
-                                    "This could mean:\n"
-                                    "• The file was deleted\n"
-                                    "• The database channel is inaccessible\n"
-                                    "• The channel has been banned\n\n"
-                                    f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
-                                )
-                                return
+                    if start <= end:
+                        ids = range(start, end + 1)
+                    else:
+                        ids = []
+                        i = start
+                        while True:
+                            ids.append(i)
+                            i -= 1
+                            if i < end:
+                                break
+                elif len(argument) == 2:
+                    # Single file
+                    try:
+                        ids = [int(int(argument[1]) / abs(client.db_channel.id))]
+                    except:
+                        return
+            except:
+                return
 
-                            # Check if message is valid and not empty
-                            if not msg or msg.empty:
-                                error_msg = (
-                                    "❌Database channel was banned by Telegram❌\n\n"
-                                    "U Get Only New Video\n\n"
-                                    "if u want all old video\n"
-                                    "Than Buy VIP Membership msg @Myhero2k"
-                                )
-                                
-                                print(f"⚠️ EMPTY MESSAGE DETECTED - user {user_id}, msg_id: {ids}, msg exists: {msg is not None}")
-                                print(f"⚠️ Sending error notification to user {user_id}")
-                                
-                                # Send error message directly without try-except to see any errors
-                                await message.reply_text(error_msg)
-                                print(f"✅ Error notification sent to user {user_id}")
-                                return
+        # --- Common logic for processing message IDs ---
+        if 'ids' in locals(): # Ensure ids variable is defined
+            for msg_id in ids:
+                if msg_id is None: continue # Skip if msg_id is None
+                try:
+                    msg = await client.get_messages(chat_id=client.db_channel.id, message_ids=msg_id)
 
-                            # Try to copy the message
-                            try:
-                                print(f"📤 Attempting to copy message to user {user_id}, msg type: {type(msg).__name__}")
-                                sent_msg = await msg.copy(chat_id=user_id, protect_content=PROTECT_CONTENT)
-                                
-                                if sent_msg:
-                                    print(f"✅ Message copied successfully to user {user_id}")
-                                    await increment_file_clicks(user_id)
-                                    if AUTO_DELETE:
-                                        from plugins.auto_delete import schedule_auto_delete
-                                        asyncio.create_task(schedule_auto_delete(client, sent_msg, file_id))
-                                    return
-                                else:
-                                    print(f"❌ Copy returned None for user {user_id}")
-                                    error_response = await message.reply_text(
-                                        "❌Database channel was banned by Telegram❌\n\n"
-                                        "U Get Only New Video\n\n"
-                                        "if u want all old video\n"
-                                        "Than Buy VIP Membership msg @Myhero2k"
-                                    )
-                                    print(f"✅ Error response sent: {error_response.id if error_response else 'Failed'}")
-                                    return
-                            except Exception as copy_error:
-                                print(f"❌ Copy error for user {user_id}: {type(copy_error).__name__}: {copy_error}")
-                                error_response = await message.reply_text(
-                                    "❌Database channel was banned by Telegram❌\n\n"
-                                    "U Get Only New Video\n\n"
-                                    "if u want all old video\n"
-                                    "Than Buy VIP Membership msg @Myhero2k"
-                                )
-                                print(f"✅ Error response sent: {error_response.id if error_response else 'Failed'}")
-                                return
-                        except Exception as outer_error:
-                            print(f"❌ Outer exception for user {user_id}: {outer_error}")
-                            await message.reply_text(
-                                "❌ **Unexpected Error**\n\n"
-                                "An unexpected error occurred while processing your request.\n\n"
-                                f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
-                            )
-                            return
+                    # Log the message retrieval
+                    print(f"📥 Retrieved message for user {user_id}, msg_id: {msg_id}, msg exists: {msg is not None}, empty: {msg.empty if msg else 'N/A'}")
 
-                return await message.reply("❌ File not found or may have been deleted.")
+                except ChannelBanned:
+                    print(f"❌ Channel banned - user {user_id}, msg_id: {msg_id}")
+                    await message.reply_text(
+                        "❌ **Database Channel Banned**\n\n"
+                        "The database channel has been banned by Telegram.\n"
+                        "Please contact the bot administrator to resolve this issue.\n\n"
+                        f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                    )
+                    return
+                except ChannelPrivate:
+                    print(f"❌ Channel private - user {user_id}, msg_id: {msg_id}")
+                    await message.reply_text(
+                        "❌ **Database Channel Private/Inaccessible**\n\n"
+                        "The database channel is private or the bot has been removed from it.\n"
+                        "Please contact the bot administrator.\n\n"
+                        f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                    )
+                    return
+                except ChatAdminRequired:
+                    print(f"❌ Admin required - user {user_id}, msg_id: {msg_id}")
+                    await message.reply_text(
+                        "❌ **Bot Permission Issue**\n\n"
+                        "The bot doesn't have admin rights in the database channel.\n"
+                        "Please contact the bot administrator.\n\n"
+                        f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                    )
+                    return
+                except FloodWait as e:
+                    print(f"❌ Flood wait for user {user_id}, msg_id: {msg_id}: {e}")
+                    await message.reply_text(f"Telegram is busy. Please try again in {e.value} seconds.")
+                    return
+                except PeerIdInvalid:
+                    print(f"❌ Peer ID Invalid for user {user_id}, msg_id: {msg_id}. Bot might not be in the channel.")
+                    await message.reply_text("❌ Bot error: Missing channel access. Please contact the admin.")
+                    return
+                except Exception as e:
+                    print(f"❌ Error fetching message - user {user_id}, msg_id: {msg_id}, error: {e}")
+                    await message.reply_text(
+                        "❌ **Error Accessing File**\n\n"
+                        "Unable to retrieve the file from database channel.\n"
+                        "This could mean:\n"
+                        "• The file was deleted\n"
+                        "• The database channel is inaccessible\n"
+                        "• The channel has been banned\n\n"
+                        f"Support: @{SUPPORT_GROUP if SUPPORT_GROUP else OWNER}"
+                    )
+                    return
 
-            except Exception:
-                return await message.reply("❌ Invalid file link or file not found.")
+                # Check if message is valid and not empty
+                if not msg or msg.empty:
+                    error_msg = (
+                        "❌Database channel was banned by Telegram❌\n\n"
+                        "U Get Only New Video\n\n"
+                        "if u want all old video\n"
+                        "Than Buy VIP Membership msg @Myhero2k"
+                    )
+
+                    print(f"⚠️ EMPTY MESSAGE DETECTED - user {user_id}, msg_id: {msg_id}, msg exists: {msg is not None}")
+                    print(f"⚠️ Sending error notification to user {user_id}")
+
+                    # Send error message directly without try-except to see any errors
+                    await message.reply_text(error_msg)
+                    print(f"✅ Error notification sent to user {user_id}")
+                    return
+
+                # Try to copy the message
+                try:
+                    print(f"📤 Attempting to copy message to user {user_id}, msg type: {type(msg).__name__}")
+                    sent_msg = await msg.copy(chat_id=user_id, protect_content=PROTECT_CONTENT)
+
+                    if sent_msg:
+                        print(f"✅ Message copied successfully to user {user_id}")
+                        await increment_file_clicks(user_id)
+                        if AUTO_DELETE:
+                            from plugins.auto_delete import schedule_auto_delete
+                            asyncio.create_task(schedule_auto_delete(client, sent_msg, token)) # Use token here
+                        await asyncio.sleep(0.5) # Small delay between files in batch
+                    else:
+                        print(f"❌ Copy returned None for user {user_id}, msg_id: {msg_id}")
+                        error_response = await message.reply_text(
+                            "❌Database channel was banned by Telegram❌\n\n"
+                            "U Get Only New Video\n\n"
+                            "if u want all old video\n"
+                            "Than Buy VIP Membership msg @Myhero2k"
+                        )
+                        print(f"✅ Error response sent: {error_response.id if error_response else 'Failed'}")
+                        return
+                except Exception as copy_error:
+                    print(f"❌ Copy error for user {user_id}, msg_id: {msg_id}: {type(copy_error).__name__}: {copy_error}")
+                    error_response = await message.reply_text(
+                        "❌Database channel was banned by Telegram❌\n\n"
+                        "U Get Only New Video\n\n"
+                        "if u want all old video\n"
+                        "Than Buy VIP Membership msg @Myhero2k"
+                    )
+                    print(f"✅ Error response sent: {error_response.id if error_response else 'Failed'}")
+                    return
+            # After loop, clear ids to prevent accidental reuse
+            del ids
+        else:
+            return await message.reply("❌ File not found or may have been deleted.")
 
     # ====== NORMAL START MESSAGE ====== #
     await message.reply(

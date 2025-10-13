@@ -5,6 +5,8 @@
 import base64
 import re
 import asyncio
+import random
+import string
 from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus
 from config import FORCE_SUB_CHANNELS, ADMINS
@@ -14,7 +16,7 @@ from shortzy import Shortzy
 import requests
 import time
 from datetime import datetime
-from database.database import user_data, db_verify_status, db_update_verify_status
+from database.database import user_data, db_verify_status, db_update_verify_status, save_file_token, get_file_token
 
 #logger = logging.getLogger(__name__)
 #logger.setLevel(logging.INFO)
@@ -45,6 +47,33 @@ async def get_non_joined_channels(client, user_id):
     
     if user_id in ADMINS:
         return []
+
+
+async def generate_secure_token(length=16):
+    """Generate a random secure token"""
+    characters = string.ascii_letters + string.digits
+    return 'file_' + ''.join(random.choice(characters) for _ in range(length))
+
+async def create_file_link(client, message_ids):
+    """Create a secure file link with random token"""
+    token = await generate_secure_token()
+    
+    # Convert message_ids to list if it's a single ID
+    if isinstance(message_ids, int):
+        message_ids = [message_ids]
+    
+    # Save token with message IDs
+    await save_file_token(token, message_ids)
+    
+    # Create link
+    link = f"https://t.me/{client.username}?start={token}"
+    return link, token
+
+async def get_file_ids_from_token(token):
+    """Get message IDs from a secure token"""
+    message_ids = await get_file_token(token)
+    return message_ids
+
     
     non_joined = []
     
