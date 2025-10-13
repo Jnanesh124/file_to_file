@@ -12,14 +12,14 @@ from database.database import is_banned_user
 @Bot.on_message(filters.private & filters.user(ADMINS) & ~filters.command(['start', 'users', 'broadcast', 'batch', 'count', 'genlink', 'stats', 'total', 'puser', 'removepremium', 'premiumlist', 'ban', 'unban', 'listban']))
 async def channel_post(client: Client, message: Message):
     user_id = message.from_user.id
-    
+
     # Check if user is banned (even admins can be banned)
     if await is_banned_user(user_id):
         return await message.reply(
             "🚫 **You are banned from using this bot.**\n\n"
             "Contact support if you think this is a mistake."
         )
-    
+
     reply_text = await message.reply_text("Please Wait...!", quote=True)
     try:
         thumbnail_path = None  # Initialize thumbnail_path for cleanup
@@ -40,57 +40,42 @@ async def channel_post(client: Client, message: Message):
             thumbnail = message.animation.thumbs[0].file_id
             thumbnail_path = await client.download_media(thumbnail)
 
-        # If there's no thumbnail, proceed with the usual link generation
-        if not thumbnail_path:
-            post_message = await message.copy(chat_id=client.db_channel.id, disable_notification=True)
+        # Use the new secure token system
+        from helper_func import create_file_link
 
-            # Generate the link
-            converted_id = post_message.id * abs(client.db_channel.id)
-            string = f"get-{converted_id}"
-            base64_string = await encode(string)
-            link = f"https://t.me/{client.username}?start={base64_string}"
+        # Copy message to DB channel first
+        post_message = await message.copy(chat_id=client.db_channel.id, disable_notification=True)
 
-            # Prepare the caption with the link
-            caption = f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪\nHOW TO OPEN LINK 👇 TUTORIAL\nhttps://t.me/HOWTOOPENLINKFAST\n\nBuy vip for 🔞 direct Video  @Myhero2k\n\nBACKUP CHANNEL https://t.me/+JfPMTmCv95hjMGNl\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪</strong>"
+        # Generate secure link with token
+        link, token = await create_file_link(client, post_message.id)
 
-            # Send the link without a thumbnail (if no media)
+        # Prepare the caption with the link
+        caption = f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪\nHOW TO OPEN LINK 👇 TUTORIAL\nhttps://t.me/HOWTOOPENLINKFAST\n\nBuy vip for 🔞 direct Video  @Myhero2k\n\nBACKUP CHANNEL https://t.me/+JfPMTmCv95hjMGNl\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪</strong>"
+
+        # Send the link
+        if thumbnail_path:
+            # Send with thumbnail
+            await client.send_photo(
+                chat_id=message.chat.id,
+                photo=thumbnail_path,
+                caption=caption,
+                reply_markup=InlineKeyboardMarkup(
+                    [[InlineKeyboardButton("🔁 Share URL", url=f'https://telegram.me/share/url?url={link}')]]
+                )
+            )
+        else:
+            # Send without thumbnail
             await message.reply_text(caption, reply_markup=InlineKeyboardMarkup(
                 [[InlineKeyboardButton("🔁 Share URL", url=f'https://telegram.me/share/url?url={link}')]]
             ))
 
-            # Delete the original media message if it was a media message (not just a text)
-            if message.video or message.document or message.animation:
-                await message.delete()
-
-            # Remove the "Please Wait..." message after processing
-            await reply_text.delete()
-            return  # Exit here to prevent further processing
-
-        # If a thumbnail is available, send the thumbnail and link
-        if thumbnail_path:
-            post_message = await message.copy(chat_id=client.db_channel.id, disable_notification=True)
-
-            # Generate the link
-            converted_id = post_message.id * abs(client.db_channel.id)
-            string = f"get-{converted_id}"
-            base64_string = await encode(string)
-            link = f"https://t.me/{client.username}?start={base64_string}"
-
-            # Prepare the caption with the link
-            caption = f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪\nHOW TO OPEN LINK 👇 TUTORIAL\nhttps://t.me/HOWTOOPENLINKFAST\n\nBuy vip for 🔞 direct Video  @Myhero2k\n\nBACKUP CHANNEL https://t.me/+JfPMTmCv95hjMGNl\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪</strong>"
-
-            # Send the thumbnail with the link in the caption
-            await message.reply_photo(photo=thumbnail_path, caption=caption, reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton("🔁 Share URL", url=f'https://telegram.me/share/url?url={link}')]]
-            ))
-            os.remove(thumbnail_path)  # Clean up the downloaded thumbnail
-
-            # Delete the original media message if it was a media message (not just a text)
-            if message.video or message.document or message.animation:
-                await message.delete()
+        # Delete the original media message if it was a media message
+        if message.video or message.document or message.animation:
+            await message.delete()
 
         # Remove the "Please Wait..." message after processing
-        await reply_text.delete()
+        if 'reply_text' in locals():
+            await reply_text.delete()
 
         if not DISABLE_CHANNEL_BUTTON:
             try:
