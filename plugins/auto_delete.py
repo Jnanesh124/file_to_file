@@ -9,7 +9,7 @@ from helper_func import encode
 # Store messages for auto-deletion
 pending_deletions = {}
 
-async def schedule_auto_delete(client: Client, sent_message: Message, original_file_id: str = None):
+async def schedule_auto_delete(client: Client, sent_message: Message, original_file_id: str = None, show_notification: bool = True):
     """Schedule a message for auto-deletion"""
     # Check if message was sent successfully
     if sent_message is None:
@@ -35,8 +35,8 @@ async def schedule_auto_delete(client: Client, sent_message: Message, original_f
         'delete_time': DELETE_AFTER
     }
 
-    # Send notification about auto-deletion
-    if NOTIFICATION:
+    # Send notification about auto-deletion only if show_notification is True
+    if NOTIFICATION and show_notification:
         notification_msg = await sent_message.reply(
             NOTIFICATION,
             quote=True,

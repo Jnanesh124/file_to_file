@@ -389,7 +389,8 @@ async def start_handler(client: Client, message: Message):
                         await increment_file_clicks(user_id)
                         if AUTO_DELETE:
                             from plugins.auto_delete import schedule_auto_delete
-                            asyncio.create_task(schedule_auto_delete(client, sent_msg, token)) # Use token here
+                            # Schedule deletion without notification for individual files
+                            asyncio.create_task(schedule_auto_delete(client, sent_msg, token, show_notification=False))
                         await asyncio.sleep(0.5) # Small delay between files in batch
                     else:
                         print(f"❌ Copy returned None for user {user_id}, msg_id: {msg_id}")
@@ -411,6 +412,13 @@ async def start_handler(client: Client, message: Message):
                     )
                     print(f"✅ Error response sent: {error_response.id if error_response else 'Failed'}")
                     return
+            
+            # Send single auto-delete notification after all files are sent
+            if AUTO_DELETE and NOTIFICATION:
+                await message.reply_text(
+                    NOTIFICATION,
+                    disable_web_page_preview=True
+                )
             # After loop, clear ids to prevent accidental reuse
             del ids
         else:
