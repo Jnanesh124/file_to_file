@@ -8,7 +8,6 @@ from pyrogram.errors import FloodWait, ChannelBanned, ChannelPrivate, ChatAdminR
 from bot import Bot
 from config import *
 from database.database import add_user, present_user, full_userbase, get_verify_status, update_verify_status, user_data, ban_user, unban_user, is_banned_user, get_banned_users, increment_file_clicks, get_total_link_clicks # Added necessary imports
-from helper_func import is_subscribed, get_non_joined_channels, get_shortlink, decode, get_messages, get_exp_time
 
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(client: Client, message: Message):
