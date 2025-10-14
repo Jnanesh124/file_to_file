@@ -108,15 +108,40 @@ async def get_file_again(client: Client, query):
 
         await query.answer("🔄 Fetching file again...", show_alert=True)
 
-        # Decode and send file again
-        from helper_func import decode
-        decoded = await decode(file_id)
+        # Check if it's a token-based file_id or legacy encoded format
+        if file_id.startswith("file_"):
+            # New token system
+            from helper_func import get_file_ids_from_token
+            actual_token = file_id.replace('file_', '', 1)
+            message_ids = await get_file_ids_from_token(actual_token)
+            
+            if not message_ids:
+                return await query.answer("❌ File token expired or invalid!", show_alert=True)
+            
+            # Handle single or multiple files
+            if isinstance(message_ids, list):
+                msg_id = message_ids[0] if len(message_ids) == 1 else message_ids[0]
+            else:
+                msg_id = message_ids
+                
+            try:
+                msg = await client.get_messages(chat_id=client.db_channel.id, message_ids=int(msg_id))
+                await msg.copy(chat_id=query.from_user.id)
+                
+                # Schedule auto-delete for the new message
+                asyncio.create_task(schedule_auto_delete(client, msg, file_id))
+            except Exception as e:
+                await query.message.reply_text("❌ File not found or may have been deleted.")
+        else:
+            # Legacy base64 system
+            from helper_func import decode
+            decoded = await decode(file_id)
 
-        if decoded.startswith("get-"):
-            parts = decoded.split("-")
-            if len(parts) == 2:  # Single file
-                _, msg_id = parts
-                msg_id = abs(int(msg_id)) // abs(client.db_channel.id)
+            if decoded.startswith("get-"):
+                parts = decoded.split("-")
+                if len(parts) == 2:  # Single file
+                    _, msg_id = parts
+                    msg_id = abs(int(msg_id)) // abs(client.db_channel.id)
 
                 try:
                     msg = await client.get_messages(client.db_channel.id, msg_id)

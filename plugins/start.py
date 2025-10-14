@@ -195,8 +195,11 @@ async def start_handler(client: Client, message: Message):
 
         # Check if it's a secure token (starts with 'file_')
         if token.startswith('file_'):
+            # Extract the actual token (remove 'file_' prefix)
+            actual_token = token.replace('file_', '', 1)
+            
             from helper_func import get_file_ids_from_token
-            message_ids = await get_file_ids_from_token(token)
+            message_ids = await get_file_ids_from_token(actual_token)
 
             if not message_ids:
                 return await message.reply("Invalid or expired link!")
