@@ -47,6 +47,20 @@ async def get_non_joined_channels(client, user_id):
     
     if user_id in ADMINS:
         return []
+    
+    non_joined = []
+    
+    for i, channel_id in enumerate(FORCE_SUB_CHANNELS):
+        try:
+            member = await client.get_chat_member(chat_id=channel_id, user_id=user_id)
+            if not member.status in [ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.MEMBER]:
+                non_joined.append((i, channel_id))
+        except UserNotParticipant:
+            non_joined.append((i, channel_id))
+        except Exception:
+            non_joined.append((i, channel_id))
+    
+    return non_joined
 
 
 async def generate_secure_token(length=16):
@@ -73,21 +87,6 @@ async def get_file_ids_from_token(token):
     """Get message IDs from a secure token"""
     message_ids = await get_file_token(token)
     return message_ids
-
-    
-    non_joined = []
-    
-    for i, channel_id in enumerate(FORCE_SUB_CHANNELS):
-        try:
-            member = await client.get_chat_member(chat_id=channel_id, user_id=user_id)
-            if not member.status in [ChatMemberStatus.OWNER, ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.MEMBER]:
-                non_joined.append((i, channel_id))
-        except UserNotParticipant:
-            non_joined.append((i, channel_id))
-        except Exception:
-            non_joined.append((i, channel_id))
-    
-    return non_joined
 
 async def encode(string):
     string_bytes = string.encode("ascii")
