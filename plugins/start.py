@@ -91,7 +91,7 @@ async def start_handler(client: Client, message: Message):
                     buttons.append([InlineKeyboardButton(f"Join Channel {index+1}", url=client.invitelinks[index])])
         
         # Add "Try Again" button
-        buttons.append([InlineKeyboardButton("🔄 Try Again", callback_data="check_sub")])
+        buttons.append([InlineKeyboardButton("🔄 Try Again", url=f"https://t.me/{BOT_USERNAME}?start=restart")])
 
         await checking_msg.delete()
         

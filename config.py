@@ -49,6 +49,9 @@ OWNER_USERNAME = os.environ.get('OWNER_USERNAME', 'JNK_BACKUP')
 SUPPORT_GROUP = os.environ.get("SUPPORT_GROUP", "JNK_BACKUP")
 CHANNEL = os.environ.get("CHANNEL", "JNK_BACKUP")
 
+# Bot username (will be auto-detected)
+BOT_USERNAME = os.environ.get("BOT_USERNAME", "")
+
 # Shortener (token system)
 SHORTLINK_URL = os.environ.get("SHORTLINK_URL", "teraboxlinks.com")
 SHORTLINK_API = os.environ.get("SHORTLINK_API", "6a77d7544d9317a1002a7645ca03de54223f75f1")
