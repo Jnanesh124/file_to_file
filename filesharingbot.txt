@@ -2393,3 +2393,65 @@ https://t.me/ultroid_official
 [14-Oct-25 08:26:31 - INFO] - bot -   ... and 3 more users
 [14-Oct-25 08:26:31 - INFO] - bot - ==================================================
 [14-Oct-25 08:26:32 - INFO] - aiohttp.access - 172.31.64.226 [14/Oct/2025:08:26:32 +0000] "GET / HTTP/1.1" 200 177 "https://a701be85-1993-4c68-9ca5-eca5ed6170d1-00-1241upr0lv96x.sisko.replit.dev:8080/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar22m%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+[14-Oct-25 08:29:17 - INFO] - root - Stop signal received (SIGTERM). Exiting...
+[14-Oct-25 08:29:20 - INFO] - bot - Bot stopped.
+[14-Oct-25 08:29:27 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[14-Oct-25 08:29:27 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[14-Oct-25 08:29:27 - INFO] - bot - ==================================================
+[14-Oct-25 08:29:27 - INFO] - bot - 📊 VERIFICATION STATISTICS (Last 24 Hours)
+[14-Oct-25 08:29:27 - INFO] - bot - ==================================================
+[14-Oct-25 08:29:27 - INFO] - bot - ✅ Total Active Verified Users: 13
+[14-Oct-25 08:29:27 - INFO] - bot - 🆕 New Verifications (24h): 13
+[14-Oct-25 08:29:27 - INFO] - bot - 
+🔔 Recent Verifications:
+[14-Oct-25 08:29:27 - INFO] - bot -   1. 👤 Sharon (@iamcreaterof)
+     🆔 ID: 6153140762
+     ⏰ Verified: 2025-10-14 08:18:27
+     ⏳ Expires in: 23h 48m
+[14-Oct-25 08:29:27 - INFO] - bot -   2. 👤 GTR (No username)
+     🆔 ID: 6876199430
+     ⏰ Verified: 2025-10-14 05:15:59
+     ⏳ Expires in: 20h 46m
+[14-Oct-25 08:29:27 - INFO] - bot -   3. 👤 Mr.360 (No username)
+     🆔 ID: 5081193676
+     ⏰ Verified: 2025-10-14 05:09:48
+     ⏳ Expires in: 20h 40m
+[14-Oct-25 08:29:27 - INFO] - bot -   4. 👤 614598 (@Rajeshbote)
+     🆔 ID: 6051446762
+     ⏰ Verified: 2025-10-14 03:00:44
+     ⏳ Expires in: 18h 31m
+[14-Oct-25 08:29:28 - INFO] - bot -   5. 👤 Ratan (No username)
+     🆔 ID: 8428402584
+     ⏰ Verified: 2025-10-13 20:13:09
+     ⏳ Expires in: 11h 43m
+[14-Oct-25 08:29:28 - INFO] - bot -   6. 👤 Rohit (@rohitkum379)
+     🆔 ID: 1944140801
+     ⏰ Verified: 2025-10-13 18:24:35
+     ⏳ Expires in: 9h 55m
+[14-Oct-25 08:29:28 - INFO] - bot -   7. 👤 Rajath (@rajaths)
+     🆔 ID: 5018731438
+     ⏰ Verified: 2025-10-13 18:14:16
+     ⏳ Expires in: 9h 44m
+[14-Oct-25 08:29:28 - INFO] - bot -   8. 👤 Fayumax (@Fayumax123)
+     🆔 ID: 7035812593
+     ⏰ Verified: 2025-10-13 17:35:45
+     ⏳ Expires in: 9h 6m
+[14-Oct-25 08:29:28 - INFO] - bot -   9. 👤 ... (@Mmmmm655)
+     🆔 ID: 5958908872
+     ⏰ Verified: 2025-10-13 16:54:20
+     ⏳ Expires in: 8h 24m
+[14-Oct-25 08:29:28 - INFO] - bot -   10. 👤 Rake (No username)
+     🆔 ID: 6355699193
+     ⏰ Verified: 2025-10-13 16:47:12
+     ⏳ Expires in: 8h 17m
+[14-Oct-25 08:29:28 - INFO] - bot -   ... and 3 more users
+[14-Oct-25 08:29:28 - INFO] - bot - ==================================================
+[14-Oct-25 08:29:29 - INFO] - aiohttp.access - 172.31.64.226 [14/Oct/2025:08:29:29 +0000] "GET / HTTP/1.1" 200 177 "https://a701be85-1993-4c68-9ca5-eca5ed6170d1-00-1241upr0lv96x.sisko.replit.dev:8080/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar24s%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
