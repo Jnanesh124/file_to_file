@@ -262,10 +262,17 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
     user_id = query.from_user.id
     print(f"🔄 Rechecking subscription for user {user_id}")
     
-    await query.answer("🔄 Checking membership status...")
+    try:
+        await query.answer("🔄 Checking membership status...")
+    except Exception as e:
+        print(f"Error answering query: {e}")
 
-    checking_msg = await query.message.edit_text("🔄 **Re-checking your membership...**\nPlease wait...")
-    await asyncio.sleep(1)
+    try:
+        checking_msg = await query.message.edit_text("🔄 **Re-checking your membership...**\nPlease wait...")
+        await asyncio.sleep(1)
+    except Exception as e:
+        print(f"Error editing message: {e}")
+        checking_msg = query.message
 
     # Re-check subscription status
     is_subscribed = await is_user_subscribed(client, query)
@@ -285,27 +292,36 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
         buttons.append([InlineKeyboardButton("🔄 Try Again", callback_data="check_sub")])
 
         # Show force subscription message with updated channel links
-        return await checking_msg.edit_text(
-            text=FORCE_MSG.format(
-                first=query.from_user.first_name,
-                last=query.from_user.last_name,
-                username=f"@{query.from_user.username}" if query.from_user.username else None,
-                mention=query.from_user.mention,
-                id=user_id
-            ),
-            reply_markup=InlineKeyboardMarkup(buttons) if buttons else None,
-            disable_web_page_preview=True
-        )
+        try:
+            await checking_msg.edit_text(
+                text=FORCE_MSG.format(
+                    first=query.from_user.first_name,
+                    last=query.from_user.last_name,
+                    username=f"@{query.from_user.username}" if query.from_user.username else None,
+                    mention=query.from_user.mention,
+                    id=user_id
+                ),
+                reply_markup=InlineKeyboardMarkup(buttons) if buttons else None,
+                disable_web_page_preview=True
+            )
+            print(f"✅ Updated message for user {user_id} - still not subscribed")
+        except Exception as e:
+            print(f"❌ Error updating message for user {user_id}: {e}")
+        return
 
     # User is now subscribed - show success message and provide start button
-    await checking_msg.edit_text(
-        "✅ **Verification Successful!**\n\n"
-        "You have joined all required channels.\n"
-        "Click the button below to continue.",
-        reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("▶️ Continue", callback_data="start_verified")]
-        ])
-    )
+    try:
+        await checking_msg.edit_text(
+            "✅ **Verification Successful!**\n\n"
+            "You have joined all required channels.\n"
+            "Click the button below to continue.",
+            reply_markup=InlineKeyboardMarkup([
+                [InlineKeyboardButton("▶️ Continue", callback_data="start_verified")]
+            ])
+        )
+        print(f"✅ User {user_id} successfully verified subscription")
+    except Exception as e:
+        print(f"❌ Error sending success message for user {user_id}: {e}")
 
 # ================== PREMIUM USER COMMANDS ================== #
 
