@@ -383,7 +383,12 @@ async def help_handler(client: Client, message: Message):
 
 @Bot.on_callback_query(filters.regex("check_sub"))
 async def check_sub_callback(client: Client, query: CallbackQuery):
-    await recheck_subscription(client, query)
+    """Handle Try Again button click for subscription check"""
+    try:
+        await recheck_subscription(client, query)
+    except Exception as e:
+        print(f"Error in check_sub_callback: {e}")
+        await query.answer("❌ An error occurred. Please try /start again.", show_alert=True)
 
 @Bot.on_message(filters.private & filters.command("puser"))
 async def puser_cmd(client: Client, message: Message):

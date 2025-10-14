@@ -77,20 +77,23 @@ async def is_subscribed(filter, client, update):
     for channel_id in FORCE_SUB_CHANNELS:
         try:
             member = await client.get_chat_member(chat_id=channel_id, user_id=user_id)
+            print(f"✅ User {user_id} status in channel {channel_id}: {member.status}")
             if member.status in ['left', 'kicked']:
+                print(f"❌ User {user_id} not subscribed to channel {channel_id} (status: {member.status})")
                 return False
         except Exception as e:
             error_msg = str(e)
             # Only return False if user is not a participant
             # Skip check if channel issue (deleted, bot removed, etc.)
             if "USER_NOT_PARTICIPANT" in error_msg:
-                print(f"User {user_id} not subscribed to channel {channel_id}")
+                print(f"❌ User {user_id} not subscribed to channel {channel_id}")
                 return False
             else:
-                print(f"Skipping channel {channel_id} check due to error: {e}")
+                print(f"⚠️ Skipping channel {channel_id} check due to error: {e}")
                 # Continue checking other channels instead of failing
                 continue
     
+    print(f"✅ User {user_id} is subscribed to all channels")
     return True
 
 async def get_non_joined_channels(client, user_id):
@@ -257,14 +260,20 @@ async def get_user_non_joined_channels(client: Client, update):
 # ================== START HANDLER IMPLEMENTATION ================== #
 async def recheck_subscription(client: Client, query: CallbackQuery):
     user_id = query.from_user.id
+    print(f"🔄 Rechecking subscription for user {user_id}")
+    
     await query.answer("🔄 Checking membership status...")
 
     checking_msg = await query.message.edit_text("🔄 **Re-checking your membership...**\nPlease wait...")
     await asyncio.sleep(1)
 
     # Re-check subscription status
-    if not await is_user_subscribed(client, query):
+    is_subscribed = await is_user_subscribed(client, query)
+    print(f"📊 User {user_id} subscription status: {is_subscribed}")
+    
+    if not is_subscribed:
         non_joined_channels = await get_user_non_joined_channels(client, query)
+        print(f"📋 User {user_id} not joined channels: {non_joined_channels}")
         buttons = []
 
         if hasattr(client, 'invitelinks') and client.invitelinks and non_joined_channels:
