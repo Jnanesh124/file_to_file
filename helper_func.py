@@ -309,10 +309,10 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
             print(f"❌ Error updating message for user {user_id}: {e}")
         return
 
-    # User is now subscribed - show success message and restart bot
+    # User is now subscribed - show success message and auto-restart
     try:
         await checking_msg.edit_text(
-            "✅ **Verification Successful!**\n\n"
+            "✅ **Subscription Verified!**\n\n"
             "You have joined all required channels.\n"
             "Starting bot..."
         )
@@ -322,14 +322,25 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
         await asyncio.sleep(1)
         await checking_msg.delete()
         
-        # Create a fake message object to trigger the start handler
-        from pyrogram.types import Message
+        # Import and trigger the start handler directly
         from plugins.start import start_handler
         
-        # Trigger the full start handler which includes verification checks
-        fake_message = query.message
-        fake_message.text = "/start"
-        await start_handler(client, fake_message)
+        # Create a simulated Message object for the start handler
+        class FakeMessage:
+            def __init__(self, original_message):
+                self.from_user = original_message.from_user
+                self.chat = original_message.chat
+                self.text = "/start"
+                self.message_id = original_message.message_id
+                
+            async def reply(self, *args, **kwargs):
+                return await client.send_message(self.chat.id, *args, **kwargs)
+            
+            async def reply_text(self, *args, **kwargs):
+                return await client.send_message(self.chat.id, *args, **kwargs)
+        
+        fake_msg = FakeMessage(query.message)
+        await start_handler(client, fake_msg)
         
     except Exception as e:
         print(f"❌ Error in auto-start after verification for user {user_id}: {e}")
