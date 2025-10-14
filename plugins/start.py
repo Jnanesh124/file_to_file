@@ -394,3 +394,8 @@ async def listban_cmd(client: Client, message: Message):
 @Bot.on_message(filters.private & filters.command("total"))
 async def total_cmd(client: Client, message: Message):
     await total_handler(client, message)
+
+@Bot.on_message(filters.private & filters.command("dverify"))
+async def dverify_cmd(client: Client, message: Message):
+    from helper_func import dverify_handler
+    await dverify_handler(client, message)
