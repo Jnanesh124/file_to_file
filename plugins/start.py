@@ -34,24 +34,6 @@ async def check_subscription_callback(client: Client, query: CallbackQuery):
     """Handle Try Again button click for subscription check"""
     await recheck_subscription(client, query)
 
-@Bot.on_callback_query(filters.regex("start_verified"))
-async def start_verified_callback(client: Client, query: CallbackQuery):
-    """Handle callback after successful subscription verification"""
-    await query.answer()
-    
-    # Delete the verification message
-    await query.message.delete()
-    
-    # Send welcome message
-    await client.send_message(
-        query.from_user.id,
-        "✅ **Welcome!**\n\n"
-        "You can now use the bot. Send me a file or use /help to see available commands.",
-        reply_markup=InlineKeyboardMarkup([
-            [InlineKeyboardButton("❓ Help", callback_data="help")]
-        ])
-    )
-
 @Bot.on_message(filters.private & filters.command("start"))
 async def start_handler(client: Client, message: Message):
     user_id = message.from_user.id

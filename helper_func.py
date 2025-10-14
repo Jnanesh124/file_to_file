@@ -309,19 +309,33 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
             print(f"❌ Error updating message for user {user_id}: {e}")
         return
 
-    # User is now subscribed - show success message and provide start button
+    # User is now subscribed - show success message and auto-start
     try:
         await checking_msg.edit_text(
             "✅ **Verification Successful!**\n\n"
             "You have joined all required channels.\n"
-            "Click the button below to continue.",
-            reply_markup=InlineKeyboardMarkup([
-                [InlineKeyboardButton("▶️ Continue", callback_data="start_verified")]
-            ])
+            "Starting bot..."
         )
         print(f"✅ User {user_id} successfully verified subscription")
+        
+        # Wait a moment then delete the verification message
+        await asyncio.sleep(1)
+        await checking_msg.delete()
+        
+        # Auto-trigger start by sending the welcome message
+        from config import START_MSG
+        await client.send_message(
+            user_id,
+            START_MSG.format(
+                first=query.from_user.first_name,
+                last=query.from_user.last_name,
+                username=f"@{query.from_user.username}" if query.from_user.username else None,
+                mention=query.from_user.mention,
+                id=user_id
+            )
+        )
     except Exception as e:
-        print(f"❌ Error sending success message for user {user_id}: {e}")
+        print(f"❌ Error in auto-start after verification for user {user_id}: {e}")
 
 # ================== PREMIUM USER COMMANDS ================== #
 
