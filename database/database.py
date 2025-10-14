@@ -180,22 +180,23 @@ async def get_banned_users():
 
 # --- File Token Storage Functions ---
 
-async def save_file_token(token: str, file_id: str):
-    """Save a file token to the database."""
-    await file_tokens.insert_one({'_id': token, 'file_id': file_id})
+async def save_file_token(token: str, message_ids):
+    """Save a file token to the database with message IDs."""
+    # message_ids can be a single ID or a list of IDs
+    await file_tokens.insert_one({'_id': token, 'message_ids': message_ids})
 
 async def get_file_id_from_token(token: str):
-    """Retrieve the file_id associated with a given token."""
+    """Retrieve the message_ids associated with a given token."""
     token_doc = await file_tokens.find_one({'_id': token})
     if token_doc:
-        return token_doc.get('file_id')
+        return token_doc.get('message_ids')
     return None
 
 async def get_file_token(token: str):
-    """Retrieve the file_id(s) associated with a given token."""
+    """Retrieve the message_ids associated with a given token."""
     token_doc = await file_tokens.find_one({'_id': token})
     if token_doc:
-        return token_doc.get('file_id')
+        return token_doc.get('message_ids')
     return None
 
 async def delete_file_token(token: str):

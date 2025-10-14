@@ -27,10 +27,16 @@ async def get_shortlink(url, api, link):
     """Get shortlink from URL shortener"""
     try:
         async with aiohttp.ClientSession() as session:
+            # Build proper shortlink URL
+            shortlink_url = f"https://{url}/api"
             params = {'api': api, 'url': link}
-            async with session.get(url, params=params, raise_for_status=True) as response:
-                data = await response.json()
-                return data.get('shortenedUrl', link)
+            async with session.get(shortlink_url, params=params, timeout=10) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    return data.get('shortenedUrl', link)
+                else:
+                    print(f"Shortlink API returned status {response.status}")
+                    return link
     except Exception as e:
         print(f"Shortlink error: {e}")
         return link
