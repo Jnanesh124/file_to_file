@@ -1,0 +1,74 @@
+Pyromod is working! If you like pyromod, please star it at https://github.com/usernein/pyromod
+[14-Oct-25 08:16:52 - INFO] - bot - Bot Running..!
+
+Created by 
+https://t.me/ultroid_official
+[14-Oct-25 08:16:52 - INFO] - bot -  
+
+       
+(っ◔◡◔)っ ♥ ULTROIDOFFICIAL ♥
+░╚════╝░░╚════╝░╚═════╝░╚══════╝
+                                          
+[14-Oct-25 08:16:53 - INFO] - bot - ==================================================
+[14-Oct-25 08:16:53 - INFO] - bot - 📊 VERIFICATION STATISTICS (Last 24 Hours)
+[14-Oct-25 08:16:53 - INFO] - bot - ==================================================
+[14-Oct-25 08:16:53 - INFO] - bot - ✅ Total Active Verified Users: 12
+[14-Oct-25 08:16:53 - INFO] - bot - 🆕 New Verifications (24h): 12
+[14-Oct-25 08:16:53 - INFO] - bot - 
+🔔 Recent Verifications:
+[14-Oct-25 08:16:53 - INFO] - bot -   1. 👤 GTR (No username)
+     🆔 ID: 6876199430
+     ⏰ Verified: 2025-10-14 05:15:59
+     ⏳ Expires in: 20h 59m
+[14-Oct-25 08:16:53 - INFO] - bot -   2. 👤 Mr.360 (No username)
+     🆔 ID: 5081193676
+     ⏰ Verified: 2025-10-14 05:09:48
+     ⏳ Expires in: 20h 52m
+[14-Oct-25 08:16:53 - INFO] - bot -   3. 👤 614598 (@Rajeshbote)
+     🆔 ID: 6051446762
+     ⏰ Verified: 2025-10-14 03:00:44
+     ⏳ Expires in: 18h 43m
+[14-Oct-25 08:16:53 - INFO] - bot -   4. 👤 Ratan (No username)
+     🆔 ID: 8428402584
+     ⏰ Verified: 2025-10-13 20:13:09
+     ⏳ Expires in: 11h 56m
+[14-Oct-25 08:16:54 - INFO] - bot -   5. 👤 Rohit (@rohitkum379)
+     🆔 ID: 1944140801
+     ⏰ Verified: 2025-10-13 18:24:35
+     ⏳ Expires in: 10h 7m
+[14-Oct-25 08:16:54 - INFO] - bot -   6. 👤 Rajath (@rajaths)
+     🆔 ID: 5018731438
+     ⏰ Verified: 2025-10-13 18:14:16
+     ⏳ Expires in: 9h 57m
+[14-Oct-25 08:16:54 - INFO] - bot -   7. 👤 Fayumax (@Fayumax123)
+     🆔 ID: 7035812593
+     ⏰ Verified: 2025-10-13 17:35:45
+     ⏳ Expires in: 9h 18m
+[14-Oct-25 08:16:54 - INFO] - bot -   8. 👤 ... (@Mmmmm655)
+     🆔 ID: 5958908872
+     ⏰ Verified: 2025-10-13 16:54:20
+     ⏳ Expires in: 8h 37m
+[14-Oct-25 08:16:54 - INFO] - bot -   9. 👤 Rake (No username)
+     🆔 ID: 6355699193
+     ⏰ Verified: 2025-10-13 16:47:12
+     ⏳ Expires in: 8h 30m
+[14-Oct-25 08:16:54 - INFO] - bot -   10. 👤 Joel (No username)
+     🆔 ID: 5652285580
+     ⏰ Verified: 2025-10-13 16:08:57
+     ⏳ Expires in: 7h 52m
+[14-Oct-25 08:16:54 - INFO] - bot -   ... and 2 more users
+[14-Oct-25 08:16:54 - INFO] - bot - ==================================================
+[14-Oct-25 08:16:55 - INFO] - aiohttp.access - 172.31.64.226 [14/Oct/2025:08:16:55 +0000] "GET / HTTP/1.1" 200 177 "https://a701be85-1993-4c68-9ca5-eca5ed6170d1-00-1241upr0lv96x.sisko.replit.dev:8080/__replco/workspace_iframe.html?initialPath=%2F&id=%3Ar1pb%3A" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36"
+Error checking subscription for channel -1001764441595: Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")
+Error checking channel -1001764441595: Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")
+Error checking channel -1002903033591: Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")
+Error checking channel -1003011512366: Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")
+Error checking channel -1001910410959: Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")
+Error checking channel -1002071799763: Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")
+Error checking channel -1001848686433: Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")
+Error checking channel -1002756209221: Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")
+Error checking channel -1003190134411: Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")
+Error checking channel -1003087757291: Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")
+Error checking channel -1003091498384: Telegram says: [400 USER_NOT_PARTICIPANT] - The user is not a member of this chat (caused by "channels.GetParticipant")
+Shortlink error: vplink.in
+✅ User 6153140762 (Sharon) verified successfully at 2025-10-14 08:18:27
