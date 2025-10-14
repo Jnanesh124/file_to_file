@@ -309,7 +309,7 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
             print(f"❌ Error updating message for user {user_id}: {e}")
         return
 
-    # User is now subscribed - show success message and auto-start
+    # User is now subscribed - show success message and restart bot
     try:
         await checking_msg.edit_text(
             "✅ **Verification Successful!**\n\n"
@@ -322,18 +322,15 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
         await asyncio.sleep(1)
         await checking_msg.delete()
         
-        # Auto-trigger start by sending the welcome message
-        from config import START_MSG
-        await client.send_message(
-            user_id,
-            START_MSG.format(
-                first=query.from_user.first_name,
-                last=query.from_user.last_name,
-                username=f"@{query.from_user.username}" if query.from_user.username else None,
-                mention=query.from_user.mention,
-                id=user_id
-            )
-        )
+        # Create a fake message object to trigger the start handler
+        from pyrogram.types import Message
+        from plugins.start import start_handler
+        
+        # Trigger the full start handler which includes verification checks
+        fake_message = query.message
+        fake_message.text = "/start"
+        await start_handler(client, fake_message)
+        
     except Exception as e:
         print(f"❌ Error in auto-start after verification for user {user_id}: {e}")
 
