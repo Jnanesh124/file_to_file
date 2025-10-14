@@ -519,30 +519,4 @@ async def total_handler(client: Client, message: Message):
     except Exception as e:
         await message.reply(f"An error occurred while fetching total clicks: {e}")
 
-# ================== DE-VERIFY COMMAND ================== #
-async def dverify_handler(client: Client, message: Message):
-    """Remove verification status from a user (Admin only)"""
-    if message.chat.id not in ADMINS:
-        return await message.reply("You are not authorized to use this command.")
 
-    try:
-        _, user_id_str = message.text.split(" ", 1)
-        user_id = int(user_id_str)
-
-        # Update the user's verification status to unverified
-        await update_verify_status(user_id, verify_token="", is_verified=False, verified_time=0, link="")
-        await message.reply(f"✅ User `{user_id}` has been de-verified successfully.\nThey will need to verify again to access the bot.")
-
-        # Optionally, notify the user they need to reverify
-        try:
-            await client.send_message(
-                user_id,
-                "⚠️ Your verification has been reset by an admin.\nPlease click /start to verify again."
-            )
-        except Exception as e:
-            print(f"Failed to notify user {user_id} about de-verification: {e}")
-
-    except ValueError:
-        await message.reply("Invalid user ID format. Please use `/dverify <user_id>`.")
-    except Exception as e:
-        await message.reply(f"An error occurred: {e}")

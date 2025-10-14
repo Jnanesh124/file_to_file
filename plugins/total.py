@@ -3,7 +3,7 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 from bot import Bot
 from config import ADMINS
-from database.database import user_data, present_user, add_user, update_verify_status, get_total_link_clicks
+from database.database import user_data, present_user, add_user, update_verify_status, get_total_link_clicks, ban_user, unban_user, get_banned_users
 
 @Bot.on_message(filters.private & filters.command("total"))
 async def total_handler(client: Client, message: Message):
@@ -217,7 +217,6 @@ async def ban_user_command(client: Client, message: Message):
             await add_user(user_id)
 
         # Ban the user
-        from database.database import ban_user
         await ban_user(user_id)
 
         # Try to get user info for better display
@@ -274,7 +273,6 @@ async def unban_user_command(client: Client, message: Message):
             return
 
         # Unban the user
-        from database.database import unban_user
         await unban_user(user_id)
 
         # Try to get user info for better display
@@ -314,7 +312,6 @@ async def unban_user_command(client: Client, message: Message):
 async def list_banned_command(client: Client, message: Message):
     """Show list of all banned users"""
     try:
-        from database.database import get_banned_users
         banned_users = await get_banned_users()
 
         if not banned_users:
@@ -363,3 +360,33 @@ async def list_banned_command(client: Client, message: Message):
 
     except Exception as e:
         await message.reply(f"❌ Error fetching banned users: {str(e)}")
+
+@Bot.on_message(filters.private & filters.user(ADMINS) & filters.command('dverify'))
+async def dverify_command(client: Client, message: Message):
+    """Remove verification status from a user (Admin only)"""
+    try:
+        if len(message.text.split()) < 2:
+            await message.reply("❌ **Usage:** `/dverify <user_id>`\n\n**Example:** `/dverify 123456789`")
+            return
+
+        try:
+            user_id = int(message.text.split()[1])
+        except ValueError:
+            await message.reply("❌ **Invalid user ID.** Please provide a valid numeric user ID.")
+            return
+
+        # Update the user's verification status to unverified
+        await update_verify_status(user_id, verify_token="", is_verified=False, verified_time=0, link="")
+        await message.reply(f"✅ User `{user_id}` has been de-verified successfully.\nThey will need to verify again to access the bot.")
+
+        # Optionally, notify the user they need to reverify
+        try:
+            await client.send_message(
+                user_id,
+                "⚠️ Your verification has been reset by an admin.\nPlease click /start to verify again."
+            )
+        except Exception as e:
+            print(f"Failed to notify user {user_id} about de-verification: {e}")
+
+    except Exception as e:
+        await message.reply(f"❌ An error occurred: {str(e)}")
