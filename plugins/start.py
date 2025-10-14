@@ -31,26 +31,25 @@ from helper_func import (
 
 @Bot.on_callback_query(filters.regex("check_sub"))
 async def check_subscription_callback(client: Client, query: CallbackQuery):
-    """Handle Try Again button click - auto-start bot regardless of subscription"""
-    user_id = query.from_user.id
-    
+    """Handle Try Again button click - directly auto-start bot"""
     try:
-        await query.answer("🔄 Checking membership status...")
+        await query.answer("🔄 Starting bot...")
     except:
         pass
 
-    # Show checking message
-    checking_msg = await query.message.edit_text("🔄 **Re-checking your membership...**")
-    await asyncio.sleep(1)
-    await checking_msg.delete()
+    # Delete the subscription message
+    try:
+        await query.message.delete()
+    except:
+        pass
     
-    # Auto-trigger /start regardless of subscription status
+    # Auto-trigger /start command
     class FakeMessage:
-        def __init__(self, original_message):
-            self.from_user = original_message.from_user
-            self.chat = original_message.chat
+        def __init__(self, original_query):
+            self.from_user = original_query.from_user
+            self.chat = original_query.message.chat
             self.text = "/start"
-            self.message_id = original_message.message_id
+            self.message_id = original_query.message.message_id
             
         async def reply(self, *args, **kwargs):
             return await client.send_message(self.chat.id, *args, **kwargs)
@@ -58,7 +57,7 @@ async def check_subscription_callback(client: Client, query: CallbackQuery):
         async def reply_text(self, *args, **kwargs):
             return await client.send_message(self.chat.id, *args, **kwargs)
     
-    fake_msg = FakeMessage(query.message)
+    fake_msg = FakeMessage(query)
     await start_handler(client, fake_msg)
 
 @Bot.on_message(filters.private & filters.command("start"))
