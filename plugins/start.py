@@ -29,6 +29,11 @@ from helper_func import (
     get_exp_time
 )
 
+@Bot.on_callback_query(filters.regex("check_sub"))
+async def check_subscription_callback(client: Client, query: CallbackQuery):
+    """Handle Try Again button click for subscription check"""
+    await recheck_subscription(client, query)
+
 @Bot.on_callback_query(filters.regex("start_verified"))
 async def start_verified_callback(client: Client, query: CallbackQuery):
     """Handle callback after successful subscription verification"""
