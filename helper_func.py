@@ -116,6 +116,39 @@ async def get_verification_stats():
         'verified_in_24h': sorted(verified_in_24h, key=lambda x: x['verified_time'], reverse=True)
     }
 
+async def get_message_id(client, message):
+    """Extract message ID from forwarded message or link"""
+    if message.forward_from_chat:
+        # If it's a forwarded message from channel
+        if message.forward_from_chat.id == client.db_channel.id:
+            return message.forward_from_message_id
+    elif message.text:
+        # Try to extract from link
+        pattern = r"https://t\.me/(?:c/)?(\d+)/(\d+)"
+        import re
+        match = re.search(pattern, message.text)
+        if match:
+            channel_id = int(match.group(1))
+            msg_id = int(match.group(2))
+            # Check if it matches the DB channel
+            if channel_id == abs(client.db_channel.id) or f"-100{channel_id}" == str(client.db_channel.id):
+                return msg_id
+    return None
+
+async def create_file_link(client, message_ids):
+    """Create a secure file link with token"""
+    # Generate a unique token
+    token = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+    
+    # Save token with message IDs to database
+    await save_file_token(token, message_ids)
+    
+    # Create the link
+    bot_username = (await client.get_me()).username
+    link = f"https://t.me/{bot_username}?start=file_{token}"
+    
+    return link, token
+
 # Helper functions without Bot decorators
 async def start_handler_impl(client: Client, message: Message):
     user_id = message.from_user.id
