@@ -262,6 +262,7 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
     checking_msg = await query.message.edit_text("🔄 **Re-checking your membership...**\nPlease wait...")
     await asyncio.sleep(1)
 
+    # Re-check subscription status
     if not await is_user_subscribed(client, query):
         non_joined_channels = await get_user_non_joined_channels(client, query)
         buttons = []
@@ -274,38 +275,28 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
         # Add "Try Again" button
         buttons.append([InlineKeyboardButton("🔄 Try Again", callback_data="check_sub")])
 
-        # Only send markup if there are buttons
-        if buttons:
-            return await checking_msg.edit_text(
-                text=FORCE_MSG.format(
-                    first=query.from_user.first_name,
-                    last=query.from_user.last_name,
-                    username=f"@{query.from_user.username}" if query.from_user.username else None,
-                    mention=query.from_user.mention,
-                    id=user_id
-                ),
-                reply_markup=InlineKeyboardMarkup(buttons),
-                disable_web_page_preview=True
-            )
-        else:
-            return await checking_msg.edit_text(
-                text=FORCE_MSG.format(
-                    first=query.from_user.first_name,
-                    last=query.from_user.last_name,
-                    username=f"@{query.from_user.username}" if query.from_user.username else None,
-                    mention=query.from_user.mention,
-                    id=user_id
-                ),
-                disable_web_page_preview=True
-            )
+        # Show force subscription message with updated channel links
+        return await checking_msg.edit_text(
+            text=FORCE_MSG.format(
+                first=query.from_user.first_name,
+                last=query.from_user.last_name,
+                username=f"@{query.from_user.username}" if query.from_user.username else None,
+                mention=query.from_user.mention,
+                id=user_id
+            ),
+            reply_markup=InlineKeyboardMarkup(buttons) if buttons else None,
+            disable_web_page_preview=True
+        )
 
-    # Auto-run start after successful subscription check
-    await checking_msg.delete()
-    # Simulate /start again for auto start
-    class MsgWrapper:
-        from_user = query.from_user
-        text = "/start"
-    await start_handler(client, MsgWrapper())
+    # User is now subscribed - show success message and provide start button
+    await checking_msg.edit_text(
+        "✅ **Verification Successful!**\n\n"
+        "You have joined all required channels.\n"
+        "Click the button below to continue.",
+        reply_markup=InlineKeyboardMarkup([
+            [InlineKeyboardButton("▶️ Continue", callback_data="start_verified")]
+        ])
+    )
 
 # ================== PREMIUM USER COMMANDS ================== #
 
