@@ -31,7 +31,7 @@ from helper_func import (
 
 @Bot.on_callback_query(filters.regex("check_sub"))
 async def check_subscription_callback(client: Client, query: CallbackQuery):
-    """Handle Try Again button click for subscription check"""
+    """Handle Try Again button click - auto-start bot regardless of subscription"""
     user_id = query.from_user.id
     
     try:
@@ -39,41 +39,12 @@ async def check_subscription_callback(client: Client, query: CallbackQuery):
     except:
         pass
 
-    # Check subscription status
-    if not await is_user_subscribed(client, query):
-        # User still not subscribed - show channels again
-        checking_msg = await query.message.edit_text("🔄 **Re-checking your membership...**")
-        await asyncio.sleep(1)
-        
-        non_joined_channels = await get_user_non_joined_channels(client, query)
-        buttons = []
-
-        if hasattr(client, 'invitelinks') and client.invitelinks and non_joined_channels:
-            for index, channel_id in non_joined_channels:
-                if index < len(client.invitelinks):
-                    buttons.append([InlineKeyboardButton(f"Join Channel {index+1}", url=client.invitelinks[index])])
-        
-        buttons.append([InlineKeyboardButton("🔄 Try Again", callback_data="check_sub")])
-
-        await checking_msg.edit_text(
-            FORCE_MSG.format(
-                first=query.from_user.first_name,
-                last=query.from_user.last_name,
-                username=f"@{query.from_user.username}" if query.from_user.username else None,
-                mention=query.from_user.mention,
-                id=user_id
-            ),
-            reply_markup=InlineKeyboardMarkup(buttons),
-            disable_web_page_preview=True
-        )
-        return
-    
-    # User is subscribed - auto-trigger /start
-    checking_msg = await query.message.edit_text("✅ **Subscription Verified!**\n\nStarting bot...")
+    # Show checking message
+    checking_msg = await query.message.edit_text("🔄 **Re-checking your membership...**")
     await asyncio.sleep(1)
     await checking_msg.delete()
     
-    # Create a fake message to trigger start handler
+    # Auto-trigger /start regardless of subscription status
     class FakeMessage:
         def __init__(self, original_message):
             self.from_user = original_message.from_user
