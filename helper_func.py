@@ -5,12 +5,11 @@ import time
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from pyrogram.errors import FloodWait, ChannelBanned, ChannelPrivate, ChatAdminRequired, PeerIdInvalid
-from bot import Bot
 from config import *
-from database.database import add_user, present_user, full_userbase, get_verify_status, update_verify_status, user_data, ban_user, unban_user, is_banned_user, get_banned_users, increment_file_clicks, get_total_link_clicks # Added necessary imports
+from database.database import add_user, present_user, full_userbase, get_verify_status, update_verify_status, user_data, ban_user, unban_user, is_banned_user, get_banned_users, increment_file_clicks, get_total_link_clicks
 
-@Bot.on_message(filters.private & filters.command("start"))
-async def start_handler(client: Client, message: Message):
+# Helper functions without Bot decorators
+async def start_handler_impl(client: Client, message: Message):
     user_id = message.from_user.id
 
     # Check if user is banned
@@ -50,7 +49,6 @@ async def start_handler(client: Client, message: Message):
         # You might want to implement referral logic here
         pass
 
-@Bot.on_message(filters.private & filters.command("help"))
 async def help_command(client: Client, message: Message):
     user_id = message.from_user.id
 
@@ -454,7 +452,6 @@ async def start_handler(client: Client, message: Message):
     )
 
 # ================== CALLBACK HANDLER FOR TRY AGAIN ================== #
-@Bot.on_callback_query(filters.regex("check_sub"))
 async def recheck_subscription(client: Client, query: CallbackQuery):
     user_id = query.from_user.id
     await query.answer("🔄 Checking membership status...")
@@ -510,7 +507,6 @@ async def recheck_subscription(client: Client, query: CallbackQuery):
 # ================== PREMIUM USER COMMANDS ================== #
 
 # Add premium user
-@Bot.on_message(filters.private & filters.command("puser"))
 async def puser_handler(client: Client, message: Message):
     if message.chat.id not in ADMINS:
         return await message.reply("You are not authorized to use this command.")
@@ -538,7 +534,6 @@ async def puser_handler(client: Client, message: Message):
         await message.reply(f"An error occurred: {e}")
 
 # Remove premium user
-@Bot.on_message(filters.private & filters.command("removepremium"))
 async def removepremium_handler(client: Client, message: Message):
     if message.chat.id not in ADMINS:
         return await message.reply("You are not authorized to use this command.")
@@ -566,7 +561,6 @@ async def removepremium_handler(client: Client, message: Message):
         await message.reply(f"An error occurred: {e}")
 
 # List all premium users
-@Bot.on_message(filters.private & filters.command("premiumlist"))
 async def premiumlist_handler(client: Client, message: Message):
     if message.chat.id not in ADMINS:
         return await message.reply("You are not authorized to use this command.")
@@ -630,7 +624,6 @@ async def premiumlist_handler(client: Client, message: Message):
         await message.reply(f"An error occurred while fetching premium users: {e}")
 
 # Ban a user
-@Bot.on_message(filters.private & filters.command("ban"))
 async def ban_user_handler(client: Client, message: Message):
     if message.chat.id not in ADMINS:
         return await message.reply("You are not authorized to use this command.")
@@ -657,7 +650,6 @@ async def ban_user_handler(client: Client, message: Message):
         await message.reply(f"An error occurred: {e}")
 
 # Unban a user
-@Bot.on_message(filters.private & filters.command("unban"))
 async def unban_user_handler(client: Client, message: Message):
     if message.chat.id not in ADMINS:
         return await message.reply("You are not authorized to use this command.")
@@ -684,7 +676,6 @@ async def unban_user_handler(client: Client, message: Message):
         await message.reply(f"An error occurred: {e}")
 
 # List all banned users
-@Bot.on_message(filters.private & filters.command("listban"))
 async def listban_handler(client: Client, message: Message):
     if message.chat.id not in ADMINS:
         return await message.reply("You are not authorized to use this command.")
@@ -707,7 +698,6 @@ async def listban_handler(client: Client, message: Message):
 
 
 # ================== TOTAL CLICKS COMMAND ================== #
-@Bot.on_message(filters.private & filters.command("total"))
 async def total_handler(client: Client, message: Message):
     user_id = message.from_user.id
     # Logic to count total clicks on stored links for the user
