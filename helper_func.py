@@ -2,11 +2,119 @@ import asyncio
 import random
 import string
 import time
+import base64
+import aiohttp
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, CallbackQuery
 from pyrogram.errors import FloodWait, ChannelBanned, ChannelPrivate, ChatAdminRequired, PeerIdInvalid
 from config import *
-from database.database import add_user, present_user, full_userbase, get_verify_status, update_verify_status, user_data, ban_user, unban_user, is_banned_user, get_banned_users, increment_file_clicks, get_total_link_clicks
+from database.database import add_user, present_user, full_userbase, get_verify_status, update_verify_status, user_data, ban_user, unban_user, is_banned_user, get_banned_users, increment_file_clicks, get_total_link_clicks, get_file_token, save_file_token
+
+# ================== ENCODING/DECODING FUNCTIONS ================== #
+async def encode(string):
+    """Encode string to base64"""
+    string_bytes = string.encode("ascii")
+    base64_bytes = base64.urlsafe_b64encode(string_bytes)
+    return base64_bytes.decode("ascii")
+
+async def decode(base64_string):
+    """Decode base64 string"""
+    base64_bytes = base64_string.encode("ascii")
+    string_bytes = base64.urlsafe_b64decode(base64_bytes)
+    return string_bytes.decode("ascii")
+
+async def get_shortlink(url, api, link):
+    """Get shortlink from URL shortener"""
+    try:
+        async with aiohttp.ClientSession() as session:
+            params = {'api': api, 'url': link}
+            async with session.get(url, params=params, raise_for_status=True) as response:
+                data = await response.json()
+                return data.get('shortenedUrl', link)
+    except Exception as e:
+        print(f"Shortlink error: {e}")
+        return link
+
+def get_exp_time(seconds):
+    """Convert seconds to readable time format"""
+    periods = [('day', 86400), ('hour', 3600), ('minute', 60), ('second', 1)]
+    result = []
+    for period_name, period_seconds in periods:
+        if seconds >= period_seconds:
+            period_value, seconds = divmod(seconds, period_seconds)
+            if period_value > 0:
+                result.append(f"{period_value} {period_name}{'s' if period_value > 1 else ''}")
+    return ', '.join(result) if result else '0 seconds'
+
+def get_readable_time(seconds):
+    """Convert seconds to readable time format"""
+    return get_exp_time(seconds)
+
+async def get_file_ids_from_token(token):
+    """Get file IDs from secure token"""
+    file_ids = await get_file_token(token)
+    return file_ids
+
+async def is_subscribed(filter, client, update):
+    """Check if user is subscribed to force sub channels"""
+    if not FORCE_SUB_CHANNELS:
+        return True
+    
+    user_id = update.from_user.id
+    
+    for channel_id in FORCE_SUB_CHANNELS:
+        try:
+            member = await client.get_chat_member(chat_id=channel_id, user_id=user_id)
+            if member.status in ['left', 'kicked']:
+                return False
+        except Exception as e:
+            print(f"Error checking subscription for channel {channel_id}: {e}")
+            return False
+    
+    return True
+
+async def get_non_joined_channels(client, user_id):
+    """Get list of channels user hasn't joined"""
+    non_joined = []
+    
+    for index, channel_id in enumerate(FORCE_SUB_CHANNELS):
+        try:
+            member = await client.get_chat_member(chat_id=channel_id, user_id=user_id)
+            if member.status in ['left', 'kicked']:
+                non_joined.append((index, channel_id))
+        except Exception as e:
+            print(f"Error checking channel {channel_id}: {e}")
+            non_joined.append((index, channel_id))
+    
+    return non_joined
+
+async def get_verification_stats():
+    """Get verification statistics"""
+    current_time = time.time()
+    verified_users = []
+    
+    async for user in user_data.find({'verify_status.is_verified': True}):
+        user_id = int(user['_id'])
+        verify_status = user.get('verify_status', {})
+        verified_time = verify_status.get('verified_time', 0)
+        
+        if verified_time:
+            time_elapsed = current_time - verified_time
+            if time_elapsed < VERIFY_EXPIRE:
+                remaining_time = VERIFY_EXPIRE - time_elapsed
+                verified_users.append({
+                    'user_id': user_id,
+                    'verified_time': verified_time,
+                    'remaining_time': remaining_time
+                })
+    
+    # Get users verified in last 24 hours
+    verified_in_24h = [u for u in verified_users if (current_time - u['verified_time']) < 86400]
+    
+    return {
+        'total_verified': len(verified_users),
+        'verified_in_24h': sorted(verified_in_24h, key=lambda x: x['verified_time'], reverse=True)
+    }
 
 # Helper functions without Bot decorators
 async def start_handler_impl(client: Client, message: Message):
