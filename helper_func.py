@@ -74,13 +74,15 @@ async def is_subscribed(filter, client, update):
     
     user_id = update.from_user.id
     
-    for channel_id in FORCE_SUB_CHANNELS:
+    async def check_channel(channel_id):
+        """Check a single channel membership"""
         try:
             member = await client.get_chat_member(chat_id=channel_id, user_id=user_id)
             print(f"✅ User {user_id} status in channel {channel_id}: {member.status}")
             if member.status in ['left', 'kicked']:
                 print(f"❌ User {user_id} not subscribed to channel {channel_id} (status: {member.status})")
                 return False
+            return True
         except Exception as e:
             error_msg = str(e)
             # Only return False if user is not a participant
@@ -90,30 +92,49 @@ async def is_subscribed(filter, client, update):
                 return False
             else:
                 print(f"⚠️ Skipping channel {channel_id} check due to error: {e}")
-                # Continue checking other channels instead of failing
-                continue
+                # Treat as subscribed if there's a channel error
+                return True
     
-    print(f"✅ User {user_id} is subscribed to all channels")
-    return True
+    # Check all channels concurrently
+    results = await asyncio.gather(*[check_channel(ch_id) for ch_id in FORCE_SUB_CHANNELS])
+    
+    # If any channel check returned False, user is not subscribed to all
+    is_all_subscribed = all(results)
+    
+    if is_all_subscribed:
+        print(f"✅ User {user_id} is subscribed to all channels")
+    
+    return is_all_subscribed
 
 async def get_non_joined_channels(client, user_id):
     """Get list of channels user hasn't joined"""
-    non_joined = []
     
-    for index, channel_id in enumerate(FORCE_SUB_CHANNELS):
+    async def check_channel_membership(index, channel_id):
+        """Check if user is a member of a specific channel"""
         try:
             member = await client.get_chat_member(chat_id=channel_id, user_id=user_id)
             if member.status in ['left', 'kicked']:
-                non_joined.append((index, channel_id))
+                return (index, channel_id)
+            return None
         except Exception as e:
             error_msg = str(e)
             # Only add to non_joined if it's a USER_NOT_PARTICIPANT error
             # Skip if channel is deleted, banned, or bot was removed
             if "USER_NOT_PARTICIPANT" in error_msg:
-                non_joined.append((index, channel_id))
                 print(f"User {user_id} not in channel {channel_id}")
+                return (index, channel_id)
             else:
                 print(f"Skipping channel {channel_id} due to error: {e}")
+                return None
+    
+    # Check all channels concurrently
+    results = await asyncio.gather(*[
+        check_channel_membership(index, channel_id) 
+        for index, channel_id in enumerate(FORCE_SUB_CHANNELS)
+    ])
+    
+    # Filter out None values
+    non_joined = [result for result in results if result is not None]
     
     return non_joined
 
