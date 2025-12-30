@@ -31,7 +31,7 @@ NOTIFICATION_TIME = int(os.environ.get('NOTIFICATION_TIME', 60))  # seconds
 AUTO_DELETE = os.environ.get("AUTO_DELETE", "True").lower() in ["true", "1", "yes", "on"]
 GET_AGAIN = os.environ.get("GET_AGAIN", "False").lower() in ["true", "1", "yes", "on"]
 
-DELETE_INFORM = os.environ.get("INFORM", "🔞 Direct  adult Video Membership 🔞\n\nMain category 🔞\n\n▪️ Mom son\n▪️ bro sis \n▪️ dad and son \n▪️ hidden camera \n▪️ oyo room\n▪️ Desi \n▪️ Pakistani maal\n▪️ Telugu \n▪️ Tamil\n▪️ Malayalam \n▪️ naughty America & only fan \n▪️ Lesbian & she male\n\nVip channel Totally 5 ✅\n\nALSO U GET FREE ACCESS TO THIS BOT 🤖\nhttps://t.me/newxxxiobot\nhttps://t.me/xvidforubot\n\nAlso U get Daily 600+ Video in this bot 🤖\nhttps://t.me/premiumhelperxbot\n\nTotally price :- 300₹ (one time payment Lifetime free)\n\nIf u want buy msg me :- https://t.me/Myhero2k\n\n         👇 Payment Proff 👇          \nhttps://justpaste.it/Vipmembership")
+DELETE_INFORM = os.environ.get("INFORM", "🔞 Direct  adult Video Membership 🔞\n\nMain category 🔞\n\n▪️ Mom son\n▪️ bro sis \n▪️ dad and son \n▪️ hidden camera \n▪️ oyo room\n▪️ Desi \n▪️ Pakistani maal\n▪️ Telugu \n▪️ Tamil\n▪️ Malayalam \n▪️ naughty America & only fan \n▪️ Lesbian & she male\n\nVip channel Totally 5 ✅\n\nALSO U GET FREE ACCESS TO THIS BOT 🤖\nhttps://t.me/newxxxiobot\nhttps://t.me/xvidforubot\n\nAlso U get Daily 600+ Video in this bot 🤖\nhttps://t.me/premiumhelperxbot\n\nTotally price :- 300₹ (one time payment Lifetime free)\n\nIf u want buy msg me :- @Vip_Membership_Buyer_bot\n\n         👇 Payment Proff 👇          \nhttps://justpaste.it/Vipmembership")
 NOTIFICATION = os.environ.get(
     "NOTIFICATION",
     "File will delete after {DELETE_AFTER} seconds."
@@ -110,7 +110,7 @@ PROTECT_CONTENT = os.environ.get('PROTECT_CONTENT', "False") == "True"
 DISABLE_CHANNEL_BUTTON = os.environ.get("DISABLE_CHANNEL_BUTTON", None) == 'True'
 
 BOT_STATS_TEXT = "<b>BOT UPTIME</b>\n{uptime}"
-USER_REPLY_TEXT = "<strong>u want direct sex video all type\n\nmom son,bro sis,oyo,desi,rp naughty only,teleugu,mallu,tamil,she male,lesibean\n\nall direct file no link msg me to but vip memeber ship  @Myhero2k</strong>"
+USER_REPLY_TEXT = "<strong>u want direct sex video all type\n\nmom son,bro sis,oyo,desi,rp naughty only,teleugu,mallu,tamil,she male,lesibean\n\nall direct file no link msg me to but vip memeber ship  @Vip_Membership_Buyer_bot</strong>"
 
 # Remove duplicates and ensure unique admin IDs
 ADMINS = list(set(ADMINS))
