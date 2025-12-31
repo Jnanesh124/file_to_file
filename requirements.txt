@@ -1,7 +1,7 @@
 #git+https://github.com/youesky/pyrogram
 # --- For-Bot-Working --------- #
-pyrogram
-TgCrypto
+pyrofork==2.3.69
+tgcrypto-pyrofork
 pyromod
 # --- For-Database ------------ #
 pymongo
