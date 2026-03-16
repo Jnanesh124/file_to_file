@@ -65,7 +65,7 @@ async def batch(client: Client, message: Message):
     from helper_func import create_file_link
     message_ids = [f_msg_id, s_msg_id]
     link, token = await create_file_link(client, message_ids)
-    await second_message.reply_text(f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪\nBuy vip for 🔞 direct Video  @Vip_Membership_Buyer_bot\n\n©️BACKUP CHANNEL @JNK_BACKUP\n⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪⚪</strong>", quote=True)
+    await second_message.reply_text(f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n🥰 more channels https://t.me/premiumhelperxbot</strong>", quote=True)
 
 
 @Bot.on_message(filters.private & filters.user(ADMINS) & filters.command('genlink'))
