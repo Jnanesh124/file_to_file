@@ -31,7 +31,17 @@ NOTIFICATION_TIME = int(os.environ.get('NOTIFICATION_TIME', 60))  # seconds
 AUTO_DELETE = os.environ.get("AUTO_DELETE", "True").lower() in ["true", "1", "yes", "on"]
 GET_AGAIN = os.environ.get("GET_AGAIN", "False").lower() in ["true", "1", "yes", "on"]
 
-DELETE_INFORM = os.environ.get("INFORM", "🔞 Direct  adult Video Membership 🔞\n\nMain category 🔞\n\n▪️ Mom son\n▪️ bro sis \n▪️ dad and son \n▪️ hidden camera \n▪️ oyo room\n▪️ Desi \n▪️ Pakistani maal\n▪️ Telugu \n▪️ Tamil\n▪️ Malayalam \n▪️ naughty America & only fan \n▪️ Lesbian & she male\n\nVip channel Totally 5 ✅\n\nALSO U GET FREE ACCESS TO THIS BOT 🤖\nhttps://t.me/newxxxiobot\nhttps://t.me/xvidforubot\n\nAlso U get Daily 600+ Video in this bot 🤖\nhttps://t.me/premiumhelperxbot\n\nTotally price :- 300₹ (one time payment Lifetime free)\n\nIf u want buy msg me :- @Vip_Membership_Buyer_bot\n\n         👇 Payment Proff 👇          \nhttps://justpaste.it/Vipmembership")
+DELETE_INFORM = os.environ.get("INFORM", "🎀 All Channel Link 🎀
+
+https://t.me/+qQhDLMY8LPxjMTg1
+
+https://t.me/+CbtKyemGSrhiMzI1
+
+https://t.me/+bc_od7SDu2hhMTll
+
+https://t.me/+y3eNWag7tTUyZWNl
+
+https://t.me/+UJiDSt0-soEyNDE9")
 NOTIFICATION = os.environ.get(
     "NOTIFICATION",
     "File will delete after {DELETE_AFTER} seconds."
