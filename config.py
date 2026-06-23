@@ -31,17 +31,7 @@ NOTIFICATION_TIME = int(os.environ.get('NOTIFICATION_TIME', 60))  # seconds
 AUTO_DELETE = os.environ.get("AUTO_DELETE", "True").lower() in ["true", "1", "yes", "on"]
 GET_AGAIN = os.environ.get("GET_AGAIN", "False").lower() in ["true", "1", "yes", "on"]
 
-DELETE_INFORM = os.environ.get("INFORM", "🎀 All Channel Link 🎀
-
-https://t.me/+qQhDLMY8LPxjMTg1
-
-https://t.me/+CbtKyemGSrhiMzI1
-
-https://t.me/+bc_od7SDu2hhMTll
-
-https://t.me/+y3eNWag7tTUyZWNl
-
-https://t.me/+UJiDSt0-soEyNDE9")
+DELETE_INFORM = os.environ.get("INFORM", "file delete")
 NOTIFICATION = os.environ.get(
     "NOTIFICATION",
     "File will delete after {DELETE_AFTER} seconds."
