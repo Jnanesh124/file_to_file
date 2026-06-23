@@ -50,7 +50,7 @@ async def channel_post(client: Client, message: Message):
         link, token = await create_file_link(client, post_message.id)
 
         # Prepare the caption with the link
-        caption = f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n🥰 more channels https://t.me/premiumhelperxbot</strong>"
+        caption = f"<strong>🥵 DIRECT VIDEO 📂 👇\n\n{link}\n\n🥰 more channels @Rukkus_Stuff </strong>"
 
         # Send the link
         if thumbnail_path:
