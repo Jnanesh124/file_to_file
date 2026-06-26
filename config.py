@@ -110,7 +110,7 @@ PROTECT_CONTENT = os.environ.get('PROTECT_CONTENT', "False") == "True"
 DISABLE_CHANNEL_BUTTON = os.environ.get("DISABLE_CHANNEL_BUTTON", None) == 'True'
 
 BOT_STATS_TEXT = "<b>BOT UPTIME</b>\n{uptime}"
-USER_REPLY_TEXT = "<strong>u want direct sex video all type\n\nmom son,bro sis,oyo,desi,rp naughty only,teleugu,mallu,tamil,she male,lesibean\n\nall direct file no link msg me to but vip memeber ship  @Vip_Membership_Buyer_bot</strong>"
+USER_REPLY_TEXT = "<strong>👄 All Adult Content\nhttps://t.me/Rukkus_Stuff\n\n🍿 Movie Content\nhttps://t.me/+dau0zdsJPhI2OWNl\n\n🎁 Free Loots\nhttps://t.me/JNKFREELOOTS</strong>"
 
 # Remove duplicates and ensure unique admin IDs
 ADMINS = list(set(ADMINS))
